@@ -8,7 +8,8 @@
     "build": "tsc",
     "lint": "eslint --ext .ts . --fix",
     "test": "jest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\""
   },
   "keywords": [],
   "license": "MIT",
