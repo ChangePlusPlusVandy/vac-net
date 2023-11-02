@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 
@@ -33,7 +34,7 @@ const Home: React.FC = () => {
   }, [currentUser]);
 
   return (
-    <div>
+    <div className="text-2xl">
       This is a React Firebase Auth template. Below is a fact from a protected
       route on the server.
       <p>{fact}</p>
