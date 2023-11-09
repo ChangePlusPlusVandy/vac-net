@@ -8,10 +8,10 @@ interface Beneficiary {
   phoneNumber?: string;
   archived?: boolean;
   birthday?: Date;
-  currentSavings?: Number;
-  currentSpending?: Number;
+  currentSavings?: number;
+  currentSpending?: number;
   priorities?: string[];
-  children?: Number;
+  children?: number;
 }
 
 const BeneficiarySchema = new mongoose.Schema<Beneficiary>({
