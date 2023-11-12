@@ -8,6 +8,7 @@ import { verifyToken } from "./middlewares/verifyToken";
 import { notFound, errorHandler } from "./middlewares/errors";
 import { connectDB } from "../config/database";
 import loansRoute from "./routes/loansRoute";
+import sessionRouter from "./routes/sessions.router";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use(helmet());
  * Use the verifyToken to protect all the routes that require authentication
  */
 app.use("/example", verifyToken, exampleRoute);
+app.use("/session", sessionRouter);
 
 app.use("/loans", verifyToken, loansRoute);
 
