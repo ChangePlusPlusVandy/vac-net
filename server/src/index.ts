@@ -7,7 +7,7 @@ import { exampleRoute } from "./routes/exampleRoute";
 import { verifyToken } from "./middlewares/verifyToken";
 import { notFound, errorHandler } from "./middlewares/errors";
 import { connectDB } from "../config/database";
-import { beneficiaryRoute } from "./routes/testRoute";
+import { beneficiaryRoute } from "./routes/beneficiary.router";
 
 dotenv.config();
 

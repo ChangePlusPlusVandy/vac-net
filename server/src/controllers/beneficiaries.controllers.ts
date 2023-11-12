@@ -1,15 +1,18 @@
-import { Request, Response } from "express";
-import BeneficiaryModel from "../models/BeneficiaryModel";
+import { type Request, type Response } from "express";
+
+import BeneficiaryModel, {
+  type IBeneficiary,
+} from "../models/BeneficiaryModel";
 
 const editBeneficiary = async (req: Request, res: Response): Promise<void> => {
   const beneficiaryId = req.query?._id;
+  const beneficiaryContent = req.body as IBeneficiary;
 
   try {
-    console.log(req.body);
     if (beneficiaryId) {
       const beneficiary = await BeneficiaryModel.findByIdAndUpdate(
         beneficiaryId,
-        req.body,
+        beneficiaryContent,
         { new: true },
       );
 
@@ -30,7 +33,8 @@ const deleteBeneficiary = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  const beneficiaryId = req.query?._id;
+  const beneficiaryId = req.query?.id;
+  console.log(req.query);
   try {
     if (beneficiaryId) {
       await BeneficiaryModel.deleteOne({ _id: beneficiaryId });

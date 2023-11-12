@@ -1,11 +1,13 @@
-import express from "express";
 import {
-  editBeneficiary,
   deleteBeneficiary,
+  editBeneficiary,
 } from "../controllers/beneficiaries.controllers";
+
+import express from "express";
+
 const beneficiaryRoute = express.Router();
 
-beneficiaryRoute.put("/:_id", editBeneficiary);
-beneficiaryRoute.delete("/:_id", deleteBeneficiary);
+beneficiaryRoute.put("/", editBeneficiary);
+beneficiaryRoute.delete("/", deleteBeneficiary);
 
 export { beneficiaryRoute };
