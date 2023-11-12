@@ -28,17 +28,11 @@ app.use(helmet());
  * Use the verifyToken to protect all the routes that require authentication
  */
 app.use("/example", verifyToken, exampleRoute);
-app.use("/test", beneficiaryRoute);
+app.use("/beneficiary", beneficiaryRoute);
 
 // Default route: Unprotected
 app.get("/", (_req: Request, res: Response) => {
   res.send("Express + Typescript Auth Server Temp!");
-});
-
-app.put("/test/", (req: Request, res: Response) => {
-});
-
-app.delete("/test/", (req: Request, res: Response) => {  
 });
 
 // error handling route
