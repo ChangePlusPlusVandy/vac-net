@@ -1,30 +1,20 @@
-import express, { type Request, type Response } from "express";
-import { read } from "fs";
+import { type Request, type Response } from "express";
 import OutstandingLoan, {Loan} from "../models/OutstandingLoan";
 const mongoose = require("mongoose");
 
 
 const createOutstandingLoan = async (req: Request, res: Response) => {
     try {
-        const {
-            initialPayment,
-            initialPaymentDate,
-            principalLeft,
-            nextPaymentDate,
-            nextPaymentAmount,
-            archivedLoan,
-            beneficiary,
-            validLoan
-        } = req.body;
-
-        
         const newLoan = await OutstandingLoan.create(req.body as Loan);
         await newLoan.save();
 
         return res.status(200).json(newLoan);
     } catch (err) {
-        console.error(err);
-        return res.status(500).send({message: err});
+        if (err instanceof Error){
+            console.error(err, err.message);
+            return res.status(500).send({message: err.message});
+        }
+        console.error("Something unexpected happened");
     }
 }
 
@@ -36,7 +26,11 @@ const getLoanById = async (req: Request, res: Response) => {
 
         return res.status(200).json(loan);
     } catch (err){
-        return res.status(500).send({message: err});
+        if (err instanceof Error){
+            console.error(err, err.message);
+            return res.status(500).send({message: err.message});
+        }
+        console.error("Something unexpected happened");
     }
 }
 
@@ -46,7 +40,11 @@ const getLoans = async (req: Request, res: Response) => {
         
         return res.status(200).json(loans);
     } catch (err) {
-        return res.status(500).send({message: err});
+        if (err instanceof Error){
+            console.error(err, err.message);
+            return res.status(500).send({message: err.message});
+        }
+        console.error("Something unexpected happened");
     }
 }
 
