@@ -1,52 +1,55 @@
-import { AnyAaaaRecord } from "dns";
+import { type Request, type Response } from "express";
 import Session from "../models/SessionModel";
-import { Request, Response } from 'express';
 
 const createSession = async (req: Request, res: Response) => {
-    try {
-        const {
-            sessionDate,
-            region,
-            staff,
-            archived,
-            attendance
-        } = req.body;
+  try {
+    const newSession = await Session.create(req.body);
+    await newSession.save();
 
-        const newSession = await Session.create(req.body);
-        await newSession.save();
-
-        return res.status(200).json(newSession);
-    } catch (error: any) {
-        console.error(error.message);
-        return res.status(500).send({ message: error.message });
+    return res.status(200).json(newSession);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.log(err, err.message);
+      return res.status(500).send({ message: err.message });
     }
+    console.log("Something unexpected went wrong");
+  }
 };
 
 const getSessionById = async (req: Request, res: Response) => {
-    const sessionId = req.params.sessionId;
-    try {
-            const session = await Session.findById(sessionId).exec();
+  const sessionId = req.params.sessionId;
+  try {
+    if (sessionId) {
+      const session = await Session.findById(sessionId).exec();
 
-            if (!session) {
-                return res.status(500).send("Invalid ID query");
-            }
-            
-            return res.status(200).json(session);
-            
-    } catch (err: any) {
-        console.error(err.message);
-        return res.status(500).send({ message: err.message });
+      if (!session) {
+        return res.status(500).send("Invalid ID query");
+      }
+
+      return res.status(200).json(session);
+    } else {
+      return res.status(400).send("No sessionId provided");
     }
-}
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.log(err, err.message);
+      return res.status(500).send({ message: err.message });
+    }
+    console.log("Something unexpected went wrong");
+  }
+};
 
 const getSessions = async (req: Request, res: Response) => {
-    try {
-        const allSessions = await Session.find({});
-        return res.status(200).json(allSessions);
-    } catch (err: any) {
-        console.error(err.message);
-        return res.status
+  try {
+    const allSessions = await Session.find({});
+    return res.status(200).json(allSessions);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.log(err, err.message);
+      return res.status(500).send({ message: err.message });
     }
-}
+    console.log("Something unexpected went wrong");
+  }
+};
 
 export { createSession, getSessionById, getSessions };

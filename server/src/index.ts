@@ -9,7 +9,6 @@ import { notFound, errorHandler } from "./middlewares/errors";
 import { connectDB } from "../config/database";
 import sessionRouter from "./routes/sessions.router";
 
-
 dotenv.config();
 
 const app: Express = express();
