@@ -7,7 +7,7 @@ import { exampleRoute } from "./routes/exampleRoute";
 import { verifyToken } from "./middlewares/verifyToken";
 import { notFound, errorHandler } from "./middlewares/errors";
 import { connectDB } from "../config/database";
-import { staffRoute } from "./routes/staff.router";
+import userRouter from "./routes/user.router";
 
 dotenv.config();
 
@@ -28,7 +28,7 @@ app.use(helmet());
  * Use the verifyToken to protect all the routes that require authentication
  */
 app.use("/example", verifyToken, exampleRoute);
-app.use("/staff", staffRoute);
+app.use("/staff", userRouter);
 // Default route: Unprotected
 app.get("/", (_req: Request, res: Response) => {
   res.send("Express + Typescript Auth Server Temp!");

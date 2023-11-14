@@ -1,11 +1,11 @@
-import express from "express";
-
 import {
   createStaff,
   getAllStaff,
-  getStaffById,
   getStaffByFirebaseId,
-} from "../controllers/staffmodel.controller";
+  getStaffById,
+} from "../controllers/users.controllers";
+
+import express from "express";
 
 const staffRoute = express.Router();
 
@@ -14,4 +14,4 @@ staffRoute.get("/allstaff", getAllStaff);
 staffRoute.get("/getstaff", getStaffById);
 staffRoute.get("/", getStaffByFirebaseId);
 
-export { staffRoute };
+export default staffRoute;
