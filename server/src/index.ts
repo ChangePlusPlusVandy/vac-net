@@ -34,7 +34,6 @@ app.use("/loan", loanRoute);
 app.use("/beneficiary", beneficiaryRoute);
 app.use("/session", sessionRouter);
 
-
 // Default route: Unprotected
 app.get("/", (_req: Request, res: Response) => {
   res.send("Express + Typescript Auth Server Temp!");
