@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
-interface Loan {
+const { Schema } = mongoose;
+
+export interface Loan {
   initialPayment?: number;
   initialPaymentDate?: Date;
   principalLeft?: number;
@@ -35,7 +37,8 @@ const LoanSchema = new mongoose.Schema<Loan>({
     default: false,
   },
   beneficiary: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "Beneficiary",
   },
   validLoan: {
     type: Boolean,
