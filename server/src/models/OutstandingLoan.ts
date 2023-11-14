@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export interface Loan {
-  _id: number;
+  _id: string;
   initialPayment?: number;
   initialPaymentDate?: Date;
   principalLeft?: number;
