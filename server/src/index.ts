@@ -8,8 +8,7 @@ import { verifyToken } from "./middlewares/verifyToken";
 import { notFound, errorHandler } from "./middlewares/errors";
 import { connectDB } from "../config/database";
 
-import { beneficiaryRouter } from "./routes/beneficiaryRoute";
-
+import beneficiaryRouter from "./routes/beneficiaryRoute";
 
 dotenv.config();
 
@@ -37,7 +36,6 @@ app.use("/beneficiary", beneficiaryRouter);
 app.get("/", (_req: Request, res: Response) => {
   res.send("Express + Typescript Auth Server Temp!");
 });
-
 
 // error handling route
 app.use(notFound);
