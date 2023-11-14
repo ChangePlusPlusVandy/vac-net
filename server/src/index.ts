@@ -11,8 +11,6 @@ import loanRoute from "./routes/loanRoute";
 import beneficiaryRouter from "./routes/beneficiary.router";
 import sessionRouter from "./routes/sessions.router";
 
-import beneficiaryRouter from "./routes/beneficiaryRoute";
-
 dotenv.config();
 
 const app: Express = express();
@@ -34,8 +32,6 @@ app.use(helmet());
 app.use("/loan", loanRoute);
 app.use("/beneficiary", beneficiaryRouter);
 app.use("/session", sessionRouter);
-
-app.use("/beneficiary", beneficiaryRouter);
 
 // Default route: Unprotected
 app.get("/", (_req: Request, res: Response) => {
