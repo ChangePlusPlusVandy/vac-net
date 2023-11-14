@@ -5,9 +5,9 @@ import {
 
 import express from "express";
 
-const beneficiaryRoute = express.Router();
+const beneficiaryRouter = express.Router();
 
-beneficiaryRoute.put("/", editBeneficiary);
-beneficiaryRoute.delete("/", deleteBeneficiary);
+beneficiaryRouter.put("/", editBeneficiary);
+beneficiaryRouter.delete("/", deleteBeneficiary);
 
-export { beneficiaryRoute };
+export default beneficiaryRouter;
