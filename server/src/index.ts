@@ -3,15 +3,18 @@ import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
-import beneficiaryRoutes from "./routes/beneficiary.routes";
+import { exampleRoute } from "./routes/exampleRoute";
 import { verifyToken } from "./middlewares/verifyToken";
 import { notFound, errorHandler } from "./middlewares/errors";
 import { connectDB } from "../config/database";
+import loanRoute from "./routes/loanRoute";
+import beneficiaryRouter from "./routes/beneficiary.router";
+import sessionRouter from "./routes/sessions.router";
 
 dotenv.config();
 
 const app: Express = express();
-const PORT: number | string = process.env.PORT || 3001;
+const PORT: number | string = process.env.PORT ?? 3001;
 
 void connectDB(); // Connect to MongoDB
 
@@ -26,7 +29,9 @@ app.use(helmet());
  * Uses the verifyToken middleware to protect the "/data" route
  * Use the verifyToken to protect all the routes that require authentication
  */
-app.use("/beneficiary", beneficiaryRoutes);
+app.use("/loan", loanRoute);
+app.use("/beneficiary", beneficiaryRouter);
+app.use("/session", sessionRouter);
 
 // Default route: Unprotected
 app.get("/", (_req: Request, res: Response) => {

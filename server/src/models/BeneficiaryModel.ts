@@ -41,7 +41,6 @@ const BeneficiarySchema = new mongoose.Schema<IBeneficiary>({
   },
   birthday: {
     type: Date,
-    default: () => Date.now(),
   },
   currentSavings: {
     type: Number,
