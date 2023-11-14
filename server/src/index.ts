@@ -8,7 +8,6 @@ import { verifyToken } from "./middlewares/verifyToken";
 import { notFound, errorHandler } from "./middlewares/errors";
 import { connectDB } from "../config/database";
 
-
 dotenv.config();
 
 const app: Express = express();
@@ -27,7 +26,7 @@ app.use(helmet());
  * Uses the verifyToken middleware to protect the "/data" route
  * Use the verifyToken to protect all the routes that require authentication
  */
-app.use('/beneficiary', beneficiaryRoutes);
+app.use("/beneficiary", beneficiaryRoutes);
 
 // Default route: Unprotected
 app.get("/", (_req: Request, res: Response) => {
