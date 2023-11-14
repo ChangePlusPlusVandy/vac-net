@@ -1,8 +1,37 @@
 import { type Request, type Response } from "express";
 
-import BeneficiaryModel, {
-  type IBeneficiary,
-} from "../models/BeneficiaryModel";
+import Beneficiary, { type IBeneficiary } from "../models/BeneficiaryModel";
+
+const createBeneficiary = async (req: Request, res: Response) => {
+  try {
+    const newBeneficiary = await Beneficiary.create(req.body);
+    await newBeneficiary.save();
+
+    return res.status(200).json(newBeneficiary);
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err.message);
+      return res.status(500).send({ message: err.message });
+    }
+  }
+};
+
+const getBeneficiaryById = async (req: Request, res: Response) => {
+  const beneficiaryID = req.query?.id;
+  try {
+    if (beneficiaryID) {
+      const beneficiary = await Beneficiary.findById(beneficiaryID).exec();
+      return res.status(200).json(beneficiary);
+    } else {
+      return res.status(500).send("Invalid ID query");
+    }
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err.message);
+      return res.status(500).send({ message: err.message });
+    }
+  }
+};
 
 const editBeneficiary = async (req: Request, res: Response): Promise<void> => {
   const beneficiaryId = req.query?._id;
@@ -10,7 +39,7 @@ const editBeneficiary = async (req: Request, res: Response): Promise<void> => {
 
   try {
     if (beneficiaryId) {
-      const beneficiary = await BeneficiaryModel.findByIdAndUpdate(
+      const beneficiary = await Beneficiary.findByIdAndUpdate(
         beneficiaryId,
         beneficiaryContent,
         { new: true },
@@ -29,6 +58,18 @@ const editBeneficiary = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const getBeneficiaries = async (req: Request, res: Response) => {
+  try {
+    const allUsers = await Beneficiary.find({});
+    return res.status(200).json(allUsers);
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err.message);
+      return res.status(500).send({ message: err.message });
+    }
+  }
+};
+
 const deleteBeneficiary = async (
   req: Request,
   res: Response,
@@ -37,7 +78,7 @@ const deleteBeneficiary = async (
   console.log(req.query);
   try {
     if (beneficiaryId) {
-      await BeneficiaryModel.deleteOne({ _id: beneficiaryId });
+      await Beneficiary.deleteOne({ _id: beneficiaryId });
       res.status(200).json({ message: "Beneficiary successfully deleted." });
     } else {
       res.status(500).send("Invalid ID query");
@@ -50,4 +91,10 @@ const deleteBeneficiary = async (
   }
 };
 
-export { editBeneficiary, deleteBeneficiary };
+export {
+  createBeneficiary,
+  getBeneficiaryById,
+  getBeneficiaries,
+  editBeneficiary,
+  deleteBeneficiary,
+};
