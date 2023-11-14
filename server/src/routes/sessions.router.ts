@@ -1,9 +1,10 @@
-import express from "express";
 import {
   createSession,
   getSessionById,
   getSessions,
-} from "../controllers/sessions.controllers";
+} from "../controllers/session.controllers";
+
+import express from "express";
 
 const sessionRouter = express.Router();
 
