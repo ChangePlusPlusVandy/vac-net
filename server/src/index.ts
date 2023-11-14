@@ -10,6 +10,7 @@ import { connectDB } from "../config/database";
 import loanRoute from "./routes/loan.router";
 import beneficiaryRouter from "./routes/beneficiary.router";
 import sessionRouter from "./routes/sessions.router";
+import userRouter from "./routes/user.router";
 
 dotenv.config();
 
@@ -32,7 +33,7 @@ app.use(helmet());
 app.use("/loan", loanRoute);
 app.use("/beneficiary", beneficiaryRouter);
 app.use("/session", sessionRouter);
-
+app.use("/user", userRouter);
 // Default route: Unprotected
 app.get("/", (_req: Request, res: Response) => {
   res.send("Express + Typescript Auth Server Temp!");

@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
 interface Staff {
-  firstName?: String;
-  lastName?: String;
-  firebaseUID?: String;
+  firstName?: string;
+  lastName?: string;
+  firebaseUID?: string;
   joinDate?: Date;
-  status?: String;
-  clearance?: String;
+  status?: string;
+  clearance?: string;
 }
 
 const StaffSchema = new mongoose.Schema<Staff>({
