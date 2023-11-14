@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface IBeneficiary {
+  _id: string;
   firstName?: string;
   lastName?: string;
   joinDate?: Date;
