@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-interface Beneficiary {
+export interface IBeneficiary {
+  _id: string;
   firstName?: string;
   lastName?: string;
   joinDate?: Date;
@@ -14,7 +15,7 @@ interface Beneficiary {
   children?: number;
 }
 
-const BeneficiarySchema = new mongoose.Schema<Beneficiary>({
+const BeneficiarySchema = new mongoose.Schema<IBeneficiary>({
   firstName: {
     type: String,
     //required: true
@@ -40,7 +41,6 @@ const BeneficiarySchema = new mongoose.Schema<Beneficiary>({
   },
   birthday: {
     type: Date,
-    default: () => Date.now(),
   },
   currentSavings: {
     type: Number,
@@ -56,4 +56,4 @@ const BeneficiarySchema = new mongoose.Schema<Beneficiary>({
   },
 });
 
-export default mongoose.model<Beneficiary>("Beneficiary", BeneficiarySchema);
+export default mongoose.model<IBeneficiary>("Beneficiary", BeneficiarySchema);
