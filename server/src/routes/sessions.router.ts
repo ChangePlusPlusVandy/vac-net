@@ -1,10 +1,19 @@
-import { deleteSession, editSession } from "../controllers/session.controllors";
+import {
+  createSession,
+  deleteSession,
+  editSession,
+  getSessionById,
+  getSessions,
+} from "../controllers/session.controllers";
 
 import express from "express";
 
-const router = express.Router();
+const sessionRouter = express.Router();
 
-router.delete("/", deleteSession);
-router.put("/", editSession);
+sessionRouter.post("/", createSession);
+sessionRouter.get("/:sessionId", getSessionById);
+sessionRouter.get("/sessions", getSessions);
+sessionRouter.put("/", editSession);
+sessionRouter.delete("/", deleteSession);
 
-export default router;
+export default sessionRouter;

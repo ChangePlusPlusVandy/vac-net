@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 export interface IBeneficiary {
   firstName?: string;
   lastName?: string;
@@ -14,7 +13,6 @@ export interface IBeneficiary {
   priorities?: string[];
   children?: number;
 }
-
 
 const BeneficiarySchema = new mongoose.Schema<IBeneficiary>({
   firstName: {
