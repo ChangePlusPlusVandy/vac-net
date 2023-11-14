@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-interface Session {
+export interface ISession {
+  _id: string;
   sessionDate: Date;
   region: string;
   staff: string[];
@@ -8,7 +9,7 @@ interface Session {
   attendance: string[];
 }
 
-const SessionSchema = new mongoose.Schema<Session>({
+const SessionSchema = new mongoose.Schema<ISession>({
   sessionDate: {
     type: Date,
   },
@@ -26,4 +27,4 @@ const SessionSchema = new mongoose.Schema<Session>({
   },
 });
 
-export default mongoose.model<Session>("Session", SessionSchema);
+export default mongoose.model<ISession>("Session", SessionSchema);
