@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-
 const { Schema } = mongoose;
 
 export interface Loan {
+  _id: string;
   initialPayment?: number;
   initialPaymentDate?: Date;
   principalLeft?: number;

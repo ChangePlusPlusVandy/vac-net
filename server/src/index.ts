@@ -7,7 +7,7 @@ import { exampleRoute } from "./routes/exampleRoute";
 import { verifyToken } from "./middlewares/verifyToken";
 import { notFound, errorHandler } from "./middlewares/errors";
 import { connectDB } from "../config/database";
-import loanRoute from "./routes/loanRoute";
+import loanRoute from "./routes/loan.router";
 import beneficiaryRouter from "./routes/beneficiary.router";
 import sessionRouter from "./routes/sessions.router";
 
