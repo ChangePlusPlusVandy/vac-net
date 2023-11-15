@@ -1,5 +1,7 @@
 import {
   createStaff,
+  deleteStaff,
+  editStaff,
   getAllStaff,
   getStaffByFirebaseId,
   getStaffById,
@@ -7,11 +9,13 @@ import {
 
 import express from "express";
 
-const staffRoute = express.Router();
+const staffRouter = express.Router();
 
-staffRoute.post("/", createStaff);
-staffRoute.get("/allstaff", getAllStaff);
-staffRoute.get("/getstaff", getStaffById);
-staffRoute.get("/", getStaffByFirebaseId);
+staffRouter.post("/", createStaff);
+staffRouter.get("/allstaff", getAllStaff);
+staffRouter.get("/getstaff", getStaffById);
+staffRouter.get("/", getStaffByFirebaseId);
+staffRouter.put("/", editStaff);
+staffRouter.delete("/", deleteStaff);
 
-export default staffRoute;
+export default staffRouter;
