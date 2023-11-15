@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface Staff {
+export interface IStaff {
   firstName?: string;
   lastName?: string;
   firebaseUID?: string;
@@ -9,7 +9,7 @@ interface Staff {
   clearance?: string;
 }
 
-const StaffSchema = new mongoose.Schema<Staff>({
+const StaffSchema = new mongoose.Schema<IStaff>({
   firstName: {
     type: String,
     required: true,
@@ -36,4 +36,4 @@ const StaffSchema = new mongoose.Schema<Staff>({
   },
 });
 
-export default mongoose.model<Staff>("Staff", StaffSchema);
+export default mongoose.model<IStaff>("Staff", StaffSchema);

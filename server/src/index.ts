@@ -7,7 +7,9 @@ import { exampleRoute } from "./routes/exampleRoute";
 import { verifyToken } from "./middlewares/verifyToken";
 import { notFound, errorHandler } from "./middlewares/errors";
 import { connectDB } from "../config/database";
-import loanRoute from "./routes/loan.router";
+
+// Routers
+import loanRouter from "./routes/loan.router";
 import beneficiaryRouter from "./routes/beneficiary.router";
 import sessionRouter from "./routes/sessions.router";
 import userRouter from "./routes/user.router";
@@ -30,7 +32,7 @@ app.use(helmet());
  * Uses the verifyToken middleware to protect the "/data" route
  * Use the verifyToken to protect all the routes that require authentication
  */
-app.use("/loan", loanRoute);
+app.use("/loan", loanRouter);
 app.use("/beneficiary", beneficiaryRouter);
 app.use("/session", sessionRouter);
 app.use("/user", userRouter);

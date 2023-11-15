@@ -1,4 +1,4 @@
-import StaffModel from "../models/StaffModel";
+import StaffModel, { type IStaff } from "../models/StaffModel";
 import type { Request, Response } from "express";
 
 export const createStaff = async (req: Request, res: Response) => {
@@ -56,6 +56,49 @@ export const getStaffByFirebaseId = async (req: Request, res: Response) => {
     if (err instanceof Error) {
       console.error(err.message);
       return res.status(500).send({ message: err.message });
+    }
+  }
+};
+
+export const editStaff = async (req: Request, res: Response): Promise<void> => {
+  const staffId = req.query?._id;
+  const staffContent = req.body as IStaff;
+
+  try {
+    if (staffId) {
+      const staff = await StaffModel.findByIdAndUpdate(staffId, staffContent, {
+        new: true,
+      });
+      console.log(staff);
+      res.status(200).json(staff);
+    } else {
+      res.status(400).send({ message: "Missing Staff ID" });
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error, error.message);
+      res.status(500).send({ message: error.message });
+    }
+  }
+};
+
+export const deleteStaff = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const staffId = req.query?.id;
+  console.log(req.query);
+  try {
+    if (staffId) {
+      await StaffModel.deleteOne({ _id: staffId });
+      res.status(200).json({ message: "Staff successfully deleted." });
+    } else {
+      res.status(500).send("Invalid ID query");
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error, error.message);
+      res.status(500).send({ message: error.message });
     }
   }
 };
