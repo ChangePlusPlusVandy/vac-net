@@ -93,10 +93,34 @@ const deleteSession = async (req: Request, res: Response) => {
   }
 };
 
+const getNoShows = async (req: Request, res: Response) => {
+  try {
+    const sessionID = req.query.id;
+    if (sessionID) {
+      const session = await Session.findById(sessionID);
+      if (!session) {
+        return res.status(500).send("Invalid ID query");
+      }
+
+      const noShows = session.expectedAttendance.filter(x => !session.actualAttendance.includes(x));
+      return res.status(200).json(noShows);
+    } else {
+      return res.status(400).send({ message: "Missing Session ID" });
+    }
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.log(err, err.message);
+      return res.status(500).send({ message: err.message });
+    }
+    console.log("Something unexpected went wrong");
+  }
+}
+
 export {
   createSession,
   getSessionById,
   getSessions,
   editSession,
   deleteSession,
+  getNoShows,
 };
