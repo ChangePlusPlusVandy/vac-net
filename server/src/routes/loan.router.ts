@@ -2,6 +2,7 @@ import {
   createOutstandingLoan,
   deleteLoan,
   editLoan,
+  getDelinquentPayment,
   getLoanById,
   getLoans,
 } from "../controllers/loans.controllers";
@@ -15,5 +16,6 @@ loanRouter.delete("/:_id", deleteLoan);
 loanRouter.post("/", createOutstandingLoan);
 loanRouter.get("/", getLoanById);
 loanRouter.get("/getall", getLoans);
+loanRouter.get("/getDelinquent", getDelinquentPayment)
 
 export default loanRouter;
