@@ -1,5 +1,10 @@
 /** @type {import("eslint").Linter.Config} */
 const config = {
+  root: true,
+  env: {
+    browser: true,
+    es2020: true,
+  },
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: true,

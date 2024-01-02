@@ -8,12 +8,13 @@ import {
 } from "react-router-dom";
 
 import { AuthProvider } from "./contexts/AuthContext";
-import { ThemeProvider } from "./contexts/ThemeContext";
+import Beneficiaries from "./pages/beneficiaries/beneficiaries";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Login from "./pages/Auth/Login";
 // import PrivateRoute from "./pages/Auth/PrivateRoute";
 import React from "react";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,13 +25,13 @@ const router = createBrowserRouter(
 
         <Route path="/app" element={<DashboardLayout />}>
           <Route index element={<Navigate to="/app/dashboard" />} />
-          <Route path="dashboard" element={<div>Dashboard</div>} />
-          <Route path="beneficiaries" element={<div>Beneficiaries</div>} />
-          <Route path="loans" element={<div>Loans</div>} />
-          <Route path="sessions" element={<div>Sessions</div>} />
-          <Route path="staff" element={<div>Staff</div>} />
-          <Route path="support" element={<div>Support</div>} />
-          <Route path="settings" element={<div>Settings</div>} />
+          <Route path="/app/dashboard" element={<div>Dashboard</div>} />
+          <Route path="/app/beneficiaries" element={<Beneficiaries />} />
+          <Route path="/app/loans" element={<div>Loans</div>} />
+          <Route path="/app/sessions" element={<div>Sessions</div>} />
+          <Route path="/app/staff" element={<div>Staff</div>} />
+          <Route path="/app/support" element={<div>Support</div>} />
+          <Route path="/app/settings" element={<div>Settings</div>} />
         </Route>
 
         <Route path="/forgot-password" element={<ForgotPassword />} />
