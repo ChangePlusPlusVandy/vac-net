@@ -10,7 +10,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 
-import auth from "../firebase/config";
+import { auth } from "../firebase/config";
 
 interface AuthContextData {
   currentUser: User | null;

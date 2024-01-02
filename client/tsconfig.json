@@ -28,7 +28,7 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    "firebase/config.js",
+    "firebase/config.ts",
     "vite.config.ts"
   ],
   "exclude": ["node_modules"]

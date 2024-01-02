@@ -1,10 +1,12 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { useAuth } from "../../AuthContext";
+
+import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+
 import FormError from "./FormError";
+import { useAuth } from "../../AuthContext";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface FormValues {
   email: string;
@@ -42,9 +44,10 @@ const ForgotPassword: React.FC = () => {
       setError("");
       await forgotPassword(values.email);
       setMessage("Check your email for further instructions");
-    } catch (err: any) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
     }
   };
 
