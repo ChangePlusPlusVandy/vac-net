@@ -4,7 +4,7 @@ import { Icons } from "@/components/ui/icons";
 import { UserAuthForm } from "./UserAuthForm";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useAuth } from "../../AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {

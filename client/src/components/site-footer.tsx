@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export function SiteFooter({
   className,
@@ -23,6 +24,7 @@ export function SiteFooter({
             </a>
           </p>
         </div>
+        <ModeToggle />
       </div>
     </footer>
   );

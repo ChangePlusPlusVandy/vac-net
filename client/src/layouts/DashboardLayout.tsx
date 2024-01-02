@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
 
 import { type Icons } from "@/components/ui/icons";
-import { useAuth } from "@/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { MainNav } from "@/components/main-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { UserAccountNav } from "@/components/user-account-nav";
