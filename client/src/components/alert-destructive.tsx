@@ -11,7 +11,9 @@ export function AlertDestructive({
   return (
     <Alert variant="destructive">
       <ExclamationTriangleIcon className="h-4 w-4" />
-      <Icons.logo className="mx-auto h-6 w-6" />
+      <div style={{ color: "#16a34a" }}>
+        <Icons.logo className="mx-auto h-6 w-6" />
+      </div>
       <AlertTitle>Error</AlertTitle>
       <AlertDescription>
         {errorDescription ?? "Something went wrong."}

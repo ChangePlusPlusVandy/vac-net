@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import BeneficiaryToolbar from "@/components/toolbars/beneficiary-toolbar";
 import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
 import { ItemCreateButton } from "@/components/create-item-button";
+import StaffToolbar from "@/components/toolbars/staff-toolbar";
 
 const Beneficiaries = () => {
   const [query, setQuery] = useState("");
@@ -13,12 +13,12 @@ const Beneficiaries = () => {
   return (
     <DashboardShell>
       <DashboardHeader
-        heading="Beneficaries"
-        text="View and manage your beneficary data"
+        heading="Staff"
+        text="View and manage your staff members."
       >
-        <ItemCreateButton item="Add Beneficary" />
+        <ItemCreateButton item="Onboard New Member" />
       </DashboardHeader>
-      <BeneficiaryToolbar
+      <StaffToolbar
         query={query}
         setQuery={setQuery}
         status={status}
@@ -26,7 +26,7 @@ const Beneficiaries = () => {
         sort={sort}
         setSort={setSort}
       />
-      <div>beneficiaries</div>
+      <div>sessions</div>
     </DashboardShell>
   );
 };

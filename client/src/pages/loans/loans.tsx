@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import BeneficiaryToolbar from "@/components/toolbars/beneficiary-toolbar";
 import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
 import { ItemCreateButton } from "@/components/create-item-button";
+import LoanToolbar from "@/components/toolbars/loan-toolbar";
 
 const Beneficiaries = () => {
   const [query, setQuery] = useState("");
@@ -12,13 +12,10 @@ const Beneficiaries = () => {
 
   return (
     <DashboardShell>
-      <DashboardHeader
-        heading="Beneficaries"
-        text="View and manage your beneficary data"
-      >
-        <ItemCreateButton item="Add Beneficary" />
+      <DashboardHeader heading="Loans" text="View and manage your loan data">
+        <ItemCreateButton item="Add Loan" />
       </DashboardHeader>
-      <BeneficiaryToolbar
+      <LoanToolbar
         query={query}
         setQuery={setQuery}
         status={status}
@@ -26,7 +23,7 @@ const Beneficiaries = () => {
         sort={sort}
         setSort={setSort}
       />
-      <div>beneficiaries</div>
+      <div>loans</div>
     </DashboardShell>
   );
 };
