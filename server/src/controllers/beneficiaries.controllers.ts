@@ -91,10 +91,28 @@ const deleteBeneficiary = async (
   }
 };
 
+const countBeneficiaries = async (req: Request, res: Response) => {
+  try {
+    const totalCount = await Beneficiary.countDocuments();
+    const activeCount = await Beneficiary.countDocuments({ archived: false });
+
+    return res.status(200).json({
+      totalBeneficiaries: totalCount,
+      activeBeneficiaries: activeCount
+    });
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err.message);
+      return res.status(500).send({ message: err.message });
+    }
+  }
+};
+
 export {
   createBeneficiary,
   getBeneficiaryById,
   getBeneficiaries,
   editBeneficiary,
   deleteBeneficiary,
+  countBeneficiaries
 };
