@@ -1,4 +1,5 @@
 import {
+  countBeneficiaries,
   createBeneficiary,
   deleteBeneficiary,
   editBeneficiary,
@@ -15,5 +16,6 @@ beneficiaryRouter.delete("/", deleteBeneficiary);
 beneficiaryRouter.post("/create", createBeneficiary);
 beneficiaryRouter.get("/id", getBeneficiaryById);
 beneficiaryRouter.get("/all", getBeneficiaries);
+beneficiaryRouter.get("/count", countBeneficiaries);
 
 export default beneficiaryRouter;
