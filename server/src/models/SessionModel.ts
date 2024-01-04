@@ -6,7 +6,8 @@ export interface ISession {
   region: string;
   staff: string[];
   archived?: boolean;
-  attendance: string[];
+  expectedAttendance: string[];
+  actualAttendance: string[];
 }
 
 const SessionSchema = new mongoose.Schema<ISession>({
@@ -22,7 +23,10 @@ const SessionSchema = new mongoose.Schema<ISession>({
   archived: {
     type: Boolean,
   },
-  attendance: {
+  expectedAttendance: {
+    type: [String],
+  },
+  actualAttendance: {
     type: [String],
   },
 });
