@@ -76,10 +76,6 @@ const Beneficiary = () => {
     setBeneficiary({ ...beneficiary, phoneNumber: e.target.value });
   };
 
-  const handleBirthDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBeneficiary({ ...beneficiary, birthday: new Date(e.target.value) });
-  };
-
   const handleCurrentSavingsChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -170,7 +166,7 @@ const Beneficiary = () => {
             </Label>
             <DatePicker
               date={beneficiary?.birthday}
-              setDate={handleBirthDateChange}
+              // setDate={handleBirthDateChange}
             />
           </div>
         )}
@@ -197,6 +193,18 @@ const Beneficiary = () => {
             onChange={handleCurrentSpendingChange}
             disabled={params.get("f") !== "1"}
           />
+        </div>
+        <div className="flex flex-row justify-between">
+          <div className="w-1/2">
+            <Label htmlFor="name" className="text-left">
+              Associated Loans
+            </Label>
+          </div>
+          <div className="w-1/2">
+            <Label htmlFor="name" className="text-left">
+              Associated Sessions
+            </Label>
+          </div>
         </div>
       </div>
     </DashboardShell>

@@ -5,6 +5,7 @@ import BeneficiaryCard from "@/components/cards/beneficiary-card";
 import BeneficiaryToolbar from "@/components/toolbars/beneficiary-toolbar";
 import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
+import { useAuth } from "@/contexts/AuthContext";
 import { useSearchParams } from "react-router-dom";
 
 export interface Beneficiary {
@@ -29,6 +30,7 @@ const Beneficiaries = () => {
   const [sort, setSort] = useState("");
   const [notifyNew, setNotifyNew] = useState(false);
   const [beneficiaries, setBeneficiaries] = useState<Beneficiary[]>([]);
+  const { mongoUser } = useAuth();
 
   useEffect(() => {
     if (!sort) return;
@@ -94,6 +96,18 @@ const Beneficiaries = () => {
     void getBeneficiaries();
   }, [notifyNew]);
 
+  const handleFilters = (b: Beneficiary) => {
+    if (!status) return true;
+
+    switch (status) {
+      case "0":
+        return mongoUser?.bookmarkedBeneficiaries?.includes(b._id ?? "");
+      case "1":
+        return b.loan === undefined;
+      // TODO: add rest of cases
+    }
+  };
+
   return (
     <DashboardShell>
       <DashboardHeader
@@ -126,6 +140,7 @@ const Beneficiaries = () => {
                 .includes(query.get("f")?.toLowerCase() ?? "")
             );
           })
+          .filter((bene) => handleFilters(bene))
           .map((bene, i) => {
             return <BeneficiaryCard beneficiary={bene} key={i} />;
           })}

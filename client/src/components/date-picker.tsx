@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import * as React from "react";
@@ -18,8 +19,8 @@ export function DatePicker({
   date,
   setDate,
 }: {
-  date: Date;
-  setDate: React.SetStateAction<Date>;
+  date?: Date;
+  setDate?: React.SetStateAction<Date>;
 }) {
   return (
     <Popover>
@@ -39,7 +40,7 @@ export function DatePicker({
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          // onSelect={setDate}
           initialFocus
         />
       </PopoverContent>

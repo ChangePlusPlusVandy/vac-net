@@ -136,9 +136,9 @@ const BeneficiaryCard = ({ beneficiary }: { beneficiary: Beneficiary }) => {
         <div className="flex space-x-4 text-sm text-muted-foreground">
           <Badge
             className="flex items-center"
-            variant={
-              getLoanStatus() === "Delinquient" ? "destructive" : "default"
-            }
+            // variant={
+            //   getLoanStatus() === "Delinquient" ? "destructive" : "default"
+            // }
           >
             <BellIcon className="mr-1 h-3 w-3" />
             {getLoanStatus()}
