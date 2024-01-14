@@ -45,7 +45,6 @@ const editBeneficiary = async (req: Request, res: Response): Promise<void> => {
         { new: true },
       );
 
-      console.log(beneficiary);
       res.status(200).json(beneficiary);
     } else {
       res.status(400).send({ message: "Missing Beneficiary ID" });
@@ -59,6 +58,7 @@ const editBeneficiary = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getBeneficiaries = async (req: Request, res: Response) => {
+  console.log("got here");
   try {
     const allUsers = await Beneficiary.find({});
     return res.status(200).json(allUsers);

@@ -7,6 +7,7 @@ export interface IStaff {
   joinDate?: Date;
   status?: string;
   clearance?: string;
+  bookmarkedBeneficiaries?: string[];
 }
 
 const StaffSchema = new mongoose.Schema<IStaff>({
@@ -33,6 +34,9 @@ const StaffSchema = new mongoose.Schema<IStaff>({
   clearance: {
     type: String,
     required: true,
+  },
+  bookmarkedBeneficiaries: {
+    type: [String],
   },
 });
 

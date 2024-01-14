@@ -15,7 +15,7 @@ staffRouter.post("/", createStaff);
 staffRouter.get("/allstaff", getAllStaff);
 staffRouter.get("/getstaff", getStaffById);
 staffRouter.get("/", getStaffByFirebaseId);
-staffRouter.put("/", editStaff);
+staffRouter.post("/edit", editStaff);
 staffRouter.delete("/", deleteStaff);
 
 export default staffRouter;

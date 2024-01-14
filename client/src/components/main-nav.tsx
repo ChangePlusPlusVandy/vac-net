@@ -31,7 +31,7 @@ export function MainNav({ items }: DashboardNavProps) {
           <Icons.logo />
         </div>
         <span className="hidden font-bold sm:inline-block">
-          Vounteer Action Network
+          Volunteer Action Network
         </span>
       </a>
       {items?.length ? (

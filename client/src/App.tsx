@@ -9,6 +9,7 @@ import {
 
 import { AuthProvider } from "./contexts/AuthContext";
 import Beneficiaries from "./pages/beneficiaries/beneficiaries";
+import Beneficiary from "./pages/beneficiaries/beneficiary";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Loans from "./pages/loans/loans";
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
         <Route index element={<Navigate to="/app/dashboard" />} />
         <Route path="/app/dashboard" element={<div>Dashboard</div>} />
         <Route path="/app/beneficiaries" element={<Beneficiaries />} />
+        <Route path="/app/beneficiaries/:id" element={<Beneficiary />} />
         <Route path="/app/loans" element={<Loans />} />
         <Route path="/app/sessions" element={<Session />} />
         <Route path="/app/staff" element={<Staff />} />

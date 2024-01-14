@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 type ItemCreateButtonProps = ButtonProps & {
   isLoading?: boolean;
   item: string;
+  onClick?: () => void;
 };
 
 export function ItemCreateButton({

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 export interface IBeneficiary {
   _id: string;
@@ -12,22 +13,27 @@ export interface IBeneficiary {
   currentSavings?: number;
   currentSpending?: number;
   priorities?: string[];
+  loan?: string;
   children?: number;
 }
 
 const BeneficiarySchema = new mongoose.Schema<IBeneficiary>({
   firstName: {
     type: String,
-    //required: true
+    required: true,
   },
   lastName: {
     type: String,
-    //required: true
+    required: true,
   },
   joinDate: {
     type: Date,
     default: () => Date.now(),
     //required: true,
+  },
+  loan: {
+    type: Schema.Types.ObjectId,
+    ref: "Loan",
   },
   languages: {
     type: [String],

@@ -14,7 +14,7 @@ const Beneficiaries = () => {
     <DashboardShell>
       <DashboardHeader
         heading="Sessions"
-        text="View and manage your session data"
+        text="View and manage your session data."
       >
         <ItemCreateButton item="Add Session" />
       </DashboardHeader>

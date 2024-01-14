@@ -24,6 +24,7 @@ export function SiteFooter({
             >
               ChangePlusPlus
             </a>
+            .
           </p>
         </div>
         <ModeToggle />

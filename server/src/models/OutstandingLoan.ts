@@ -11,6 +11,7 @@ export interface Loan {
   archivedLoan?: boolean;
   beneficiary?: string;
   validLoan?: boolean;
+  loanStatus: string;
 }
 
 const LoanSchema = new mongoose.Schema<Loan>({
@@ -42,6 +43,10 @@ const LoanSchema = new mongoose.Schema<Loan>({
   },
   validLoan: {
     type: Boolean,
+  },
+  loanStatus: {
+    type: String,
+    required: true,
   },
 });
 

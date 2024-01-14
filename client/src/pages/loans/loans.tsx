@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
@@ -12,7 +12,7 @@ const Beneficiaries = () => {
 
   return (
     <DashboardShell>
-      <DashboardHeader heading="Loans" text="View and manage your loan data">
+      <DashboardHeader heading="Loans" text="View and manage your loan data.">
         <ItemCreateButton item="Add Loan" />
       </DashboardHeader>
       <LoanToolbar

@@ -12,8 +12,20 @@ import {
 
 import { auth } from "../../firebase/config";
 
+export interface Staff {
+  _id?: string;
+  firstName?: string;
+  lastName?: string;
+  firebaseUID?: string;
+  joinDate?: Date;
+  status?: string;
+  clearance?: string;
+  bookmarkedBeneficiaries?: string[];
+}
+
 interface AuthContextData {
   currentUser: User | null;
+  mongoUser: Staff | undefined;
   login: (email: string, password: string) => Promise<UserCredential>;
   registerUser: (
     name: string,
@@ -24,6 +36,8 @@ interface AuthContextData {
   getUser: () => User | null;
   forgotPassword: (email: string) => Promise<void>;
   confirmReset: (code: string, password: string) => Promise<void>;
+  refresh: boolean;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -34,7 +48,9 @@ export function useAuth(): AuthContextData {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [mongoUser, setMongoUser] = useState<Staff | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
+  const [refresh, setRefresh] = useState(false);
 
   async function login(email: string, password: string) {
     return await signInWithEmailAndPassword(auth, email, password);
@@ -66,6 +82,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return await confirmPasswordReset(auth, code, password);
   }
 
+  async function getMongoUser(uid: string) {
+    try {
+      const res = await fetch(
+        `http://localhost:3001/user?firebaseUID=${uid}`,
+      ).then((res) => res.json() as unknown as Staff[]);
+      setMongoUser(res[0]);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -74,14 +102,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    if (currentUser) {
+      void getMongoUser(currentUser.uid);
+    }
+  }, [currentUser, refresh]);
+
   const value = {
     currentUser,
+    mongoUser,
     login,
     registerUser,
     logout,
     getUser,
     forgotPassword,
     confirmReset,
+    refresh,
+    setRefresh,
   };
 
   return (

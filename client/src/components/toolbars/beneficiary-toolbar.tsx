@@ -3,41 +3,50 @@ import { Combobox } from "@/components/combobox";
 import { Icons } from "../ui/icons";
 import { Input } from "@/components/ui/input";
 import React from "react";
+import { type SetURLSearchParams } from "react-router-dom";
 
 const loanStatus = [
   {
-    value: "pending",
+    value: "0",
+    label: "Bookmarked",
+  },
+  {
+    value: "1",
+    label: "No Loan",
+  },
+  {
+    value: "2",
     label: "Pending Approval",
   },
   {
-    value: "good",
-    label: "Good Standing",
+    value: "3",
+    label: "On Time",
   },
   {
-    value: "bad",
+    value: "4",
     label: "Delinquient",
   },
   {
-    value: "paid",
+    value: "5",
     label: "Fully Paid Off",
   },
 ];
 
 const sortBy = [
   {
-    value: "fn",
+    value: "1",
     label: "First Name",
   },
   {
-    value: "ln",
+    value: "2",
     label: "Last Name",
   },
   {
-    value: "jd",
+    value: "3",
     label: "Join Date",
   },
   {
-    value: "la",
+    value: "4",
     label: "Loan Amount",
   },
 ];
@@ -50,8 +59,8 @@ const BeneficiaryToolbar = ({
   sort,
   setSort,
 }: {
-  query: string;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  query: string | null;
+  setQuery: SetURLSearchParams;
   status: string;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
   sort: string;
@@ -63,12 +72,13 @@ const BeneficiaryToolbar = ({
         <Input
           placeholder="Filter Beneficiaries"
           className="h-9 w-[150px] lg:w-[250px]"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          type="text"
+          value={query ?? ""}
+          onChange={(e) => setQuery({ f: e.target.value })}
         />
         <Combobox
           items={loanStatus}
-          itemName="Loan Status"
+          itemName="Filters"
           value={status}
           setValue={setStatus}
         />
@@ -78,7 +88,7 @@ const BeneficiaryToolbar = ({
           value={sort}
           setValue={setSort}
         />
-        {query !== "" || status !== "" || sort !== "" ? (
+        {!!query || !!status || !!sort ? (
           <Button
             variant="ghost"
             className="h-8 px-2 lg:px-3"
