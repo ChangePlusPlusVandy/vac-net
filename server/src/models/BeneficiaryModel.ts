@@ -33,7 +33,7 @@ const BeneficiarySchema = new mongoose.Schema<IBeneficiary>({
   },
   loan: {
     type: Schema.Types.ObjectId,
-    ref: "Loan",
+    ref: "OutstandingLoan",
   },
   languages: {
     type: [String],

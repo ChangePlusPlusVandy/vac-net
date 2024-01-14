@@ -87,6 +87,7 @@ const Beneficiaries = () => {
             },
           },
         ).then((res: Response) => res.json() as unknown as Beneficiary[]);
+        console.log(data);
         // TODO: decide what the initial sort should be
         setBeneficiaries(data);
       } catch (error) {

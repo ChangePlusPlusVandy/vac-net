@@ -20,7 +20,9 @@ const getBeneficiaryById = async (req: Request, res: Response) => {
   const beneficiaryID = req.query?.id;
   try {
     if (beneficiaryID) {
-      const beneficiary = await Beneficiary.findById(beneficiaryID).exec();
+      const beneficiary = await Beneficiary.findById(beneficiaryID)
+        .populate("loan")
+        .exec();
       return res.status(200).json(beneficiary);
     } else {
       return res.status(500).send("Invalid ID query");
@@ -60,7 +62,7 @@ const editBeneficiary = async (req: Request, res: Response): Promise<void> => {
 const getBeneficiaries = async (req: Request, res: Response) => {
   console.log("got here");
   try {
-    const allUsers = await Beneficiary.find({});
+    const allUsers = await Beneficiary.find({}).populate("loan");
     return res.status(200).json(allUsers);
   } catch (err) {
     if (err instanceof Error) {
@@ -98,7 +100,7 @@ const countBeneficiaries = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       totalBeneficiaries: totalCount,
-      activeBeneficiaries: activeCount
+      activeBeneficiaries: activeCount,
     });
   } catch (err) {
     if (err instanceof Error) {
@@ -114,5 +116,5 @@ export {
   getBeneficiaries,
   editBeneficiary,
   deleteBeneficiary,
-  countBeneficiaries
+  countBeneficiaries,
 };

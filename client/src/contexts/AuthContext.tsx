@@ -88,7 +88,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         `http://localhost:3001/user?firebaseUID=${uid}`,
       ).then((res) => res.json() as unknown as Staff[]);
       setMongoUser(res[0]);
-      console.log(res);
     } catch (err) {
       console.log(err);
     }
