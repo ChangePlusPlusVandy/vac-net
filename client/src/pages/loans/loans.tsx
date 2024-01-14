@@ -5,6 +5,19 @@ import { DashboardShell } from "@/components/shell";
 import { ItemCreateButton } from "@/components/create-item-button";
 import LoanToolbar from "@/components/toolbars/loan-toolbar";
 
+export interface Loan {
+  _id?: string;
+  initialPayment?: number;
+  initialPaymentDate?: Date;
+  principalLeft?: number;
+  nextPaymentDate?: Date;
+  nextPaymentAmount?: number;
+  archivedLoan?: boolean;
+  beneficiary?: string;
+  validLoan?: boolean;
+  loanStatus?: string;
+}
+
 const Beneficiaries = () => {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("");

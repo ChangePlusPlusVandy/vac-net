@@ -5,6 +5,7 @@ import BeneficiaryCard from "@/components/cards/beneficiary-card";
 import BeneficiaryToolbar from "@/components/toolbars/beneficiary-toolbar";
 import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
+import type { Loan } from "../loans/loans";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSearchParams } from "react-router-dom";
 
@@ -20,7 +21,7 @@ export interface Beneficiary {
   currentSavings?: number;
   currentSpending?: number;
   priorities?: string[];
-  loan?: string;
+  loan?: Loan;
   children?: number;
 }
 
@@ -78,7 +79,6 @@ const Beneficiaries = () => {
   useEffect(() => {
     const getBeneficiaries = async () => {
       try {
-        // TODO: data obj should include associated loan data for each user
         const data: Beneficiary[] = await fetch(
           "http://localhost:3001/beneficiary/all",
           {
@@ -105,6 +105,8 @@ const Beneficiaries = () => {
         return mongoUser?.bookmarkedBeneficiaries?.includes(b._id ?? "");
       case "1":
         return b.loan === undefined;
+      case "4":
+        return b.loan?.loanStatus === "Delinquient";
       // TODO: add rest of cases
     }
   };

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 export interface Loan {
-  _id: string;
+  _id?: string;
   initialPayment?: number;
   initialPaymentDate?: Date;
   principalLeft?: number;
@@ -11,7 +11,7 @@ export interface Loan {
   archivedLoan?: boolean;
   beneficiary?: string;
   validLoan?: boolean;
-  loanStatus: string;
+  loanStatus?: string;
 }
 
 const LoanSchema = new mongoose.Schema<Loan>({

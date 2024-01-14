@@ -32,7 +32,7 @@ const BeneficiaryCard = ({ beneficiary }: { beneficiary: Beneficiary }) => {
   const getLoanStatus = () => {
     if (!beneficiary.loan) return "No Loan";
 
-    // TODO: flush this out with all of the combos
+    return beneficiary.loan?.loanStatus;
   };
 
   const handleGoToBeneficiary = (e: React.MouseEvent) => {
@@ -136,9 +136,13 @@ const BeneficiaryCard = ({ beneficiary }: { beneficiary: Beneficiary }) => {
         <div className="flex space-x-4 text-sm text-muted-foreground">
           <Badge
             className="flex items-center"
-            // variant={
-            //   getLoanStatus() === "Delinquient" ? "destructive" : "default"
-            // }
+            variant={
+              getLoanStatus() === "Delinquient"
+                ? "destructive"
+                : getLoanStatus() === "No Loan"
+                ? "secondary"
+                : "default"
+            }
           >
             <BellIcon className="mr-1 h-3 w-3" />
             {getLoanStatus()}
