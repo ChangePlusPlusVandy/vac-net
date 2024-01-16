@@ -5,10 +5,11 @@ import { DashboardShell } from "@/components/shell";
 import { ItemCreateButton } from "@/components/create-item-button";
 import StaffToolbar from "@/components/toolbars/staff-toolbar";
 
-const Beneficiaries = () => {
+const Staff = () => {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("");
   const [sort, setSort] = useState("");
+
 
   return (
     <DashboardShell>
@@ -31,4 +32,4 @@ const Beneficiaries = () => {
   );
 };
 
-export default Beneficiaries;
+export default Staff;

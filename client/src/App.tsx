@@ -18,6 +18,7 @@ import Login from "./pages/Auth/Login";
 import React from "react";
 import Session from "./pages/sessions/sessions";
 import Staff from "@/pages/staff/staff";
+import StaffMembers from "@/pages/staff/staff-members"
 import { ThemeProvider } from "./contexts/ThemeContext";
 
 const router = createBrowserRouter(
@@ -33,7 +34,7 @@ const router = createBrowserRouter(
         <Route path="/app/beneficiaries/:id" element={<Beneficiary />} />
         <Route path="/app/loans" element={<Loans />} />
         <Route path="/app/sessions" element={<Session />} />
-        <Route path="/app/staff" element={<Staff />} />
+        <Route path="/app/staff" element={<StaffMembers />} />
         <Route path="/app/support" element={<div>Support</div>} />
         <Route path="/app/settings" element={<div>Settings</div>} />
       </Route>

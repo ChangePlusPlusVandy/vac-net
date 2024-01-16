@@ -5,6 +5,16 @@ import { DashboardShell } from "@/components/shell";
 import { ItemCreateButton } from "@/components/create-item-button";
 import SessionToolbar from "@/components/toolbars/session-toolbar";
 
+export interface ISession {
+  _id: string;
+  sessionDate: Date;
+  region: string;
+  staff: string[];
+  archived?: boolean;
+  expectedAttendance: string[];
+  actualAttendance: string[];
+}
+
 const Beneficiaries = () => {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("");
