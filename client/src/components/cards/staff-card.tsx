@@ -15,6 +15,7 @@ const StaffCard = ({staff} : {staff: IStaff}) => {
     return (
         <Card
             className="cursor-pointer hover:border-gray-400 dark:hover:border-gray-600"
+            onClick={() => navigate(`./${staff._id}`)}
         >
             <CardHeader className="grid grid-cols-[1fr_32px] items-start gap-4 space-y-0">
             <div className="mb-1">

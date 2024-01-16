@@ -9,6 +9,7 @@ import StaffCard from "@/components/cards/staff-card"
 
 
 export interface IStaff {
+    _id?: string,
     firstName?: string;
     lastName?: string;
     firebaseUID?: string;
