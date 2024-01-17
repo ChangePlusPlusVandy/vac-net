@@ -3,6 +3,7 @@ import { Combobox } from "@/components/combobox";
 import { Icons } from "../ui/icons";
 import { Input } from "@/components/ui/input";
 import React from "react";
+import { type SetURLSearchParams } from "react-router-dom";
 
 const loanStatus = [
   {
@@ -46,8 +47,8 @@ const BeneficiaryToolbar = ({
   sort,
   setSort,
 }: {
-  query: string;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  query: string | null;
+  setQuery: SetURLSearchParams;
   status: string;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
   sort: string;
@@ -59,7 +60,7 @@ const BeneficiaryToolbar = ({
         <Input
           placeholder="Filter Loans"
           className="h-9 w-[150px] lg:w-[250px]"
-          value={query}
+          value={query ?? ""}
           onChange={(e) => setQuery(e.target.value)}
         />
         <Combobox
