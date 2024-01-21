@@ -26,6 +26,7 @@ const StaffMembers = () => {
   const [notifyNew, setNotifyNew] = useState(false);
   const [query, setQuery] = useSearchParams();
   const [sort, setSort] = useState("");
+  const [status, setStatus] = useState("");
   
   useEffect(() => {
     if (!sort){
@@ -129,14 +130,14 @@ const StaffMembers = () => {
       >
         <ItemCreateButton item="Onboard New Member" />
       </DashboardHeader>
-      {/* <StaffToolbar
-        query={query}
+      <StaffToolbar
+        query={query.get("f")}
         setQuery={setQuery}
         status={status}
         setStatus={setStatus}
         sort={sort}
         setSort={setSort}
-      /> */}
+      />
       <div className="py-3 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
         {staffMembers.map((staff, i) => {
           return <StaffCard staff={staff} key={i}/>
