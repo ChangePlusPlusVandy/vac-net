@@ -162,7 +162,7 @@ const Sessions = () => {
         sortDirection={sortDirection}
         setSortDirection={setSortDirection}
       />
-      {/* I don't get the get("f") stuff so please change if it is unnecessary */}
+      {/* I don't get the get("f") stuff so please change if it is unnecessary. Also right now it only searches by location. */}
       <div className="py-3 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
         {sessions
           .filter((ses) => {

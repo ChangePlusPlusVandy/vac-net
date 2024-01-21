@@ -22,16 +22,16 @@ export function AddSession({
   notify: boolean;
   setNotify: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [location, setLocation] = useState("");
+  const [date, setDate] = useState("");
   const [phoneNumber, setPhoneNumber] = useState<string | undefined>();
   const [currentSavings, setCurrentSavings] = useState("");
   const [currentSpending, setCurrentSpending] = useState("");
 
   const handleAddSession = async () => {
     const data = {
-      firstName,
-      lastName,
+      location,
+      date,
       phoneNumber,
       currentSavings,
       currentSpending,
@@ -64,23 +64,23 @@ export function AddSession({
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              First Name
+              Location
             </Label>
             <Input
-              id="fname"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              id="location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
               className="col-span-3"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Last Name
+              Date
             </Label>
             <Input
-              id="lname"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              id="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
               className="col-span-3"
             />
           </div>
