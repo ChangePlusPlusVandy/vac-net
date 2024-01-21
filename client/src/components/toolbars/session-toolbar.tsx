@@ -2,35 +2,42 @@ import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/combobox";
 import { Icons } from "../ui/icons";
 import { Input } from "@/components/ui/input";
+import { DoubleArrowUpIcon, DoubleArrowDownIcon } from "@radix-ui/react-icons";
+
 import React from "react";
+import { type SetURLSearchParams } from "react-router-dom";
 
 const sessionStatus = [
   {
-    value: "pending",
+    value: "1",
     label: "Completed",
   },
   {
-    value: "good",
+    value: "2",
     label: "Coming Up",
   },
   {
-    value: "bad",
+    value: "3",
     label: "Happening Soon",
   },
   {
-    value: "s",
+    value: "4",
     label: "Has Missing Attendees",
   },
 ];
 
 const sortBy = [
   {
-    value: "jd",
+    value: "1",
     label: "Meeting Date",
   },
   {
-    value: "init-la",
+    value: "2",
     label: "Expected Attendence",
+  },
+  {
+    value: "3",
+    label: "Region",
   },
 ];
 
@@ -41,13 +48,17 @@ const BeneficiaryToolbar = ({
   setStatus,
   sort,
   setSort,
+  sortDirection,
+  setSortDirection,
 }: {
-  query: string;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  query: string | null;
+  setQuery: SetURLSearchParams;
   status: string;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
   sort: string;
   setSort: React.Dispatch<React.SetStateAction<string>>;
+  sortDirection: string;
+  setSortDirection: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   return (
     <div className="flex items-center justify-between ml-1">
@@ -55,8 +66,8 @@ const BeneficiaryToolbar = ({
         <Input
           placeholder="Filter Sessions"
           className="h-9 w-[150px] lg:w-[250px]"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          value={query ?? ""}
+          onChange={(e) => setQuery({ f: e.target.value })}
         />
         <Combobox
           items={sessionStatus}
@@ -70,7 +81,30 @@ const BeneficiaryToolbar = ({
           value={sort}
           setValue={setSort}
         />
-        {query !== "" || status !== "" || sort !== "" ? (
+        {sort !== "" ? (
+          sortDirection === "Ascending" ? (
+            <Button
+              variant="ghost"
+              className="h-8 px-2 lg:px-3"
+              value={sortDirection}
+              onClick={() => setSortDirection("Descending")}
+            >
+              <DoubleArrowUpIcon></DoubleArrowUpIcon>
+            </Button>
+          ) : (
+            <Button
+              variant="ghost"
+              className="h-8 px-2 lg:px-3"
+              value={sortDirection}
+              onClick={() => setSortDirection("Ascending")}
+            >
+              <DoubleArrowDownIcon></DoubleArrowDownIcon>
+            </Button>
+          )
+        ) : (
+          <></>
+        )}
+        {!!query || !!status || !!sort ? (
           <Button
             variant="ghost"
             className="h-8 px-2 lg:px-3"
