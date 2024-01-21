@@ -24,8 +24,81 @@ export interface IStaff {
 const StaffMembers = () => {
   const [staffMembers, setStaffMembers] = useState<IStaff[]>([]);
   const [notifyNew, setNotifyNew] = useState(false);
-  const [query, setQuery] = useSearchParams()
+  const [query, setQuery] = useSearchParams();
+  const [sort, setSort] = useState("");
   
+  useEffect(() => {
+    if (!sort){
+      return;
+    }
+
+    switch(sort){
+      case "1":
+        console.log("Sort by first name");
+        const firstNameSort = [...staffMembers];
+
+        firstNameSort.sort((a, b) => {
+          if (a.firstName && b.firstName){
+            return a.firstName.localeCompare(b.firstName);
+          }
+          return 0;
+        });
+
+
+        console.log(firstNameSort);
+        setStaffMembers(firstNameSort);
+        break;
+
+      case "2":
+        console.log("Sort by last name");
+        const lastNameSort = [...staffMembers];
+
+        lastNameSort.sort((a, b) => {
+          if (a.lastName && b.lastName){
+            return a.lastName.localeCompare(b.lastName);
+          }
+          return 0;
+        });
+
+        console.log(lastNameSort);
+        setStaffMembers(lastNameSort);
+        break;
+
+      case "3":
+        console.log("Sort by firebaseUID");
+        const idSort = [...staffMembers];
+
+        idSort.sort((a, b) => {
+          if (a.firebaseUID && b.firebaseUID){
+            return a.firebaseUID.localeCompare(b.firebaseUID);
+          }
+
+          return 0;
+        });
+
+        console.log(idSort);
+        setStaffMembers(idSort);
+        break;
+
+      case "4":
+        console.log("Sort by join date");
+        const dateSort = [...staffMembers];
+
+        dateSort.sort((a, b) => {
+          if (a.joinDate && b.joinDate){
+            return a.joinDate.getTime() - b.joinDate.getTime();
+          }
+
+          return 0;
+        })
+
+        console.log(dateSort);
+        setStaffMembers(dateSort);
+        break;
+    }
+  }, [sort]);
+
+
   useEffect(() => {
     const getStaffMembers = async () => {
       try {

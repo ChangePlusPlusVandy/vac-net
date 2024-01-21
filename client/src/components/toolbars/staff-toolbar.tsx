@@ -25,17 +25,21 @@ const loanStatus = [
 
 const sortBy = [
   {
-    value: "jd",
-    label: "Issue Date",
+    value: "1",
+    label: "First Name",
   },
   {
-    value: "init-la",
-    label: "Initial Loan Amount",
+    value: "2",
+    label: "Last Name",
   },
   {
-    value: "remaining-la",
-    label: "Remaining Principal",
+    value: "3",
+    label: "Firebase UID",
   },
+  {
+    value: "4",
+    label: "Join Date"
+  }
 ];
 
 const StaffToolbar = ({
