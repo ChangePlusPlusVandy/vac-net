@@ -5,23 +5,15 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import { SetURLSearchParams } from "react-router-dom";
 
-const loanStatus = [
+const staffClearance = [
   {
-    value: "pending",
-    label: "Pending Approval",
+    value: "0",
+    label: "Admin Clearance",
   },
   {
-    value: "good",
-    label: "Good Standing",
-  },
-  {
-    value: "bad",
-    label: "Delinquient",
-  },
-  {
-    value: "paid",
-    label: "Fully Paid Off",
-  },
+    value: "1",
+    label: "Employee Clearance",
+  }
 ];
 
 const sortBy = [
@@ -52,7 +44,7 @@ const StaffToolbar = ({
   setSort,
 }: {
   query: string | null;
-  setQuery: SetURLSearchParams;//React.Dispatch<React.SetStateAction<string>>;
+  setQuery: SetURLSearchParams;
   status: string;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
   sort: string;
@@ -68,7 +60,7 @@ const StaffToolbar = ({
           onChange={(e) => setQuery({f: e.target.value})}
         />
         <Combobox
-          items={loanStatus}
+          items={staffClearance}
           itemName="Filters"
           value={status}
           setValue={setStatus}

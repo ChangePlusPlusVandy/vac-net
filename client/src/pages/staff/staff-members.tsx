@@ -6,6 +6,9 @@ import { ItemCreateButton } from "@/components/create-item-button";
 import StaffToolbar from "@/components/toolbars/staff-toolbar";
 import { useSearchParams } from "react-router-dom";
 import StaffCard from "@/components/cards/staff-card"
+import { useAuth } from "@/contexts/AuthContext";
+import { AddBeneficiary } from "../beneficiaries/add-beneficiary";
+import { AddStaff } from "./add-staff";
 
 
 export interface IStaff {
@@ -27,6 +30,7 @@ const StaffMembers = () => {
   const [query, setQuery] = useSearchParams();
   const [sort, setSort] = useState("");
   const [status, setStatus] = useState("");
+  const { mongoUser } = useAuth();
   
   useEffect(() => {
     if (!sort){
@@ -87,7 +91,10 @@ const StaffMembers = () => {
 
         dateSort.sort((a, b) => {
           if (a.joinDate && b.joinDate){
-            return a.joinDate.getTime() - b.joinDate.getTime();
+            const dateA = a.joinDate instanceof Date ? a.joinDate.getTime() : 0;
+            const dateB = b.joinDate instanceof Date ? b.joinDate.getTime() : 0;
+
+            return dateA - dateB;
           }
 
           return 0;
@@ -121,6 +128,16 @@ const StaffMembers = () => {
     void getStaffMembers()
   }, [notifyNew])
 
+  const handleFilters = (s: IStaff) => {
+    if (!status) return true;
+
+    switch (status) {
+      case "0":
+        return s.clearance == "Admin";
+      case "1":
+        return s.clearance == "Employee";
+    }
+  };
 
   return (
     <DashboardShell>
@@ -128,7 +145,7 @@ const StaffMembers = () => {
         heading="Staff"
         text="View and manage your staff members."
       >
-        <ItemCreateButton item="Onboard New Member" />
+        <AddStaff setNotify={setNotifyNew} notify={notifyNew}/>
       </DashboardHeader>
       <StaffToolbar
         query={query.get("f")}
@@ -139,7 +156,23 @@ const StaffMembers = () => {
         setSort={setSort}
       />
       <div className="py-3 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
-        {staffMembers.map((staff, i) => {
+        {staffMembers
+        .filter((staff) => {
+          if (!query.get("f")) return true;
+            return (
+              staff.firstName
+                ?.toLowerCase()
+                .includes(query.get("f")?.toLowerCase() ?? "") ??
+              staff.lastName
+                ?.toLowerCase()
+                .includes(query.get("f")?.toLowerCase() ?? "") ??
+              staff.firebaseUID
+                ?.toLowerCase()
+                .includes(query.get("f")?.toLowerCase() ?? "")
+            );
+          })
+        .filter((staff) => (handleFilters(staff)))
+        .map((staff, i) => {
           return <StaffCard staff={staff} key={i}/>
         })}
       </div>
