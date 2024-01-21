@@ -60,8 +60,9 @@ const BeneficiaryToolbar = ({
         <Input
           placeholder="Filter Loans"
           className="h-9 w-[150px] lg:w-[250px]"
+          type="text"
           value={query ?? ""}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => setQuery({ f: e.target.value})}
         />
         <Combobox
           items={loanStatus}
