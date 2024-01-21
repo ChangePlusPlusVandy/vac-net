@@ -99,4 +99,39 @@ const getDelinquentPayment = async (req: Request, res: Response) => {
   }
 }
 
-export { editLoan, deleteLoan, createOutstandingLoan, getLoanById, getLoans, getDelinquentPayment };
+const getOutstandingLoansWithinInterval = async (req: Request, res: Response) => {
+  try {
+    // Extract the number of days from the request
+    const days = parseInt(req.params.days, 10);
+
+    // Calculate the end date of the interval
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + days);
+
+    // Find outstanding loans within the interval
+    const outstandingLoans = await OutstandingLoan.find({
+      nextPaymentDate: {
+        $gte: new Date(), // today
+        $lte: endDate,     // endDate
+      },
+      nextPaymentAmount: { $exists: true, $ne: null },
+    });
+
+    const totalNextPaymentAmount = outstandingLoans.reduce((total, loan) => {
+      if (loan.nextPaymentAmount !== undefined) {
+        return total + loan.nextPaymentAmount;
+      }
+      return total; // Ensure to always return the total
+    }, 0);
+
+    return res.status(200).json({ totalNextPaymentAmount });
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err, err.message);
+      return res.status(500).send({ message: err.message });
+    }
+    console.error("Something unexpected happened");
+  }
+};
+
+export { editLoan, deleteLoan, createOutstandingLoan, getLoanById, getLoans, getDelinquentPayment, getOutstandingLoansWithinInterval };
