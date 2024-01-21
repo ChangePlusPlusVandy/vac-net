@@ -6,35 +6,35 @@ import React from "react";
 
 const sessionStatus = [
   {
-    value: "pending",
+    value: "completed",
     label: "Completed",
   },
   {
-    value: "good",
+    value: "comingup",
     label: "Coming Up",
   },
   {
-    value: "bad",
+    value: "happeningsoon",
     label: "Happening Soon",
   },
   {
-    value: "s",
+    value: "hasmissingattendees",
     label: "Has Missing Attendees",
   },
 ];
 
 const sortBy = [
   {
-    value: "jd",
+    value: "meetingdate",
     label: "Meeting Date",
   },
   {
-    value: "init-la",
+    value: "expectedattendance",
     label: "Expected Attendence",
   },
 ];
 
-const BeneficiaryToolbar = ({
+const SessionToolbar = ({
   query,
   setQuery,
   status,
@@ -91,4 +91,4 @@ const BeneficiaryToolbar = ({
   );
 };
 
-export default BeneficiaryToolbar;
+export default SessionToolbar;

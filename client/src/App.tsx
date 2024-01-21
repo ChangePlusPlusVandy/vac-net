@@ -17,6 +17,7 @@ import Login from "./pages/Auth/Login";
 // import PrivateRoute from "./pages/Auth/PrivateRoute";
 import React from "react";
 import Session from "./pages/sessions/sessions";
+import EditSession from "./pages/sessions/session"
 import Staff from "@/pages/staff/staff";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
@@ -33,6 +34,7 @@ const router = createBrowserRouter(
         <Route path="/app/beneficiaries/:id" element={<Beneficiary />} />
         <Route path="/app/loans" element={<Loans />} />
         <Route path="/app/sessions" element={<Session />} />
+        <Route path="/app/sessions/:sessionId" element={<EditSession />} />
         <Route path="/app/staff" element={<Staff />} />
         <Route path="/app/support" element={<div>Support</div>} />
         <Route path="/app/settings" element={<div>Settings</div>} />
