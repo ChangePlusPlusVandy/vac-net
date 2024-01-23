@@ -36,7 +36,7 @@ export function AddStaff({
       firebaseUID,
       joinDate,
       status,
-      clearance
+      clearance,
     };
     console.log(data);
     try {

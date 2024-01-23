@@ -1,28 +1,27 @@
 import React, { useEffect, useState } from "react";
-import type { ISession } from "../sessions/sessions"
-import { DashboardHeader } from "@/components/header";
-import { DashboardShell } from "@/components/shell";
-import { ItemCreateButton } from "@/components/create-item-button";
-import StaffToolbar from "@/components/toolbars/staff-toolbar";
-import { useSearchParams } from "react-router-dom";
-import StaffCard from "@/components/cards/staff-card"
-import { useAuth } from "@/contexts/AuthContext";
+
 import { AddBeneficiary } from "../beneficiaries/add-beneficiary";
 import { AddStaff } from "./add-staff";
-
+import { DashboardHeader } from "@/components/header";
+import { DashboardShell } from "@/components/shell";
+import type { ISession } from "../sessions/sessions";
+import StaffCard from "@/components/cards/staff-card";
+import StaffToolbar from "@/components/toolbars/staff-toolbar";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSearchParams } from "react-router-dom";
 
 export interface IStaff {
-    _id?: string,
-    firstName?: string;
-    lastName?: string;
-    firebaseUID?: string;
-    joinDate?: Date;
-    status?: string;
-    clearance?: string;
-    bookmarkedBeneficiaries?: string[];
-    sessions?: ISession
-  }
-
+  _id?: string;
+  firstName?: string;
+  lastName?: string;
+  firebaseUID?: string;
+  joinDate?: Date;
+  status?: string;
+  clearance?: string;
+  bookmarkedBeneficiaries?: string[];
+  trackedSessions?: string[];
+  sessions?: ISession;
+}
 
 const StaffMembers = () => {
   const [staffMembers, setStaffMembers] = useState<IStaff[]>([]);
@@ -31,24 +30,23 @@ const StaffMembers = () => {
   const [sort, setSort] = useState("");
   const [status, setStatus] = useState("");
   const { mongoUser } = useAuth();
-  
+
   useEffect(() => {
-    if (!sort){
+    if (!sort) {
       return;
     }
 
-    switch(sort){
+    switch (sort) {
       case "1":
         console.log("Sort by first name");
         const firstNameSort = [...staffMembers];
 
         firstNameSort.sort((a, b) => {
-          if (a.firstName && b.firstName){
+          if (a.firstName && b.firstName) {
             return a.firstName.localeCompare(b.firstName);
           }
           return 0;
         });
-
 
         console.log(firstNameSort);
         setStaffMembers(firstNameSort);
@@ -59,7 +57,7 @@ const StaffMembers = () => {
         const lastNameSort = [...staffMembers];
 
         lastNameSort.sort((a, b) => {
-          if (a.lastName && b.lastName){
+          if (a.lastName && b.lastName) {
             return a.lastName.localeCompare(b.lastName);
           }
           return 0;
@@ -74,7 +72,7 @@ const StaffMembers = () => {
         const idSort = [...staffMembers];
 
         idSort.sort((a, b) => {
-          if (a.firebaseUID && b.firebaseUID){
+          if (a.firebaseUID && b.firebaseUID) {
             return a.firebaseUID.localeCompare(b.firebaseUID);
           }
 
@@ -90,7 +88,7 @@ const StaffMembers = () => {
         const dateSort = [...staffMembers];
 
         dateSort.sort((a, b) => {
-          if (a.joinDate && b.joinDate){
+          if (a.joinDate && b.joinDate) {
             const dateA = a.joinDate instanceof Date ? a.joinDate.getTime() : 0;
             const dateB = b.joinDate instanceof Date ? b.joinDate.getTime() : 0;
 
@@ -98,7 +96,7 @@ const StaffMembers = () => {
           }
 
           return 0;
-        })
+        });
 
         console.log(dateSort);
         setStaffMembers(dateSort);
@@ -106,27 +104,26 @@ const StaffMembers = () => {
     }
   }, [sort]);
 
-
   useEffect(() => {
     const getStaffMembers = async () => {
       try {
-        const data : IStaff[] = await fetch(
+        const data: IStaff[] = await fetch(
           "http://localhost:3001/user/allstaff",
           {
             headers: {
               "Content-Type": "application/json",
             },
           },
-        ).then((res: Response) => res.json() as unknown as IStaff[])
-        console.log(data)
-        setStaffMembers(data)
-      }catch (e){
+        ).then((res: Response) => res.json() as unknown as IStaff[]);
+        console.log(data);
+        setStaffMembers(data);
+      } catch (e) {
         console.log(e);
       }
     };
 
-    void getStaffMembers()
-  }, [notifyNew])
+    void getStaffMembers();
+  }, [notifyNew]);
 
   const handleFilters = (s: IStaff) => {
     if (!status) return true;
@@ -142,10 +139,10 @@ const StaffMembers = () => {
   return (
     <DashboardShell>
       <DashboardHeader
-        heading="Staff"
+        heading="Staff Members"
         text="View and manage your staff members."
       >
-        <AddStaff setNotify={setNotifyNew} notify={notifyNew}/>
+        <AddStaff setNotify={setNotifyNew} notify={notifyNew} />
       </DashboardHeader>
       <StaffToolbar
         query={query.get("f")}
@@ -157,8 +154,8 @@ const StaffMembers = () => {
       />
       <div className="py-3 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
         {staffMembers
-        .filter((staff) => {
-          if (!query.get("f")) return true;
+          .filter((staff) => {
+            if (!query.get("f")) return true;
             return (
               staff.firstName
                 ?.toLowerCase()
@@ -171,14 +168,13 @@ const StaffMembers = () => {
                 .includes(query.get("f")?.toLowerCase() ?? "")
             );
           })
-        .filter((staff) => (handleFilters(staff)))
-        .map((staff, i) => {
-          return <StaffCard staff={staff} key={i}/>
-        })}
+          .filter((staff) => handleFilters(staff))
+          .map((staff, i) => {
+            return <StaffCard staff={staff} key={i} />;
+          })}
       </div>
     </DashboardShell>
   );
 };
 
-export default StaffMembers
-
+export default StaffMembers;

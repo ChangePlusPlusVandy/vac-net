@@ -9,7 +9,8 @@ export interface IStaff {
   status?: string;
   clearance?: string;
   bookmarkedBeneficiaries?: string[];
-  sessions?: ObjectId
+  trackedSessions?: string[];
+  sessions?: ObjectId;
 }
 
 const StaffSchema = new mongoose.Schema<IStaff>({
@@ -40,9 +41,12 @@ const StaffSchema = new mongoose.Schema<IStaff>({
   bookmarkedBeneficiaries: {
     type: [String],
   },
+  trackedSessions: {
+    type: [String],
+  },
   sessions: {
-    type: ObjectId
-  }
+    type: ObjectId,
+  },
 });
 
 export default mongoose.model<IStaff>("Staff", StaffSchema);

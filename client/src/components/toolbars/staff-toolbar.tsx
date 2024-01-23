@@ -3,7 +3,7 @@ import { Combobox } from "@/components/combobox";
 import { Icons } from "../ui/icons";
 import { Input } from "@/components/ui/input";
 import React from "react";
-import { SetURLSearchParams } from "react-router-dom";
+import { type SetURLSearchParams } from "react-router-dom";
 
 const staffClearance = [
   {
@@ -13,7 +13,7 @@ const staffClearance = [
   {
     value: "1",
     label: "Employee Clearance",
-  }
+  },
 ];
 
 const sortBy = [
@@ -31,8 +31,8 @@ const sortBy = [
   },
   {
     value: "4",
-    label: "Join Date"
-  }
+    label: "Join Date",
+  },
 ];
 
 const StaffToolbar = ({
@@ -57,7 +57,7 @@ const StaffToolbar = ({
           placeholder="Filter Staff"
           className="h-9 w-[150px] lg:w-[250px]"
           value={query ?? ""}
-          onChange={(e) => setQuery({f: e.target.value})}
+          onChange={(e) => setQuery({ f: e.target.value })}
         />
         <Combobox
           items={staffClearance}
@@ -71,7 +71,7 @@ const StaffToolbar = ({
           value={sort}
           setValue={setSort}
         />
-        {query !== "" || status !== "" || sort !== "" ? (
+        {!!query || !!status || !!sort ? (
           <Button
             variant="ghost"
             className="h-8 px-2 lg:px-3"
