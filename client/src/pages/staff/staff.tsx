@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-
 import { useParams, useSearchParams } from "react-router-dom";
+
 import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
+import type { IStaff } from "@/pages/staff/staff-members";
+import { Icons } from "@/components/ui/icons";
+import { Input } from "@/components/ui/input";
 import { ItemCreateButton } from "@/components/create-item-button";
+import { Label } from "@/components/ui/label";
 import StaffToolbar from "@/components/toolbars/staff-toolbar";
 import { buttonVariants } from "@/components/ui/button";
-import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
-import type { IStaff } from "@/pages/staff/staff-members";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 
 const Staff = () => {
   const [query, setQuery] = useState("");
@@ -26,16 +26,13 @@ const Staff = () => {
     if (params.get("f") === "1") {
       setIsLoading(true);
       try {
-        await fetch(
-          `http://localhost:3001/user/edit?_id=${staff?._id}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(staff),
+        await fetch(`http://localhost:3001/user/edit?_id=${staff?._id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        ).then((res: Response) => res.json() as unknown as IStaff);
+          body: JSON.stringify(staff),
+        }).then((res: Response) => res.json() as unknown as IStaff);
         setEditing(false);
         setParams({ f: "0" });
       } catch (err) {
@@ -53,13 +50,19 @@ const Staff = () => {
       try {
         const data: IStaff = await fetch(
           "http://localhost:3001/user/getstaff?staffId=" + id,
+      try {
+        const data: IStaff = await fetch(
+          "http://localhost:3001/user/getstaff?staffId=" + id,
         ).then((res: Response) => res.json() as unknown as IStaff);
         setStaff(data);
       } catch (e) {
+      } catch (e) {
         console.log(e);
+      } finally {
       } finally {
         setIsLoading(false);
       }
+    };
     };
 
     void getStaffById();
@@ -92,12 +95,19 @@ const Staff = () => {
           staff?.lastName +
           "'s data."
         }
+        text={
+          "View and edit " +
+          staff?.firstName +
+          " " +
+          staff?.lastName +
+          "'s data."
+        }
       >
         <SaveStaff
-            isLoading={isLoading}
-            editing={params.get("f") === "1"}
-            onClick={handleSaveStaff}
-          />
+          isLoading={isLoading}
+          editing={params.get("f") === "1"}
+          onClick={handleSaveStaff}
+        />
       </DashboardHeader>
       <div className="grid gap-4 py-4">
         <div className="grid grid-cols-4 items-center gap-4">
@@ -125,7 +135,7 @@ const Staff = () => {
             disabled={params.get("f") !== "1"}
           />
         </div>
-        
+
         {/* TODO: Display the date */}
 
         <div className="grid grid-cols-4 items-center gap-4">

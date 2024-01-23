@@ -36,7 +36,7 @@ export function AddStaff({
       firebaseUID,
       joinDate,
       status,
-      clearance
+      clearance,
     };
     console.log(data);
     try {
@@ -54,9 +54,9 @@ export function AddStaff({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <ItemCreateButton item="Onboard New Member" />
+        <ItemCreateButton item="Onboard Member" />
       </SheetTrigger>
-      <SheetContent className="w-full" side="right">
+      <SheetContent className="min-w-[500px]" side="right">
         <SheetHeader>
           <SheetTitle>Onboard New Member</SheetTitle>
           <SheetDescription>
@@ -65,7 +65,7 @@ export function AddStaff({
         </SheetHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+            <Label htmlFor="name" className="text-light">
               First Name
             </Label>
             <Input
@@ -76,7 +76,7 @@ export function AddStaff({
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+            <Label htmlFor="name" className="text-light">
               Last Name
             </Label>
             <Input
@@ -87,7 +87,7 @@ export function AddStaff({
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+            <Label htmlFor="name" className="text-light">
               Firebase UID
             </Label>
             <Input
@@ -98,7 +98,7 @@ export function AddStaff({
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+            <Label htmlFor="name" className="text-light">
               Join Date
             </Label>
             <Input
@@ -110,7 +110,7 @@ export function AddStaff({
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+            <Label htmlFor="name" className="text-light">
               Status
             </Label>
             <Input
@@ -121,7 +121,7 @@ export function AddStaff({
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+            <Label htmlFor="name" className="text-light">
               Clearance
             </Label>
             <Input
