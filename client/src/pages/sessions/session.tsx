@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ChangeEvent } from "react";
+import React, { useEffect, useState, type ChangeEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
@@ -8,13 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 
 export interface Session {
-  _id: string;
-  sessionDate: string; // Use string type for input compatibility
-  region: string;
-  staff: string[];
-  archived: boolean;
-  expectedAttendance: string[];
-  actualAttendance: string[];
+  _id?: string;
+  sessionDate?: string; // Use string type for input compatibility
+  region?: string;
+  staff?: string[];
+  archived?: boolean;
+  expectedAttendance?: string[];
+  actualAttendance?: string[];
 }
 
 const SessionEdit = () => {
@@ -23,14 +23,21 @@ const SessionEdit = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   // Convert array to comma-separated string for the input field
-  const arrayToCsv = (arr: string[]) => arr.join(', ');
+  const arrayToCsv = (arr: string[]) => arr.join(", ");
 
   // Convert comma-separated string back to array for state update
-  const csvToArray = (csv: string) => csv.split(',').map(item => item.trim());
+  const csvToArray = (csv: string) => csv.split(",").map((item) => item.trim());
 
   // Handler for the staff and attendance array fields
-  const handleArrayChange = (e: ChangeEvent<HTMLTextAreaElement>, field: keyof Session) => {
-    setSession({ ...session, [field]: csvToArray(e.target.value) });
+  const handleArrayChange = (
+    e: ChangeEvent<HTMLTextAreaElement>,
+    field: keyof Session,
+  ) => {
+    setSession({
+      ...session,
+      [field]: csvToArray(e.target.value),
+      _id: session?._id ?? "",
+    });
   };
 
   // Handler for the archived checkbox
@@ -41,9 +48,11 @@ const SessionEdit = () => {
     const fetchSession = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`http://localhost:3001/session/${sessionId}`);
-        const data: Session = await response.json();
-        data.sessionDate = formatDateForInput(new Date(data.sessionDate));
+        const response = await fetch(
+          `http://localhost:3001/session/${sessionId}`,
+        );
+        const data: Session = (await response.json()) as Session;
+        data.sessionDate = formatDateForInput(new Date(data.sessionDate ?? ""));
         setSession(data);
       } catch (error) {
         console.error("Error fetching session:", error);
@@ -53,22 +62,24 @@ const SessionEdit = () => {
     };
 
     if (sessionId) {
-      fetchSession();
+      void fetchSession();
     }
   }, [sessionId]);
 
-
-    // Helper function to format the date to YYYY-MM-DD
+  // Helper function to format the date to YYYY-MM-DD
   const formatDateForInput = (date: Date) => {
     const d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
       year = d.getFullYear();
 
-    return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
+    return [year, month.padStart(2, "0"), day.padStart(2, "0")].join("-");
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, field: keyof Session) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    field: keyof Session,
+  ) => {
     setSession({ ...session, [field]: e.target.value });
   };
 
@@ -86,10 +97,10 @@ const SessionEdit = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to save the session');
+        throw new Error("Failed to save the session");
       }
 
-      const updatedSession: Session = await response.json();
+      const updatedSession: Session = (await response.json()) as Session;
       setSession(updatedSession);
       navigate(`/app/sessions`);
     } catch (error) {
@@ -101,12 +112,15 @@ const SessionEdit = () => {
 
   return (
     <DashboardShell>
-      <DashboardHeader heading="Edit Session" text="Modify your session details here.">
+      <DashboardHeader
+        heading="Edit Session"
+        text="Modify your session details here."
+      >
         <Button onClick={handleSaveSession} disabled={isLoading}>
           {isLoading ? (
             <Icons.spinner className="animate-spin" />
           ) : (
-            <Icons.save />
+            <Icons.save className="mr-2 h-4 w-4" />
           )}
           Save Changes
         </Button>
@@ -119,7 +133,7 @@ const SessionEdit = () => {
               type="date"
               id="sessionDate"
               value={session.sessionDate}
-              onChange={(e) => handleChange(e, 'sessionDate')}
+              onChange={(e) => handleChange(e, "sessionDate")}
             />
           </div>
           <div className="mb-4">
@@ -127,15 +141,15 @@ const SessionEdit = () => {
             <Input
               id="region"
               value={session.region}
-              onChange={(e) => handleChange(e, 'region')}
+              onChange={(e) => handleChange(e, "region")}
             />
           </div>
           <div className="mb-4">
             <Label htmlFor="staff">Staff</Label>
             <textarea
               id="staff"
-              value={arrayToCsv(session.staff)}
-              onChange={(e) => handleArrayChange(e, 'staff')}
+              value={arrayToCsv(session.staff ?? [])}
+              onChange={(e) => handleArrayChange(e, "staff")}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -143,8 +157,8 @@ const SessionEdit = () => {
             <Label htmlFor="expectedAttendance">Expected Attendance</Label>
             <textarea
               id="expectedAttendance"
-              value={arrayToCsv(session.expectedAttendance)}
-              onChange={(e) => handleArrayChange(e, 'expectedAttendance')}
+              value={arrayToCsv(session.expectedAttendance ?? [])}
+              onChange={(e) => handleArrayChange(e, "expectedAttendance")}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -152,8 +166,8 @@ const SessionEdit = () => {
             <Label htmlFor="actualAttendance">Actual Attendance</Label>
             <textarea
               id="actualAttendance"
-              value={arrayToCsv(session.actualAttendance)}
-              onChange={(e) => handleArrayChange(e, 'actualAttendance')}
+              value={arrayToCsv(session.actualAttendance ?? [])}
+              onChange={(e) => handleArrayChange(e, "actualAttendance")}
               className="w-full p-2 border rounded"
             />
           </div>

@@ -17,7 +17,7 @@ import Login from "./pages/Auth/Login";
 // import PrivateRoute from "./pages/Auth/PrivateRoute";
 import React from "react";
 import Session from "./pages/sessions/sessions";
-import EditSession from "./pages/sessions/session"
+import EditSession from "./pages/sessions/session";
 import Staff from "@/pages/staff/staff";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
