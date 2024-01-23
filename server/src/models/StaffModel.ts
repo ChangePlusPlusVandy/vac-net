@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 
 export interface IStaff {
@@ -8,6 +9,8 @@ export interface IStaff {
   status?: string;
   clearance?: string;
   bookmarkedBeneficiaries?: string[];
+  trackedSessions?: string[];
+  sessions?: ObjectId;
 }
 
 const StaffSchema = new mongoose.Schema<IStaff>({
@@ -37,6 +40,12 @@ const StaffSchema = new mongoose.Schema<IStaff>({
   },
   bookmarkedBeneficiaries: {
     type: [String],
+  },
+  trackedSessions: {
+    type: [String],
+  },
+  sessions: {
+    type: ObjectId,
   },
 });
 

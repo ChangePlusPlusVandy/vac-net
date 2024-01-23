@@ -3,38 +3,35 @@ import { Combobox } from "@/components/combobox";
 import { Icons } from "../ui/icons";
 import { Input } from "@/components/ui/input";
 import React from "react";
+import { type SetURLSearchParams } from "react-router-dom";
 
-const loanStatus = [
+const staffClearance = [
   {
-    value: "pending",
-    label: "Pending Approval",
+    value: "0",
+    label: "Admin Clearance",
   },
   {
-    value: "good",
-    label: "Good Standing",
-  },
-  {
-    value: "bad",
-    label: "Delinquient",
-  },
-  {
-    value: "paid",
-    label: "Fully Paid Off",
+    value: "1",
+    label: "Employee Clearance",
   },
 ];
 
 const sortBy = [
   {
-    value: "jd",
-    label: "Issue Date",
+    value: "1",
+    label: "First Name",
   },
   {
-    value: "init-la",
-    label: "Initial Loan Amount",
+    value: "2",
+    label: "Last Name",
   },
   {
-    value: "remaining-la",
-    label: "Remaining Principal",
+    value: "3",
+    label: "Firebase UID",
+  },
+  {
+    value: "4",
+    label: "Join Date",
   },
 ];
 
@@ -46,8 +43,8 @@ const StaffToolbar = ({
   sort,
   setSort,
 }: {
-  query: string;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  query: string | null;
+  setQuery: SetURLSearchParams;
   status: string;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
   sort: string;
@@ -57,14 +54,14 @@ const StaffToolbar = ({
     <div className="flex items-center justify-between ml-1">
       <div className="flex flex-1 items-center space-x-4">
         <Input
-          placeholder="Filter Loans"
+          placeholder="Filter Staff"
           className="h-9 w-[150px] lg:w-[250px]"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          value={query ?? ""}
+          onChange={(e) => setQuery({ f: e.target.value })}
         />
         <Combobox
-          items={loanStatus}
-          itemName="Loan Status"
+          items={staffClearance}
+          itemName="Filters"
           value={status}
           setValue={setStatus}
         />
@@ -74,7 +71,7 @@ const StaffToolbar = ({
           value={sort}
           setValue={setSort}
         />
-        {query !== "" || status !== "" || sort !== "" ? (
+        {!!query || !!status || !!sort ? (
           <Button
             variant="ghost"
             className="h-8 px-2 lg:px-3"

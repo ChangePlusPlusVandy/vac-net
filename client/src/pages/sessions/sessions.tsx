@@ -6,6 +6,7 @@ import { DashboardShell } from "@/components/shell";
 import SessionCard from "@/components/cards/session-card";
 import SessionToolbar from "@/components/toolbars/session-toolbar";
 
+
 export interface Session {
   _id: string;
   sessionDate: Date;
@@ -15,6 +16,17 @@ export interface Session {
   expectedAttendance: string[];
   actualAttendance: string[];
 }
+
+ export interface ISession {
+  _id: string;
+  sessionDate: Date;
+  region: string;
+  staff: string[];
+  archived?: boolean;
+  expectedAttendance: string[];
+  actualAttendance: string[];
+}
+
 
 const Sessions = () => {
   const [query, setQuery] = useState("");
