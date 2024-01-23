@@ -2,10 +2,10 @@ import {
   createSession,
   deleteSession,
   editSession,
-  getSessionById,
-  getSessions,
   getNoShows,
-  getSessionCountWithinInterval
+  getSessionById,
+  getSessionCountWithinInterval,
+  getSessions,
 } from "../controllers/session.controllers";
 
 import express from "express";
@@ -18,6 +18,6 @@ sessionRouter.get("/noshows", getNoShows);
 sessionRouter.get("/:sessionId", getSessionById);
 sessionRouter.put("/", editSession);
 sessionRouter.delete("/", deleteSession);
-sessionRouter.get("/getIntervalSessions/:days", getSessionCountWithinInterval);
+sessionRouter.get("/count", getSessionCountWithinInterval);
 
 export default sessionRouter;

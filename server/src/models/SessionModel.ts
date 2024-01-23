@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 export interface ISession {
-  _id: string;
-  sessionDate: Date;
-  region: string;
-  staff: string[];
+  _id?: string;
+  sessionDate?: Date;
+  region?: string;
+  staff?: string[];
   archived?: boolean;
   expectedAttendance: string[];
   actualAttendance: string[];

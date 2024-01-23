@@ -86,33 +86,38 @@ const getDelinquentPayment = async (req: Request, res: Response) => {
   const date = new Date();
   date.setDate(date.getDate() - 3);
 
-  try{
-    const loans = await OutstandingLoan.find({ nextPaymentDate: {$lt: date } });
+  try {
+    const loans = await OutstandingLoan.find({
+      nextPaymentDate: { $lt: date },
+    });
     return res.status(200).json(loans);
-  }catch (err) {
-    if (err instanceof Error){
+  } catch (err) {
+    if (err instanceof Error) {
       console.log(err, err.message);
-      return res.status(500).send({message: err.message});
-    }else{
-      console.log('Something unexpected happened');
+      return res.status(500).send({ message: err.message });
+    } else {
+      console.log("Something unexpected happened");
     }
   }
-}
+};
 
-const getOutstandingLoansWithinInterval = async (req: Request, res: Response) => {
+const getOutstandingLoansWithinInterval = async (
+  req: Request,
+  res: Response,
+) => {
   try {
     // Extract the number of days from the request
-    const days = parseInt(req.params.days, 10);
+    const days = '14';
 
-    // Calculate the end date of the interval
+    // Calculate the end date of the interva;
     const endDate = new Date();
-    endDate.setDate(endDate.getDate() + days);
+    endDate.setDate(endDate.getDate() + parseInt(String(days)));
 
     // Find outstanding loans within the interval
     const outstandingLoans = await OutstandingLoan.find({
       nextPaymentDate: {
         $gte: new Date(), // today
-        $lte: endDate,     // endDate
+        $lte: endDate, // endDate
       },
       nextPaymentAmount: { $exists: true, $ne: null },
     });
@@ -124,7 +129,7 @@ const getOutstandingLoansWithinInterval = async (req: Request, res: Response) =>
       return total; // Ensure to always return the total
     }, 0);
 
-    return res.status(200).json({ totalNextPaymentAmount });
+    return res.status(200).json({ total: totalNextPaymentAmount });
   } catch (err) {
     if (err instanceof Error) {
       console.error(err, err.message);
@@ -134,4 +139,12 @@ const getOutstandingLoansWithinInterval = async (req: Request, res: Response) =>
   }
 };
 
-export { editLoan, deleteLoan, createOutstandingLoan, getLoanById, getLoans, getDelinquentPayment, getOutstandingLoansWithinInterval };
+export {
+  editLoan,
+  deleteLoan,
+  createOutstandingLoan,
+  getLoanById,
+  getLoans,
+  getDelinquentPayment,
+  getOutstandingLoansWithinInterval,
+};

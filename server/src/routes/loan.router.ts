@@ -17,7 +17,7 @@ loanRouter.delete("/:_id", deleteLoan);
 loanRouter.post("/", createOutstandingLoan);
 loanRouter.get("/", getLoanById);
 loanRouter.get("/getall", getLoans);
-loanRouter.get("/getDelinquent", getDelinquentPayment)
-loanRouter.get("/getIntervalLoans/:days", getOutstandingLoansWithinInterval);
+loanRouter.get("/getDelinquent", getDelinquentPayment);
+loanRouter.get("/expectedrev", getOutstandingLoansWithinInterval);
 
 export default loanRouter;
