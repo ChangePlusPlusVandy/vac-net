@@ -50,19 +50,13 @@ const Staff = () => {
       try {
         const data: IStaff = await fetch(
           "http://localhost:3001/user/getstaff?staffId=" + id,
-      try {
-        const data: IStaff = await fetch(
-          "http://localhost:3001/user/getstaff?staffId=" + id,
         ).then((res: Response) => res.json() as unknown as IStaff);
         setStaff(data);
       } catch (e) {
-      } catch (e) {
         console.log(e);
-      } finally {
       } finally {
         setIsLoading(false);
       }
-    };
     };
 
     void getStaffById();
