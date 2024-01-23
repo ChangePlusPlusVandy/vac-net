@@ -89,13 +89,6 @@ const Staff = () => {
           staff?.lastName +
           "'s data."
         }
-        text={
-          "View and edit " +
-          staff?.firstName +
-          " " +
-          staff?.lastName +
-          "'s data."
-        }
       >
         <SaveStaff
           isLoading={isLoading}

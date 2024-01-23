@@ -74,7 +74,8 @@ const StaffCard = ({ staff }: { staff: IStaff }) => {
         <div className="flex space-x-4 text-sm text-muted-foreground">
           <div className="flex items-center">
             <Icons.dolla className="mr-1 h-3 w-3" />
-            Sessions: {staff?.sessions?.length ?? 0}
+            Sessions:{" "}
+            {Array.isArray(staff?.sessions) ? staff.sessions.length : 0}
           </div>
         </div>
       </CardContent>
