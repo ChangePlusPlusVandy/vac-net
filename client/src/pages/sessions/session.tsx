@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
+import { Textarea } from "@/components/ui/textarea";
 
 export interface Session {
   _id?: string;
@@ -146,7 +147,7 @@ const SessionEdit = () => {
           </div>
           <div className="mb-4">
             <Label htmlFor="staff">Staff</Label>
-            <textarea
+            <Textarea
               id="staff"
               value={arrayToCsv(session.staff ?? [])}
               onChange={(e) => handleArrayChange(e, "staff")}
@@ -155,7 +156,7 @@ const SessionEdit = () => {
           </div>
           <div className="mb-4">
             <Label htmlFor="expectedAttendance">Expected Attendance</Label>
-            <textarea
+            <Textarea
               id="expectedAttendance"
               value={arrayToCsv(session.expectedAttendance ?? [])}
               onChange={(e) => handleArrayChange(e, "expectedAttendance")}
@@ -164,7 +165,7 @@ const SessionEdit = () => {
           </div>
           <div className="mb-4">
             <Label htmlFor="actualAttendance">Actual Attendance</Label>
-            <textarea
+            <Textarea
               id="actualAttendance"
               value={arrayToCsv(session.actualAttendance ?? [])}
               onChange={(e) => handleArrayChange(e, "actualAttendance")}
