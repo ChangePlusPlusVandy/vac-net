@@ -12,6 +12,7 @@ import Beneficiaries from "./pages/beneficiaries/beneficiaries";
 import Beneficiary from "./pages/beneficiaries/beneficiary";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
+import Loan from "./pages/loans/loan";
 import Loans from "./pages/loans/loans";
 import Login from "./pages/Auth/Login";
 // import PrivateRoute from "./pages/Auth/PrivateRoute";
@@ -33,6 +34,7 @@ const router = createBrowserRouter(
         <Route path="/app/beneficiaries" element={<Beneficiaries />} />
         <Route path="/app/beneficiaries/:id" element={<Beneficiary />} />
         <Route path="/app/loans" element={<Loans />} />
+        <Route path="/app/loans/:id" element={<Loan />} />
         <Route path="/app/sessions" element={<Session />} />
         <Route path="/app/sessions/:sessionId" element={<EditSession />} />
         <Route path="/app/staff" element={<Staff />} />

@@ -34,7 +34,7 @@ const getLoanById = async (req: Request, res: Response) => {
 
 const getLoans = async (req: Request, res: Response) => {
   try {
-    const loans = await OutstandingLoan.find();
+    const loans = await OutstandingLoan.find().populate("beneficiary");
 
     return res.status(200).json(loans);
   } catch (err) {
@@ -86,18 +86,20 @@ const getDelinquentPayment = async (req: Request, res: Response) => {
   const date = new Date();
   date.setDate(date.getDate() - 3);
 
-  try{
-    const loans = await OutstandingLoan.find({ nextPaymentDate: {$lt: date } });
+  try {
+    const loans = await OutstandingLoan.find({
+      nextPaymentDate: { $lt: date },
+    });
     return res.status(200).json(loans);
-  }catch (err) {
-    if (err instanceof Error){
+  } catch (err) {
+    if (err instanceof Error) {
       console.log(err, err.message);
-      return res.status(500).send({message: err.message});
-    }else{
-      console.log('Something unexpected happened');
+      return res.status(500).send({ message: err.message });
+    } else {
+      console.log("Something unexpected happened");
     }
   }
-}
+};
 
 const getOutstandingLoansWithinInterval = async (req: Request, res: Response) => {
   try {
