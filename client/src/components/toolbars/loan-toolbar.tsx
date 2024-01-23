@@ -62,7 +62,7 @@ const BeneficiaryToolbar = ({
           className="h-9 w-[150px] lg:w-[250px]"
           type="text"
           value={query ?? ""}
-          onChange={(e) => setQuery({ f: e.target.value})}
+          onChange={(e) => setQuery({ f: e.target.value })}
         />
         <Combobox
           items={loanStatus}
@@ -76,7 +76,7 @@ const BeneficiaryToolbar = ({
           value={sort}
           setValue={setSort}
         />
-        {query !== "" || status !== "" || sort !== "" ? (
+        {!!query || !!status || !!sort ? (
           <Button
             variant="ghost"
             className="h-8 px-2 lg:px-3"

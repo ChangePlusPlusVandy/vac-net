@@ -1,6 +1,4 @@
-//imports here
-import { BellIcon } from "@radix-ui/react-icons";
-import React from "react";
+import { BellIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import {
   Card,
   CardContent,
@@ -8,10 +6,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import { Badge } from "@/components/ui/badge";
-import type { Loan } from "@/pages/loans/loans";
+import { Button } from "@/components/ui/button";
 import { Icons } from "../ui/icons";
+import type { Loan } from "@/pages/loans/loans";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const LoanCard = ({ loan }: { loan: Loan }) => {
@@ -33,9 +42,41 @@ const LoanCard = ({ loan }: { loan: Loan }) => {
       className="cursor-pointer hover:border-gray-400 dark:hover:border-gray-600"
       onClick={() => navigate(`./${loan._id}`)}
     >
-      <CardHeader>
-        <CardTitle className="text-xl">{getBeneficiaryName()}</CardTitle>
-        <CardDescription className="text-sm">({loan._id})</CardDescription>
+      <CardHeader className="grid grid-cols-[1fr_32px] items-start gap-4 space-y-0">
+        <div className="mb-1">
+          <CardTitle className="text-xl">{getBeneficiaryName()}</CardTitle>
+          <CardDescription className="text-sm">({loan._id})</CardDescription>
+        </div>
+        <div className="flex items-center rounded-md bg-secondary text-secondary-foreground">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" className="px-2 shadow-none">
+                <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              alignOffset={-5}
+              className="w-[200px]"
+              forceMount
+            >
+              <DropdownMenuLabel>Quick Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuCheckboxItem checked>
+                Bookmark User
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem>Edit Loan</DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem>
+                View Beneficiary
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem>View Sessions</DropdownMenuCheckboxItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Icons.search className="mr-2 h-4 w-4" /> View Profile
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="flex space-x-4 text-sm text-muted-foreground">
@@ -58,7 +99,7 @@ const LoanCard = ({ loan }: { loan: Loan }) => {
           </Badge>
           <div className="flex items-center">
             <Icons.dolla className="mr-1 h-3 w-3" />
-            {loan.initialPayment || 0}
+            {loan.initialPayment ?? 0}
           </div>
           {loan.beneficiary?.phoneNumber?.length ?? 0 > 0 ? (
             <div className="truncate">#: {loan.beneficiary?.phoneNumber} </div>

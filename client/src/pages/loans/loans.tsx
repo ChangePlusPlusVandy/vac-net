@@ -6,7 +6,7 @@ import LoanCard from "@/components/cards/loan-card";
 import LoanToolbar from "@/components/toolbars/loan-toolbar";
 import { useSearchParams } from "react-router-dom";
 import { AddLoan } from "./add-loans";
-import { Beneficiary } from "../beneficiaries/beneficiaries";
+import { type Beneficiary } from "../beneficiaries/beneficiaries";
 
 export interface Loan {
   _id?: string;
