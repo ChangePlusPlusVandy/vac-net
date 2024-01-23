@@ -105,9 +105,14 @@ const Beneficiaries = () => {
         return mongoUser?.bookmarkedBeneficiaries?.includes(b._id ?? "");
       case "1":
         return b.loan === undefined;
+      case "2":
+        return b.loan?.loanStatus === "Pending Approval";
+      case "3":
+        return b.loan?.loanStatus === "Good Standing";
       case "4":
         return b.loan?.loanStatus === "Delinquient";
-      // TODO: add rest of cases
+      case "5":
+        return b.loan?.loanStatus === "Fully Paid Off";
     }
   };
 

@@ -13,12 +13,15 @@ import Beneficiary from "./pages/beneficiaries/beneficiary";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Dashboard from "./pages/dashboard/dashboard";
+import Loan from "./pages/loans/loan";
 import Loans from "./pages/loans/loans";
 import Login from "./pages/Auth/Login";
 // import PrivateRoute from "./pages/Auth/PrivateRoute";
 import React from "react";
 import Session from "./pages/sessions/sessions";
+import EditSession from "./pages/sessions/session";
 import Staff from "@/pages/staff/staff";
+import StaffMembers from "@/pages/staff/staff-members";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
 const router = createBrowserRouter(
@@ -33,8 +36,11 @@ const router = createBrowserRouter(
         <Route path="/app/beneficiaries" element={<Beneficiaries />} />
         <Route path="/app/beneficiaries/:id" element={<Beneficiary />} />
         <Route path="/app/loans" element={<Loans />} />
+        <Route path="/app/loans/:id" element={<Loan />} />
         <Route path="/app/sessions" element={<Session />} />
-        <Route path="/app/staff" element={<Staff />} />
+        <Route path="/app/sessions/:sessionId" element={<EditSession />} />
+        <Route path="/app/staff" element={<StaffMembers />} />
+        <Route path="/app/staff/:id" element={<Staff />} />
         <Route path="/app/support" element={<div>Support</div>} />
         <Route path="/app/settings" element={<div>Settings</div>} />
       </Route>

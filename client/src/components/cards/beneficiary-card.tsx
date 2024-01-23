@@ -32,6 +32,10 @@ const BeneficiaryCard = ({ beneficiary }: { beneficiary: Beneficiary }) => {
   const getLoanStatus = () => {
     if (!beneficiary.loan) return "No Loan";
 
+    if (beneficiary.loan?.loanStatus === "Pending Approval") {
+      return "Pending";
+    }
+
     return beneficiary.loan?.loanStatus;
   };
 
@@ -141,6 +145,8 @@ const BeneficiaryCard = ({ beneficiary }: { beneficiary: Beneficiary }) => {
                 ? "destructive"
                 : getLoanStatus() === "No Loan"
                 ? "secondary"
+                : getLoanStatus() === "Pending"
+                ? "warning"
                 : "default"
             }
           >

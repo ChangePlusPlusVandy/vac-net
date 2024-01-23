@@ -34,7 +34,7 @@ const getLoanById = async (req: Request, res: Response) => {
 
 const getLoans = async (req: Request, res: Response) => {
   try {
-    const loans = await OutstandingLoan.find();
+    const loans = await OutstandingLoan.find().populate("beneficiary");
 
     return res.status(200).json(loans);
   } catch (err) {
