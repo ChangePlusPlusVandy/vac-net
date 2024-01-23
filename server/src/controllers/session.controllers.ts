@@ -102,7 +102,9 @@ const getNoShows = async (req: Request, res: Response) => {
         return res.status(500).send("Invalid ID query");
       }
 
-      const noShows = session.expectedAttendance.filter(x => !session.actualAttendance.includes(x));
+      const noShows = session.expectedAttendance.filter(
+        (x) => !session.actualAttendance.includes(x),
+      );
       return res.status(200).json(noShows);
     } else {
       return res.status(400).send({ message: "Missing Session ID" });
@@ -114,12 +116,12 @@ const getNoShows = async (req: Request, res: Response) => {
     }
     console.log("Something unexpected went wrong");
   }
-}
+};
 
 const getSessionCountWithinInterval = async (req: Request, res: Response) => {
   try {
     // Get the day number from the request query
-    const days = parseInt(req.params.days, 10);
+    const days = 14;
 
     // Calculate the start and end dates of the interval
     const currentDate = new Date();
@@ -134,7 +136,7 @@ const getSessionCountWithinInterval = async (req: Request, res: Response) => {
       },
     });
 
-    return res.status(200).json({ sessionCount });
+    return res.status(200).json({ total: sessionCount });
   } catch (err) {
     if (err instanceof Error) {
       console.log(err, err.message);
@@ -142,8 +144,7 @@ const getSessionCountWithinInterval = async (req: Request, res: Response) => {
     }
     console.log("Something unexpected went wrong");
   }
-}
-
+};
 
 export {
   createSession,
