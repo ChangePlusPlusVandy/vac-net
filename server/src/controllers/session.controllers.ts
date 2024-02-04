@@ -116,6 +116,35 @@ const getNoShows = async (req: Request, res: Response) => {
   }
 }
 
+const getSessionCountWithinInterval = async (req: Request, res: Response) => {
+  try {
+    // Get the day number from the request query
+    const days = parseInt(req.params.days, 10);
+
+    // Calculate the start and end dates of the interval
+    const currentDate = new Date();
+    const endDate = new Date(currentDate);
+    endDate.setDate(currentDate.getDate() + days);
+
+    // Find Session objects within the future interval
+    const sessionCount = await Session.countDocuments({
+      sessionDate: {
+        $gte: currentDate,
+        $lte: endDate,
+      },
+    });
+
+    return res.status(200).json({ sessionCount });
+  } catch (err) {
+    if (err instanceof Error) {
+      console.log(err, err.message);
+      return res.status(500).send({ message: err.message });
+    }
+    console.log("Something unexpected went wrong");
+  }
+}
+
+
 export {
   createSession,
   getSessionById,
@@ -123,4 +152,5 @@ export {
   editSession,
   deleteSession,
   getNoShows,
+  getSessionCountWithinInterval,
 };

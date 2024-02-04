@@ -16,27 +16,36 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import type { IStaff } from "@/pages/staff/staff-members";
-import { Icons } from "@/components/ui/icons";
+import { Icons } from "../ui/icons";
+import type { Loan } from "@/pages/loans/loans";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const StaffCard = ({ staff }: { staff: IStaff }) => {
+const LoanCard = ({ loan }: { loan: Loan }) => {
   const navigate = useNavigate();
+
+  const getBeneficiaryName = () => {
+    if (!loan.beneficiary) return "No beneficiary";
+    return loan.beneficiary?.firstName + " " + loan.beneficiary?.lastName;
+  };
+
+  const getLoanStatus = () => {
+    if (!loan.loanStatus) return "No Loan";
+
+    return loan.loanStatus;
+  };
 
   return (
     <Card
       className="cursor-pointer hover:border-gray-400 dark:hover:border-gray-600"
-      onClick={() => navigate(`./${staff._id}`)}
+      onClick={() => navigate(`./${loan._id}`)}
     >
       <CardHeader className="grid grid-cols-[1fr_32px] items-start gap-4 space-y-0">
-        <div>
-          <CardTitle className="mb-1">
-            {staff?.firstName} {staff?.lastName}
-          </CardTitle>
-          <CardDescription className="flex flex-col">
-            <span>({staff?.firebaseUID})</span>
-          </CardDescription>
+        <div className="mb-1">
+          <CardTitle className="text-xl">{getBeneficiaryName()}</CardTitle>
+          <CardDescription className="text-sm">({loan._id})</CardDescription>
         </div>
         <div className="flex items-center rounded-md bg-secondary text-secondary-foreground">
           <DropdownMenu>
@@ -56,12 +65,11 @@ const StaffCard = ({ staff }: { staff: IStaff }) => {
               <DropdownMenuCheckboxItem checked>
                 Bookmark User
               </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem>Edit Loan</DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem>
-                Edit Staff Member
+                View Beneficiary
               </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>
-                View User's Sessions
-              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem>View Sessions</DropdownMenuCheckboxItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <Icons.search className="mr-2 h-4 w-4" /> View Profile
@@ -70,16 +78,35 @@ const StaffCard = ({ staff }: { staff: IStaff }) => {
           </DropdownMenu>
         </div>
       </CardHeader>
-      <CardContent className="-mt-3">
+      <CardContent>
         <div className="flex space-x-4 text-sm text-muted-foreground">
+          <Badge
+            className="flex items-center"
+            variant={
+              getLoanStatus() === "Delinquient"
+                ? "destructive"
+                : getLoanStatus() === "No Loan"
+                ? "secondary"
+                : getLoanStatus() === "Fully Paid Off"
+                ? "default"
+                : getLoanStatus() === "Pending Approval"
+                ? "default"
+                : "default"
+            }
+          >
+            <BellIcon className="mr-1 h-3 w-3" />
+            {getLoanStatus()}
+          </Badge>
           <div className="flex items-center">
             <Icons.dolla className="mr-1 h-3 w-3" />
-            Sessions: {staff?.sessions?.length ?? 0}
+            {loan.initialPayment ?? 0}
           </div>
+          {loan.beneficiary?.phoneNumber?.length ?? 0 > 0 ? (
+            <div className="truncate">#: {loan.beneficiary?.phoneNumber} </div>
+          ) : null}
         </div>
       </CardContent>
     </Card>
   );
 };
-
-export default StaffCard;
+export default LoanCard;

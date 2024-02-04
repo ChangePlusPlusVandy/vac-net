@@ -1,3 +1,4 @@
+//imports here
 import React, { useState } from "react";
 import {
   Sheet,
@@ -15,32 +16,27 @@ import { Input } from "@/components/ui/input";
 import { ItemCreateButton } from "@/components/create-item-button";
 import { Label } from "@/components/ui/label";
 
-export function AddStaff({
+export function AddLoan({
   notify,
   setNotify,
 }: {
   notify: boolean;
   setNotify: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [firebaseUID, setFirebaseUID] = useState<string | undefined>();
-  const [joinDate, setJoinDate] = useState("");
-  const [status, setStatus] = useState("");
-  const [clearance, setClearance] = useState("");
+  const [initialPayment, setInitialPayment] = useState("");
+  const [initialDate, setInitialDate] = useState("");
+  const [paymentFrequency, setPaymentFrequency] = useState("");
+  const [loanStatus, setLoanStatus] = useState("");
 
-  const handleAddStaff = async () => {
+  const handleAddLoan = async () => {
     const data = {
-      firstName,
-      lastName,
-      firebaseUID,
-      joinDate,
-      status,
-      clearance,
+      initialPayment,
+      initialDate,
+      paymentFrequency,
+      loanStatus,
     };
-    console.log(data);
     try {
-      await fetch("http://localhost:3001/user", {
+      await fetch("http://localhost:3001/loan/", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
@@ -54,11 +50,11 @@ export function AddStaff({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <ItemCreateButton item="Onboard New Member" />
+        <ItemCreateButton item="Add Loan" />
       </SheetTrigger>
       <SheetContent className="w-full" side="right">
         <SheetHeader>
-          <SheetTitle>Onboard New Member</SheetTitle>
+          <SheetTitle>Add Loan</SheetTitle>
           <SheetDescription>
             You can always edit this information later.
           </SheetDescription>
@@ -66,75 +62,56 @@ export function AddStaff({
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              First Name
+              Initial Payment
             </Label>
             <Input
-              id="fname"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              id="ipayment"
+              type="number"
+              value={initialPayment}
+              onChange={(e) => setInitialPayment(e.target.value)}
               className="col-span-3"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Last Name
+              Loan Date
             </Label>
             <Input
-              id="lname"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Firebase UID
-            </Label>
-            <Input
-              id="uid"
-              value={firebaseUID}
-              onChange={(e) => setFirebaseUID(e.target.value)}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Join Date
-            </Label>
-            <Input
-              id="joindate"
+              id="ldate"
               type="date"
-              value={joinDate}
-              onChange={(e) => setJoinDate(e.target.value)}
+              value={initialDate}
+              onChange={(e) => setInitialDate(e.target.value)}
               className="col-span-3"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Status
+              Payment Frequency
             </Label>
             <Input
-              id="status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              id="pfreq"
+              type="string"
+              value={paymentFrequency}
+              onChange={(e) => setPaymentFrequency(e.target.value)}
               className="col-span-3"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Clearance
+              Loan Status
             </Label>
             <Input
-              id="clearance"
-              value={clearance}
-              onChange={(e) => setClearance(e.target.value)}
+              id="lstatus"
+              type="string"
+              value={loanStatus}
+              onChange={(e) => setLoanStatus(e.target.value)}
               className="col-span-3"
             />
           </div>
         </div>
         <SheetFooter>
           <SheetClose asChild>
-            <Button onClick={handleAddStaff}>Save beneficiary</Button>
+            <Button onClick={handleAddLoan}>Save loan</Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>

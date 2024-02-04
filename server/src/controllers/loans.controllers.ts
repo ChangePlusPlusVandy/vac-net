@@ -34,7 +34,7 @@ const getLoanById = async (req: Request, res: Response) => {
 
 const getLoans = async (req: Request, res: Response) => {
   try {
-    const loans = await OutstandingLoan.find();
+    const loans = await OutstandingLoan.find().populate("beneficiary");
 
     return res.status(200).json(loans);
   } catch (err) {
@@ -86,17 +86,54 @@ const getDelinquentPayment = async (req: Request, res: Response) => {
   const date = new Date();
   date.setDate(date.getDate() - 3);
 
-  try{
-    const loans = await OutstandingLoan.find({ nextPaymentDate: {$lt: date } });
+  try {
+    const loans = await OutstandingLoan.find({
+      nextPaymentDate: { $lt: date },
+    });
     return res.status(200).json(loans);
-  }catch (err) {
-    if (err instanceof Error){
+  } catch (err) {
+    if (err instanceof Error) {
       console.log(err, err.message);
-      return res.status(500).send({message: err.message});
-    }else{
-      console.log('Something unexpected happened');
+      return res.status(500).send({ message: err.message });
+    } else {
+      console.log("Something unexpected happened");
     }
   }
-}
+};
 
-export { editLoan, deleteLoan, createOutstandingLoan, getLoanById, getLoans, getDelinquentPayment };
+const getOutstandingLoansWithinInterval = async (req: Request, res: Response) => {
+  try {
+    // Extract the number of days from the request
+    const days = parseInt(req.params.days, 10);
+
+    // Calculate the end date of the interval
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + days);
+
+    // Find outstanding loans within the interval
+    const outstandingLoans = await OutstandingLoan.find({
+      nextPaymentDate: {
+        $gte: new Date(), // today
+        $lte: endDate,     // endDate
+      },
+      nextPaymentAmount: { $exists: true, $ne: null },
+    });
+
+    const totalNextPaymentAmount = outstandingLoans.reduce((total, loan) => {
+      if (loan.nextPaymentAmount !== undefined) {
+        return total + loan.nextPaymentAmount;
+      }
+      return total; // Ensure to always return the total
+    }, 0);
+
+    return res.status(200).json({ totalNextPaymentAmount });
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err, err.message);
+      return res.status(500).send({ message: err.message });
+    }
+    console.error("Something unexpected happened");
+  }
+};
+
+export { editLoan, deleteLoan, createOutstandingLoan, getLoanById, getLoans, getDelinquentPayment, getOutstandingLoansWithinInterval };

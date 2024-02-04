@@ -5,6 +5,7 @@ import {
   getDelinquentPayment,
   getLoanById,
   getLoans,
+  getOutstandingLoansWithinInterval
 } from "../controllers/loans.controllers";
 
 import express from "express";
@@ -17,5 +18,6 @@ loanRouter.post("/", createOutstandingLoan);
 loanRouter.get("/", getLoanById);
 loanRouter.get("/getall", getLoans);
 loanRouter.get("/getDelinquent", getDelinquentPayment)
+loanRouter.get("/getIntervalLoans/:days", getOutstandingLoansWithinInterval);
 
 export default loanRouter;

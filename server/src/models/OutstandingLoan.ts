@@ -8,6 +8,7 @@ export interface Loan {
   principalLeft?: number;
   nextPaymentDate?: Date;
   nextPaymentAmount?: number;
+  paymentFrequency?: string;
   archivedLoan?: boolean;
   beneficiary?: string;
   validLoan?: boolean;
@@ -32,6 +33,9 @@ const LoanSchema = new mongoose.Schema<Loan>({
   },
   nextPaymentAmount: {
     type: Number,
+  },
+  paymentFrequency: {
+    type: String,
   },
   archivedLoan: {
     type: Boolean,
