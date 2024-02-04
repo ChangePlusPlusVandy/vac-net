@@ -8,6 +8,7 @@ import StaffToolbar from "@/components/toolbars/staff-toolbar";
 import type { IStaff } from "@/pages/staff/staff-members";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import type { ISession } from "../sessions/sessions";
 
 const Staff = () => {
   const [query, setQuery] = useState("");
@@ -18,6 +19,7 @@ const Staff = () => {
   const [staff, setStaff] = useState<IStaff | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [sessions, setSessions] = useState<ISession | null>(null);
 
   useEffect(() => {
     const getStaffById = async () => {
@@ -37,6 +39,27 @@ const Staff = () => {
 
     void getStaffById();
   }, [id, editing]);
+
+  useEffect(() => {
+    const getSessionById = async () => {
+      setIsLoading(true);
+      if (staff?.sessions){
+        try{
+          const data : ISession = await fetch(
+            "http://localhost:3001/session/" + staff?.sessions
+          ).then((res: Response) => res.json() as unknown as ISession);
+          console.log(data);
+          setSessions(data);
+        }catch(e){
+          console.log(e);
+        }finally{
+          setIsLoading(false);
+        }
+      } 
+    }
+
+    void getSessionById();
+  }, [staff]);
 
 
   return (
@@ -114,8 +137,25 @@ const Staff = () => {
           />
         </div>
 
-        {/* TODO: Display bookmarked beneficiaries */}
-        {/* TODO: Display sessions  */}
+        <div className="flex flex-row justify-between">
+          <div className="w-1/2">
+            <Label htmlFor="name" className="text-left">
+              Associated Sessions
+            </Label>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="name" className="text-left">
+            Region
+          </Label>
+          <Input
+              id="sessionRegion"
+              className="col-span-1 pr-1"
+              value={sessions?.region}
+              disabled={true}
+          />
+        </div>
       </div>
     </DashboardShell>
   );

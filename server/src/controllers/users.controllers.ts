@@ -16,7 +16,7 @@ export const createStaff = async (req: Request, res: Response) => {
 
 export const getAllStaff = async (req: Request, res: Response) => {
   try {
-    const allStaff = await StaffModel.find({});
+    const allStaff = await StaffModel.find({})
     return res.status(200).json(allStaff);
   } catch (err: unknown) {
     if (err instanceof Error) {
