@@ -5,13 +5,10 @@ import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
 import type { IStaff } from "@/pages/staff/staff-members";
 import { Input } from "@/components/ui/input";
-<<<<<<< HEAD
-import type { ISession } from "../sessions/sessions";
-=======
 import { ItemCreateButton } from "@/components/create-item-button";
 import { Label } from "@/components/ui/label";
 import StaffToolbar from "@/components/toolbars/staff-toolbar";
->>>>>>> 006726ddca432cd621d454bb73da601d2ad5c198
+import type { ISession } from "../sessions/sessions";
 
 const Staff = () => {
   const [query, setQuery] = useState("");
@@ -43,7 +40,6 @@ const Staff = () => {
     void getStaffById();
   }, [id, editing]);
 
-<<<<<<< HEAD
   useEffect(() => {
     const getSessionById = async () => {
       setIsLoading(true);
@@ -65,9 +61,6 @@ const Staff = () => {
     void getSessionById();
   }, [staff]);
 
-
-=======
->>>>>>> 006726ddca432cd621d454bb73da601d2ad5c198
   return (
     <DashboardShell>
       <DashboardHeader
