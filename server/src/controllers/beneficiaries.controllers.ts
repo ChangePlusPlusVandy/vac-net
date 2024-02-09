@@ -110,6 +110,69 @@ const countBeneficiaries = async (req: Request, res: Response) => {
   }
 };
 
+const associateLoanWithBeneficiary = async (req: Request, res: Response) => {
+  const { id, loanId } = req.params;
+  try {
+    const updatedBeneficiary = await Beneficiary.findByIdAndUpdate(
+      id,
+      { $addToSet: { associatedLoans: loanId } }, // Use $addToSet to prevent duplicates
+      { new: true }
+    ).populate('associatedLoans');
+    
+    return res.status(200).json(updatedBeneficiary);
+  } catch (error) {
+    // ... error handling
+  }
+};
+
+// Controller to dissociate a loan from a beneficiary
+const dissociateLoanFromBeneficiary = async (req: Request, res: Response) => {
+  const { id, loanId } = req.params;
+  try {
+    const updatedBeneficiary = await Beneficiary.findByIdAndUpdate(
+      id,
+      { $pull: { associatedLoans: loanId } }, // Use $pull to remove the loanId from the array
+      { new: true }
+    ).populate('associatedLoans');
+    
+    return res.status(200).json(updatedBeneficiary);
+  } catch (error) {
+    // ... error handling
+  }
+};
+
+// Controller to associate a session with a beneficiary
+const associateSessionWithBeneficiary = async (req: Request, res: Response) => {
+  const { id, sessionId } = req.params;
+  try {
+    const updatedBeneficiary = await Beneficiary.findByIdAndUpdate(
+      id,
+      { $addToSet: { associatedSessions: sessionId } }, // Use $addToSet to prevent duplicates
+      { new: true }
+    ).populate('associatedSessions');
+    
+    return res.status(200).json(updatedBeneficiary);
+  } catch (error) {
+    // ... error handling
+  }
+};
+
+// Controller to dissociate a session from a beneficiary
+const dissociateSessionFromBeneficiary = async (req: Request, res: Response) => {
+  const { id, sessionId } = req.params;
+  try {
+    const updatedBeneficiary = await Beneficiary.findByIdAndUpdate(
+      id,
+      { $pull: { associatedSessions: sessionId } }, // Use $pull to remove the sessionId from the array
+      { new: true }
+    ).populate('associatedSessions');
+    
+    return res.status(200).json(updatedBeneficiary);
+  } catch (error) {
+    // ... error handling
+  }
+};
+
 export {
   createBeneficiary,
   getBeneficiaryById,
@@ -117,4 +180,8 @@ export {
   editBeneficiary,
   deleteBeneficiary,
   countBeneficiaries,
+  associateLoanWithBeneficiary,
+  dissociateLoanFromBeneficiary,
+  associateSessionWithBeneficiary,
+  dissociateSessionFromBeneficiary,
 };
