@@ -21,7 +21,7 @@ import {
   SunMedium,
   User,
   UsersRound,
-  X
+  X,
 } from "lucide-react";
 
 type IconProps = React.HTMLAttributes<SVGElement>;
@@ -65,5 +65,5 @@ export const Icons = {
   beneficiary: UsersRound,
   loan: Banknote,
   session: CalendarCheck,
-  download: DownloadCloud
+  download: DownloadCloud,
 };
