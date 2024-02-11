@@ -45,7 +45,6 @@ const Dashboard = () => {
       .then((data) => {
         setExpectedIncome(data.total);
       });
-
   }, []);
 
   return (

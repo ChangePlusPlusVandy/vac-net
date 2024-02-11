@@ -8,7 +8,7 @@ import { DashboardShell } from "@/components/shell";
 import type { Loan } from "../loans/loans";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSearchParams } from "react-router-dom";
-import { Session } from "../sessions/sessions";
+import { type Session } from "../sessions/sessions";
 
 export interface Beneficiary {
   _id?: string;

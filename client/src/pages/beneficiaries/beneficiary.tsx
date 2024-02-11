@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
 import { useParams, useSearchParams } from "react-router-dom";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants, Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { type Beneficiary as BeneType } from "@/pages/beneficiaries/beneficiaries";
@@ -18,10 +18,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { BellIcon, ChevronDownIcon } from "@radix-ui/react-icons";
-import { Loan } from "../loans/loans";
-import { Session } from "../sessions/sessions";
+import { type Loan } from "../loans/loans";
+import { type Session } from "../sessions/sessions";
 import {
   Table,
   TableBody,
@@ -30,7 +29,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 const Beneficiary = () => {
   const { id } = useParams();
   const [params, setParams] = useSearchParams();
@@ -71,8 +70,12 @@ const Beneficiary = () => {
   useEffect(() => {
     // Fetch sessions and loans when the component mounts
     const fetchSessionsAndLoans = async () => {
-      const sessionsData = await fetch('http://localhost:3001/session/sessions').then(res => res.json());
-      const loansData = await fetch('http://localhost:3001/loan/getall').then(res => res.json());
+      const sessionsData = await fetch(
+        "http://localhost:3001/session/sessions",
+      ).then((res) => res.json());
+      const loansData = await fetch("http://localhost:3001/loan/getall").then(
+        (res) => res.json(),
+      );
       setSessions(sessionsData);
       setLoans(loansData);
     };
@@ -107,12 +110,14 @@ const Beneficiary = () => {
           // Fetch details for each associated loan
           const loansInfo = await Promise.all(
             beneficiary.associatedLoans.map(async (loanId) => {
-              const response = await fetch(`http://localhost:3001/loan?id=${loanId}`);
+              const response = await fetch(
+                `http://localhost:3001/loan?id=${loanId}`,
+              );
               if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
               }
               return await response.json();
-            })
+            }),
           );
 
           // Update the state with the fetched loan details
@@ -137,12 +142,14 @@ const Beneficiary = () => {
           // Fetch details for each associated session
           const sessionsInfo = await Promise.all(
             beneficiary.associatedSessions.map(async (sessionId) => {
-              const response = await fetch(`http://localhost:3001/session/${sessionId}`);
+              const response = await fetch(
+                `http://localhost:3001/session/${sessionId}`,
+              );
               if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
               }
               return await response.json();
-            })
+            }),
           );
 
           // Update the state with the fetched session details
@@ -191,22 +198,31 @@ const Beneficiary = () => {
 
   // Function to update beneficiary with associated loan
   const handleSelectLoan = async (loanId: string) => {
-    if (!beneficiary || !beneficiary._id) return;
+    if (!beneficiary?._id) return;
     // Assuming the backend expects an array of loan IDs for association
     const updatedLoans = [...(beneficiary.associatedLoans || []), loanId];
-    const updatedBeneficiary = { ...beneficiary, associatedLoans: updatedLoans };
+    const updatedBeneficiary = {
+      ...beneficiary,
+      associatedLoans: updatedLoans,
+    };
 
     try {
-      const response = await fetch(`http://localhost:3001/beneficiary/${beneficiary._id}/loans/${loanId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedBeneficiary),
-      });
-      if (!response.ok) throw new Error("Failed to associate loan with beneficiary");
+      const response = await fetch(
+        `http://localhost:3001/beneficiary/${beneficiary._id}/loans/${loanId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedBeneficiary),
+        },
+      );
+      if (!response.ok)
+        throw new Error("Failed to associate loan with beneficiary");
       // Optionally, fetch updated beneficiary or set state directly
       setBeneficiary(await response.json());
-      const newLoanDetails = await fetch(`http://localhost:3001/loan?id=${loanId}`).then(res => res.json());
-      setDetailedLoans(prevLoans => [...prevLoans, newLoanDetails]);
+      const newLoanDetails = await fetch(
+        `http://localhost:3001/loan?id=${loanId}`,
+      ).then((res) => res.json());
+      setDetailedLoans((prevLoans) => [...prevLoans, newLoanDetails]);
     } catch (error) {
       console.error("Error associating loan with beneficiary:", error);
     }
@@ -214,20 +230,35 @@ const Beneficiary = () => {
 
   // Function to update beneficiary with associated session
   const handleSelectSession = async (sessionId: string) => {
-    if (!beneficiary || !beneficiary._id) return;
-    const updatedSessions = [...(beneficiary.associatedSessions || []), sessionId];
-    const updatedBeneficiary = { ...beneficiary, associatedSessions: updatedSessions };
+    if (!beneficiary?._id) return;
+    const updatedSessions = [
+      ...(beneficiary.associatedSessions || []),
+      sessionId,
+    ];
+    const updatedBeneficiary = {
+      ...beneficiary,
+      associatedSessions: updatedSessions,
+    };
 
     try {
-      const response = await fetch(`http://localhost:3001/beneficiary/${beneficiary._id}/sessions/${sessionId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedBeneficiary),
-      });
-      if (!response.ok) throw new Error("Failed to associate session with beneficiary");
+      const response = await fetch(
+        `http://localhost:3001/beneficiary/${beneficiary._id}/sessions/${sessionId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedBeneficiary),
+        },
+      );
+      if (!response.ok)
+        throw new Error("Failed to associate session with beneficiary");
 
-      const newSessionDetails = await fetch(`http://localhost:3001/session/${sessionId}`).then(res => res.json());
-      setDetailedSessions(prevSessions => [...prevSessions, newSessionDetails]);
+      const newSessionDetails = await fetch(
+        `http://localhost:3001/session/${sessionId}`,
+      ).then((res) => res.json());
+      setDetailedSessions((prevSessions) => [
+        ...prevSessions,
+        newSessionDetails,
+      ]);
 
       // Update the beneficiary with the newly associated session
       setBeneficiary(await response.json());
@@ -238,20 +269,27 @@ const Beneficiary = () => {
 
   const handleRemoveLoan = async (loanId: string) => {
     if (!beneficiary) return; // Add null check for beneficiary
-    const response = await fetch(`http://localhost:3001/beneficiary/${beneficiary._id}/loans/${loanId}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      `http://localhost:3001/beneficiary/${beneficiary._id}/loans/${loanId}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
 
     if (response.ok) {
       // Remove the loan from the detailedLoans state to update UI
-      setDetailedLoans(prevLoans => prevLoans.filter(loan => loan._id !== loanId));
+      setDetailedLoans((prevLoans) =>
+        prevLoans.filter((loan) => loan._id !== loanId),
+      );
       // Use functional update to ensure we're not relying on stale state
-      setBeneficiary(prev => {
+      setBeneficiary((prev) => {
         if (!prev) return null;
         return {
           ...prev,
-          associatedLoans: prev.associatedLoans ? prev.associatedLoans.filter(id => id !== loanId) : [],
+          associatedLoans: prev.associatedLoans
+            ? prev.associatedLoans.filter((id) => id !== loanId)
+            : [],
         };
       });
     } else {
@@ -262,21 +300,28 @@ const Beneficiary = () => {
   const handleRemoveSession = async (sessionId: string) => {
     if (!beneficiary) return; // Add null check for beneficiary
 
-    const response = await fetch(`http://localhost:3001/beneficiary/${beneficiary._id}/sessions/${sessionId}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      `http://localhost:3001/beneficiary/${beneficiary._id}/sessions/${sessionId}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
 
     if (response.ok) {
-      setBeneficiary(prev => {
+      setBeneficiary((prev) => {
         if (!prev) return null;
         return {
           ...prev,
-          associatedSessions: prev.associatedSessions ? prev.associatedSessions.filter(id => id !== sessionId) : [],
+          associatedSessions: prev.associatedSessions
+            ? prev.associatedSessions.filter((id) => id !== sessionId)
+            : [],
         };
       });
       // Remove the session from the detailedSessions state to update UI
-      setDetailedSessions(prevSessions => prevSessions.filter(session => session._id !== sessionId));
+      setDetailedSessions((prevSessions) =>
+        prevSessions.filter((session) => session._id !== sessionId),
+      );
     } else {
       console.error("Failed to remove the session");
     }
@@ -301,7 +346,10 @@ const Beneficiary = () => {
           {params.get("f") === "1" && (
             <button
               className={buttonVariants({ variant: "outline" })}
-              onClick={() => setParams({ f: "0" })}
+              onClick={() => {
+                setParams({ f: "0" });
+                setEditing(false);
+              }}
             >
               <Icons.close className="mr-2 h-4 w-4" />
               Cancel
@@ -354,7 +402,7 @@ const Beneficiary = () => {
             </Label>
             <DatePicker
               date={beneficiary?.birthday}
-            // setDate={handleBirthDateChange}
+              // setDate={handleBirthDateChange}
             />
           </div>
         )}
@@ -394,7 +442,12 @@ const Beneficiary = () => {
                   <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" alignOffset={-5} className="w-[200px]" forceMount>
+              <DropdownMenuContent
+                align="end"
+                alignOffset={-5}
+                className="w-[200px]"
+                forceMount
+              >
                 <DropdownMenuLabel>Choose a Loan</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {loans.map((loan, index) => (
@@ -402,10 +455,13 @@ const Beneficiary = () => {
                     key={loan._id ?? `loan-fallback-${index}`}
                     onClick={() => loan._id && handleSelectLoan(loan._id)}
                   >
-                    {`Payment: ${loan.initialPayment ?? 'Not specified'} - Date: ${loan.initialPaymentDate
-                      ? new Date(loan.initialPaymentDate).toLocaleDateString()
-                      : 'Not specified'
-                      } - Status: ${loan.loanStatus ?? 'Not specified'}`}
+                    {`Payment: ${
+                      loan.initialPayment ?? "Not specified"
+                    } - Date: ${
+                      loan.initialPaymentDate
+                        ? new Date(loan.initialPaymentDate).toLocaleDateString()
+                        : "Not specified"
+                    } - Status: ${loan.loanStatus ?? "Not specified"}`}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -420,17 +476,28 @@ const Beneficiary = () => {
                   <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" alignOffset={-5} className="w-[200px]" forceMount>
+              <DropdownMenuContent
+                align="end"
+                alignOffset={-5}
+                className="w-[200px]"
+                forceMount
+              >
                 <DropdownMenuLabel>Choose a Session</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {sessions.map(session => (
-                  <DropdownMenuItem key={session._id} onClick={() => handleSelectSession(session._id)}>
-                    {`${new Date(session.sessionDate).toLocaleDateString()} - ${session.region}`}
+                {sessions.map((session) => (
+                  <DropdownMenuItem
+                    key={session._id}
+                    onClick={() => handleSelectSession(session._id)}
+                  >
+                    {`${new Date(session.sessionDate).toLocaleDateString()} - ${
+                      session.region
+                    }`}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>)}
+          </div>
+        )}
 
         <div className="flex flex-wrap -mx-2">
           <div className="w-full md:w-1/2 px-2">
@@ -447,16 +514,21 @@ const Beneficiary = () => {
               <TableBody>
                 {detailedLoans.map((loan) => (
                   <TableRow key={loan._id}>
-                    <TableCell>{loan.initialPayment ?? 'Not specified'}</TableCell>
-                    <TableCell>{
-                      loan.initialPaymentDate
+                    <TableCell>
+                      {loan.initialPayment ?? "Not specified"}
+                    </TableCell>
+                    <TableCell>
+                      {loan.initialPaymentDate
                         ? new Date(loan.initialPaymentDate).toLocaleDateString()
-                        : 'Not specified'
-                    }</TableCell>
-                    <TableCell>{loan.loanStatus ?? 'Not specified'}</TableCell>
+                        : "Not specified"}
+                    </TableCell>
+                    <TableCell>{loan.loanStatus ?? "Not specified"}</TableCell>
                     <TableCell>
                       {editing && (
-                        <button onClick={() => handleRemoveLoan(loan._id)} aria-label="Remove loan">
+                        <button
+                          onClick={() => handleRemoveLoan(loan._id)}
+                          aria-label="Remove loan"
+                        >
                           <Icons.close />
                         </button>
                       )}
@@ -480,33 +552,34 @@ const Beneficiary = () => {
               <TableBody>
                 {detailedSessions.map((session) => (
                   <TableRow key={session._id}>
-                    <TableCell>{
-                      session.sessionDate
+                    <TableCell>
+                      {session.sessionDate
                         ? new Date(session.sessionDate).toLocaleDateString()
-                        : 'Not specified'
-                    }</TableCell>
-                    <TableCell>{session.region ?? 'Not specified'}</TableCell>
+                        : "Not specified"}
+                    </TableCell>
+                    <TableCell>{session.region ?? "Not specified"}</TableCell>
                     <TableCell>
                       {editing && (
-                        <button onClick={() => handleRemoveSession(session._id)} aria-label="Remove session">
+                        <button
+                          onClick={() => handleRemoveSession(session._id)}
+                          aria-label="Remove session"
+                        >
                           <Icons.close />
-                        </button>)}
+                        </button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </div>
-
         </div>
-
       </div>
     </DashboardShell>
   );
 };
 
 export default Beneficiary;
-
 
 const SaveBeneficiary = ({
   isLoading,
