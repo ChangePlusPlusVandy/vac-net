@@ -16,7 +16,9 @@ export const createStaff = async (req: Request, res: Response) => {
 
 export const getAllStaff = async (req: Request, res: Response) => {
   try {
-    const allStaff = await StaffModel.find({});
+    const allStaff = await StaffModel.find({})
+    .populate("sessions")
+    .exec();
     return res.status(200).json(allStaff);
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -30,7 +32,9 @@ export const getStaffById = async (req: Request, res: Response) => {
   const staffId = req.query?.staffId;
   try {
     if (staffId) {
-      const staff = await StaffModel.findById(staffId).exec();
+      const staff = await StaffModel.findById(staffId)
+      .populate("sessions")
+      .exec();
       return res.status(200).json(staff);
     } else {
       return res.status(500).send("Invalid ID query");
