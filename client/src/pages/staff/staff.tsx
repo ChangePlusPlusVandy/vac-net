@@ -26,13 +26,16 @@ const Staff = () => {
     if (params.get("f") === "1") {
       setIsLoading(true);
       try {
-        await fetch(`https://vacnet-backend-deploy.vercel.app/user/edit?_id=${staff?._id}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+        await fetch(
+          `https://vacnet-backend-deploy.vercel.app/user/edit?_id=${staff?._id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(staff),
           },
-          body: JSON.stringify(staff),
-        }).then((res: Response) => res.json() as unknown as IStaff);
+        ).then((res: Response) => res.json() as unknown as IStaff);
         setEditing(false);
         setParams({ f: "0" });
       } catch (err) {
@@ -49,7 +52,8 @@ const Staff = () => {
       setIsLoading(true);
       try {
         const data: IStaff = await fetch(
-          "https://vacnet-backend-deploy.vercel.app/user/getstaff?staffId=" + id,
+          "https://vacnet-backend-deploy.vercel.app/user/getstaff?staffId=" +
+            id,
         ).then((res: Response) => res.json() as unknown as IStaff);
         setStaff(data);
       } catch (e) {

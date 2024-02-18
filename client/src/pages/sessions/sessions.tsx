@@ -36,11 +36,14 @@ const Sessions = () => {
   useEffect(() => {
     const fetchSessions = async () => {
       try {
-        const response = await fetch("https://vacnet-backend-deploy.vercel.app/session/sessions", {
-          headers: {
-            "Content-Type": "application/json",
+        const response = await fetch(
+          "https://vacnet-backend-deploy.vercel.app/session/sessions",
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
           },
-        });
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

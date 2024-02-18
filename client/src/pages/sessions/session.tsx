@@ -89,13 +89,16 @@ const SessionEdit = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`https://vacnet-backend-deploy.vercel.app/session`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `https://vacnet-backend-deploy.vercel.app/session`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(session),
         },
-        body: JSON.stringify(session),
-      });
+      );
 
       if (!response.ok) {
         throw new Error("Failed to save the session");

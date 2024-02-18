@@ -75,11 +75,14 @@ const Loans = () => {
   useEffect(() => {
     const getLoans = async () => {
       try {
-        const data: Loan[] = await fetch("https://vacnet-backend-deploy.vercel.app/loan/getall", {
-          headers: {
-            "Content-Type": "application/json",
+        const data: Loan[] = await fetch(
+          "https://vacnet-backend-deploy.vercel.app/loan/getall",
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
           },
-        }).then((res: Response) => res.json() as unknown as Loan[]);
+        ).then((res: Response) => res.json() as unknown as Loan[]);
         console.log(data);
         setLoans(data);
       } catch (error) {

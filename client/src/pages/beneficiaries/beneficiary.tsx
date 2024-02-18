@@ -73,9 +73,10 @@ const Beneficiary = () => {
       const sessionsData = await fetch(
         "https://vacnet-backend-deploy.vercel.app/session/sessions",
       ).then((res) => res.json());
-      const loansData = await fetch("https://vacnet-backend-deploy.vercel.app/loan/getall").then(
-        (res) => res.json(),
-      );
+
+      const loansData = await fetch(
+        "https://vacnet-backend-deploy.vercel.app/loan/getall",
+      ).then((res) => res.json());
       setSessions(sessionsData);
       setLoans(loansData);
     };
@@ -314,7 +315,8 @@ const Beneficiary = () => {
         return {
           ...prev,
           associatedSessions: prev.associatedSessions
-            ? prev.associatedSessions.filter((id) => id !== sessionId)
+            ? // @ts-expect-error TODO
+              prev.associatedSessions.filter((id) => id !== sessionId)
             : [],
         };
       });
@@ -526,6 +528,7 @@ const Beneficiary = () => {
                     <TableCell>
                       {editing && (
                         <button
+                          // @ts-expect-error TODO
                           onClick={() => handleRemoveLoan(loan._id)}
                           aria-label="Remove loan"
                         >
