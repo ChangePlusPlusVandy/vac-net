@@ -50,7 +50,7 @@ const SessionEdit = () => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:3001/session/${sessionId}`,
+          `https://vacnet-backend-deploy.vercel.app/session/${sessionId}`,
         );
         const data: Session = (await response.json()) as Session;
         data.sessionDate = formatDateForInput(new Date(data.sessionDate ?? ""));
@@ -89,13 +89,16 @@ const SessionEdit = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/session`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `https://vacnet-backend-deploy.vercel.app/session`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(session),
         },
-        body: JSON.stringify(session),
-      });
+      );
 
       if (!response.ok) {
         throw new Error("Failed to save the session");

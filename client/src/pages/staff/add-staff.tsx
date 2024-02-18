@@ -40,7 +40,7 @@ export function AddStaff({
     };
     console.log(data);
     try {
-      await fetch("http://localhost:3001/user", {
+      await fetch("https://vacnet-backend-deploy.vercel.app/user", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },

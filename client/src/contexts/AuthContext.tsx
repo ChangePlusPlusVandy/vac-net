@@ -85,7 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function getMongoUser(uid: string) {
     try {
       const res = await fetch(
-        `http://localhost:3001/user?firebaseUID=${uid}`,
+        `https://vacnet-backend-deploy.vercel.app/user?firebaseUID=${uid}`,
       ).then((res) => res.json() as unknown as Staff[]);
       setMongoUser(res[0]);
     } catch (err) {

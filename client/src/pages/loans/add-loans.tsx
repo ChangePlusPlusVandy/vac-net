@@ -36,7 +36,7 @@ export function AddLoan({
       loanStatus,
     };
     try {
-      await fetch("http://localhost:3001/loan/", {
+      await fetch("https://vacnet-backend-deploy.vercel.app/loan/", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
