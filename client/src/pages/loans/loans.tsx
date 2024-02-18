@@ -78,7 +78,7 @@ const Loans = () => {
     const getLoans = async () => {
       try {
         const data: Loan[] = await fetch(
-          "https://vacnet-backend-deploy.vercel.app/loan/getall",
+          "http://localhost:3001/loan/getall",
           {
             headers: {
               "Content-Type": "application/json",
