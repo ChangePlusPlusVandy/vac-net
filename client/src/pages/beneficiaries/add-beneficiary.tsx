@@ -38,7 +38,7 @@ export function AddBeneficiary({
     };
     console.log(data);
     try {
-      await fetch("http://localhost:3001/beneficiary/create", {
+      await fetch("https://vacnet-backend-deploy.vercel.app/beneficiary/create", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },

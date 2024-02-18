@@ -36,7 +36,7 @@ const Sessions = () => {
   useEffect(() => {
     const fetchSessions = async () => {
       try {
-        const response = await fetch("http://localhost:3001/session/sessions", {
+        const response = await fetch("https://vacnet-backend-deploy.vercel.app/session/sessions", {
           headers: {
             "Content-Type": "application/json",
           },

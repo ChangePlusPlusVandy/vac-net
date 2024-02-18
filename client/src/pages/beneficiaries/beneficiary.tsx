@@ -47,7 +47,7 @@ const Beneficiary = () => {
       setIsLoading(true);
       try {
         await fetch(
-          `http://localhost:3001/beneficiary?_id=${beneficiary?._id}`,
+          `https://vacnet-backend-deploy.vercel.app/beneficiary?_id=${beneficiary?._id}`,
           {
             method: "PUT",
             headers: {
@@ -71,9 +71,9 @@ const Beneficiary = () => {
     // Fetch sessions and loans when the component mounts
     const fetchSessionsAndLoans = async () => {
       const sessionsData = await fetch(
-        "http://localhost:3001/session/sessions",
+        "https://vacnet-backend-deploy.vercel.app/session/sessions",
       ).then((res) => res.json());
-      const loansData = await fetch("http://localhost:3001/loan/getall").then(
+      const loansData = await fetch("https://vacnet-backend-deploy.vercel.app/loan/getall").then(
         (res) => res.json(),
       );
       setSessions(sessionsData);

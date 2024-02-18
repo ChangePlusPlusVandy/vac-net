@@ -108,7 +108,7 @@ const StaffMembers = () => {
     const getStaffMembers = async () => {
       try {
         const data: IStaff[] = await fetch(
-          "http://localhost:3001/user/allstaff",
+          "https://vacnet-backend-deploy.vercel.app/user/allstaff",
           {
             headers: {
               "Content-Type": "application/json",

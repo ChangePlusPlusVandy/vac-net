@@ -50,7 +50,7 @@ const SessionEdit = () => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:3001/session/${sessionId}`,
+          `https://vacnet-backend-deploy.vercel.app/session/${sessionId}`,
         );
         const data: Session = (await response.json()) as Session;
         data.sessionDate = formatDateForInput(new Date(data.sessionDate ?? ""));
@@ -89,7 +89,7 @@ const SessionEdit = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/session`, {
+      const response = await fetch(`https://vacnet-backend-deploy.vercel.app/session`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

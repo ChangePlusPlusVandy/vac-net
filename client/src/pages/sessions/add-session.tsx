@@ -44,7 +44,7 @@ export function AddSession({
 
   const handleAddSession = async () => {
     try {
-      await fetch("http://localhost:3001/session", {
+      await fetch("https://vacnet-backend-deploy.vercel.app/session", {
         method: "POST",
         body: JSON.stringify(newSession),
         headers: { "Content-Type": "application/json" },

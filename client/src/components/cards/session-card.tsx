@@ -61,7 +61,7 @@ const SessionCard = ({
         ) {
           try {
             const response = await fetch(
-              `http://localhost:3001/session/?id=${session._id}`,
+              `https://vacnet-backend-deploy.vercel.app/session/?id=${session._id}`,
               {
                 method: "DELETE",
               },

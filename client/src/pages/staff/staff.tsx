@@ -26,7 +26,7 @@ const Staff = () => {
     if (params.get("f") === "1") {
       setIsLoading(true);
       try {
-        await fetch(`http://localhost:3001/user/edit?_id=${staff?._id}`, {
+        await fetch(`https://vacnet-backend-deploy.vercel.app/user/edit?_id=${staff?._id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -49,7 +49,7 @@ const Staff = () => {
       setIsLoading(true);
       try {
         const data: IStaff = await fetch(
-          "http://localhost:3001/user/getstaff?staffId=" + id,
+          "https://vacnet-backend-deploy.vercel.app/user/getstaff?staffId=" + id,
         ).then((res: Response) => res.json() as unknown as IStaff);
         setStaff(data);
       } catch (e) {

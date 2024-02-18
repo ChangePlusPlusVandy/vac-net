@@ -25,7 +25,7 @@ const Dashboard = () => {
   const [upcomingSesions, setUpcomingSessions] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:3001/beneficiary/count")
+    fetch("https://vacnet-backend-deploy.vercel.app/beneficiary/count")
       .then((res) => res.json())
       .then((data) => {
         setTotalBeneficiaries(data.totalBeneficiaries);
@@ -45,7 +45,7 @@ const Dashboard = () => {
       .then((data) => {
         setExpectedIncome(data.total);
       });
-  }, [])
+  }, []);
 
   return (
     <DashboardShell>

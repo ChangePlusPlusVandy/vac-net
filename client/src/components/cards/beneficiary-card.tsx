@@ -65,7 +65,7 @@ const BeneficiaryCard = ({ beneficiary }: { beneficiary: Beneficiary }) => {
       );
     }
     try {
-      await fetch(`http://localhost:3001/user/edit?_id=${mongoUser?._id}`, {
+      await fetch(`https://vacnet-backend-deploy.vercel.app/user/edit?_id=${mongoUser?._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
