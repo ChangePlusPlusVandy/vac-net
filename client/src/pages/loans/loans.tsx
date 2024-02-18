@@ -7,6 +7,7 @@ import LoanToolbar from "@/components/toolbars/loan-toolbar";
 import { useSearchParams } from "react-router-dom";
 import { AddLoan } from "./add-loans";
 import { type Beneficiary } from "../beneficiaries/beneficiaries";
+import { type Session } from "../sessions/sessions";
 
 export interface Loan {
   _id?: string;
@@ -17,9 +18,10 @@ export interface Loan {
   nextPaymentAmount?: number;
   paymentFrequency?: string;
   archivedLoan?: boolean;
-  beneficiary?: Beneficiary;
+  beneficiaries?: Beneficiary[];
   validLoan?: boolean;
   loanStatus?: string;
+  associatedSessions?: Session[];
 }
 
 const Loans = () => {
@@ -121,12 +123,15 @@ const Loans = () => {
           .filter((loans) => {
             if (!query.get("f")) return true;
             return (
-              loans.beneficiary?.firstName
-                ?.toLowerCase()
-                .includes(query.get("f")?.toLowerCase() ?? "") ??
-              loans.beneficiary?.lastName
-                ?.toLowerCase()
-                .includes(query.get("f")?.toLowerCase() ?? "") ??
+              loans.beneficiaries?.some(
+                (v) =>
+                  v.firstName
+                    ?.toLowerCase()
+                    .includes(query.get("f")?.toLowerCase() ?? "") ??
+                  v.lastName
+                    ?.toLowerCase()
+                    .includes(query.get("f")?.toLowerCase() ?? ""),
+              ) ||
               loans._id
                 ?.toLowerCase()
                 .includes(query.get("f")?.toLowerCase() ?? "")
