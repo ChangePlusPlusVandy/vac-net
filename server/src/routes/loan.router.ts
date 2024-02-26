@@ -15,7 +15,7 @@ const loanRouter = express.Router();
 loanRouter.put("/", editLoan);
 loanRouter.delete("/:_id", deleteLoan);
 loanRouter.post("/", createOutstandingLoan);
-loanRouter.get("/", getLoanById);
+loanRouter.get("/:id", getLoanById);
 loanRouter.get("/getall", getLoans);
 loanRouter.get("/getDelinquent", getDelinquentPayment);
 loanRouter.get("/expectedrev", getOutstandingLoansWithinInterval);

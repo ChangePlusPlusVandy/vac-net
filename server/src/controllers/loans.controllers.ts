@@ -17,7 +17,7 @@ const createOutstandingLoan = async (req: Request, res: Response) => {
 };
 
 const getLoanById = async (req: Request, res: Response) => {
-  const id = req.query.id;
+  const id = req.params.id;
 
   try {
     const loan = await OutstandingLoan.findById(id);
