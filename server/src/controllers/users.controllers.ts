@@ -106,3 +106,34 @@ export const deleteStaff = async (
     }
   }
 };
+
+export const associateSessionWithStaff = async (req: Request, res: Response) => {
+  const { id, sessionId } = req.params;
+  try {
+    const updatedStaff = await StaffModel.findByIdAndUpdate(
+      id,
+      { $addToSet: { sessions: sessionId } }, // Use $addToSet to prevent duplicates
+      { new: true }
+    ).populate('sessions');
+    
+    return res.status(200).json(updatedStaff);
+  } catch (error) {
+    // ... error handling
+  }
+};
+
+export const dissociateSessionFromStaff = async (req: Request, res: Response) => {
+  const { id, sessionId } = req.params;
+  try {
+    const updatedStaff = await StaffModel.findByIdAndUpdate(
+      id,
+      { $pull: { sessions: sessionId } }, // Use $pull to remove the loanId from the array
+      { new: true }
+    ).exec();
+    
+    return res.status(200).json(updatedStaff);
+  } catch (error) {
+    // ... error handling
+    return res.status(500);
+  }
+};

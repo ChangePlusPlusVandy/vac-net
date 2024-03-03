@@ -9,8 +9,11 @@ import { Input } from "@/components/ui/input";
 import { ItemCreateButton } from "@/components/create-item-button";
 import { Label } from "@/components/ui/label";
 import StaffToolbar from "@/components/toolbars/staff-toolbar";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants, Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { type Session } from "../sessions/sessions";
+import { BellIcon, ChevronDownIcon } from "@radix-ui/react-icons";
+import { PlusIcon } from "@radix-ui/react-icons";
 import {
   Table,
   TableBody,
@@ -20,6 +23,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Staff = () => {
   const [query, setQuery] = useState("");
@@ -30,6 +41,7 @@ const Staff = () => {
   const [staff, setStaff] = useState<IStaff | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [allSessions, setAllSessions] = useState<Session[]>([]);
 
   const handleSaveStaff = async () => {
     if (params.get("f") === "1") {
@@ -61,7 +73,7 @@ const Staff = () => {
       setIsLoading(true);
       try {
         const data: IStaff = await fetch(
-          "https://vacnet-backend-deploy.vercel.app/user/getstaff?staffId=" +
+          "http://localhost:3001/user/getstaff?staffId=" +
             id,
         ).then((res: Response) => res.json() as unknown as IStaff);
         setStaff(data);
@@ -74,6 +86,22 @@ const Staff = () => {
 
     void getStaffById();
   }, [id, editing]);
+
+  useEffect(() => {
+    const getAllSessions = async () => {
+      setIsLoading(true);
+      try {
+        const data: Session[] = await fetch (
+          "http://localhost:3001/session/sessions"
+        ).then((res: Response) => res.json() as unknown as Session[])
+        setAllSessions(data);
+      }catch (e) {
+        console.log(e);
+      }
+    }
+
+    void getAllSessions();
+  }, [])
 
   const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStaff({ ...staff, firstName: e.target.value });
@@ -90,6 +118,50 @@ const Staff = () => {
   const handleClearanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStaff({ ...staff, clearance: e.target.value });
   };
+
+  const handleRemoveSession = async (sessionId: string) => {
+    console.log("removing");
+    
+    const response = await fetch(
+      `http://localhost:3001/user/${staff?._id}/sessions/${sessionId}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      },
+    )
+    
+    setStaff({...staff, sessions: undefined})
+    if (response.ok) {
+      setStaff({...staff, sessions: undefined});
+    } else {
+      console.error("Failed to remove the session");
+    }
+  }
+
+  const handleAddSession = async (sessionId: string) => {
+    
+    const response = await fetch(
+      `http://localhost:3001/user/${staff?._id}/sessions/${sessionId}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      },
+    )
+
+    if (response.ok){
+      try {
+        const data: Session = await fetch(
+          "http://localhost:3001/session/" +
+            sessionId,
+        ).then((res: Response) => res.json() as unknown as Session);
+        setStaff({...staff, sessions: data});
+      } catch (e) {
+        console.log(e);
+      }
+    }else{
+      console.error("Failed to add the session");
+    }
+  }
 
   return (
     <DashboardShell>
@@ -136,7 +208,6 @@ const Staff = () => {
           />
         </div>
 
-        {/* TODO: Display the date */}
 
         <div className="grid grid-cols-4 items-center gap-4">
           <Label htmlFor="status" className="text-left">
@@ -164,12 +235,8 @@ const Staff = () => {
           />
         </div>
 
-        <Label>
-          Associated Sessions
-        </Label>
 
-
-        {staff?.sessions != null ? 
+        {staff?.sessions?._id != null ? 
           <Table>
           <TableHeader>
             <TableRow>
@@ -191,12 +258,53 @@ const Staff = () => {
               {staff.sessions.archived != null ? <TableCell>{staff.sessions.archived.toString()}</TableCell>: <TableCell>Unknown</TableCell>}
               {staff.sessions.expectedAttendance.length != 0 ? <TableCell>{staff.sessions.expectedAttendance.join(", ")}</TableCell> : <TableCell>Unknown</TableCell>}
               {staff.sessions.actualAttendance.length != 0 ? <TableCell>{staff.sessions.actualAttendance.join(", ")}</TableCell> : <TableCell>Unknown</TableCell>}
+              <TableCell>
+                {editing && (
+                  <button
+                    onClick={() => handleRemoveSession(staff.sessions?._id ?? "")}
+                    aria-label="Remove session"
+                  >
+                    <Icons.close />
+                  </button>
+                )}
+              </TableCell>
             </TableRow>
           </TableBody>
+          <TableCaption>Associated Sessions</TableCaption>
         </Table>
 
         :
-        <div>No Available Sessions</div>
+        <TableCell>
+          {editing && (
+            <DropdownMenu>
+              <Label className="inline-flex mr-3">Add a Session</Label>
+              <DropdownMenuTrigger asChild>
+                <Button variant="secondary" className="px-2 shadow-none">
+                  <PlusIcon className="h-4 w-10 text-secondary-foreground" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                alignOffset={-5}
+                className="w-[200px]"
+                forceMount
+              >
+                <DropdownMenuLabel>Choose a Session</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {allSessions?.map((session) => (
+                  <DropdownMenuItem
+                    key={session._id}
+                    onClick={() => handleAddSession(session._id)}
+                  >
+                    {`${new Date(session.sessionDate).toLocaleDateString()} - ${
+                      session.region
+                    }`}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+        </TableCell>
         }
         
       </div>
