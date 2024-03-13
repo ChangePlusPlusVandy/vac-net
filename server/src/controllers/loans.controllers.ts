@@ -20,8 +20,7 @@ const getLoanById = async (req: Request, res: Response) => {
   const id = req.query.id;
 
   try {
-    const loan = await OutstandingLoan.findById(id);
-
+    const loan = await OutstandingLoan.findById(id).populate("beneficiaries");
     return res.status(200).json(loan);
   } catch (err) {
     if (err instanceof Error) {
@@ -34,7 +33,7 @@ const getLoanById = async (req: Request, res: Response) => {
 
 const getLoans = async (req: Request, res: Response) => {
   try {
-    const loans = await OutstandingLoan.find().populate("beneficiary");
+    const loans = await OutstandingLoan.find().populate("beneficiaries").populate("associatedSessions");
 
     return res.status(200).json(loans);
   } catch (err) {
@@ -139,6 +138,69 @@ const getOutstandingLoansWithinInterval = async (
   }
 };
 
+const associateBeneficiaryWithLoan = async (req: Request, res: Response) => {
+  const { id, beneId } = req.params;
+  try {
+    const updatedLoan = await OutstandingLoan.findByIdAndUpdate(
+      id,
+      { $addToSet: { beneficiaries: beneId } }, // Use $addToSet to prevent duplicates
+      { new: true }
+    ).populate('beneficiaries');
+    
+    return res.status(200).json(updatedLoan);
+  } catch (error) {
+    // ... error handling
+  }
+};
+
+// Controller to dissociate a loan from a beneficiary
+const dissociateBeneficiaryFromLoan = async (req: Request, res: Response) => {
+  const { id, beneId } = req.params;
+  try {
+    const updatedBeneficiary = await OutstandingLoan.findByIdAndUpdate(
+      id,
+      { $pull: { beneficiaries: beneId } }, // Use $pull to remove the loanId from the array
+      { new: true }
+    ).populate('beneficiaries');
+    
+    return res.status(200).json(updatedBeneficiary);
+  } catch (error) {
+    // ... error handling
+  }
+};
+
+// Controller to associate a session with a beneficiary
+const associateSessionWithLoan = async (req: Request, res: Response) => {
+  const { id, sessionId } = req.params;
+  try {
+    const updatedBeneficiary = await OutstandingLoan.findByIdAndUpdate(
+      id,
+      { $addToSet: { associatedSessions: sessionId } }, // Use $addToSet to prevent duplicates
+      { new: true }
+    ).populate('associatedSessions');
+    
+    return res.status(200).json(updatedBeneficiary);
+  } catch (error) {
+    // ... error handling
+  }
+};
+
+// Controller to dissociate a session from a beneficiary
+const dissociateSessionFromLoan = async (req: Request, res: Response) => {
+  const { id, sessionId } = req.params;
+  try {
+    const updatedBeneficiary = await OutstandingLoan.findByIdAndUpdate(
+      id,
+      { $pull: { associatedSessions: sessionId } }, // Use $pull to remove the sessionId from the array
+      { new: true }
+    ).populate('associatedSessions');
+    
+    return res.status(200).json(updatedBeneficiary);
+  } catch (error) {
+    // ... error handling
+  }
+};
+
 export {
   editLoan,
   deleteLoan,
@@ -147,4 +209,8 @@ export {
   getLoans,
   getDelinquentPayment,
   getOutstandingLoansWithinInterval,
+  associateBeneficiaryWithLoan,
+  dissociateBeneficiaryFromLoan,
+  associateSessionWithLoan,
+  dissociateSessionFromLoan
 };

@@ -10,9 +10,10 @@ export interface Loan {
   nextPaymentAmount?: number;
   paymentFrequency?: string;
   archivedLoan?: boolean;
-  beneficiary?: string;
+  beneficiaries?: string[];
   validLoan?: boolean;
   loanStatus?: string;
+  associatedSessions?: string[];
 }
 
 const LoanSchema = new mongoose.Schema<Loan>({
@@ -41,8 +42,8 @@ const LoanSchema = new mongoose.Schema<Loan>({
     type: Boolean,
     default: false,
   },
-  beneficiary: {
-    type: Schema.Types.ObjectId,
+  beneficiaries: {
+    type: [Schema.Types.ObjectId],
     ref: "Beneficiary",
   },
   validLoan: {
@@ -51,6 +52,10 @@ const LoanSchema = new mongoose.Schema<Loan>({
   loanStatus: {
     type: String,
     required: true,
+  },
+  associatedSessions: {
+    type: [Schema.Types.ObjectId],
+    ref: "Session",
   },
 });
 

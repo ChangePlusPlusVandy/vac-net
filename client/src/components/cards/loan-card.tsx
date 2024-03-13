@@ -27,13 +27,14 @@ const LoanCard = ({ loan }: { loan: Loan }) => {
   const navigate = useNavigate();
 
   const getBeneficiaryName = () => {
-    if (!loan.beneficiary) return "No beneficiary";
-    return loan.beneficiary?.firstName + " " + loan.beneficiary?.lastName;
+    if (!loan.beneficiaries?.length) return "No beneficiary";
+    return loan.beneficiaries
+      ?.map((b) => b.firstName + " " + b.lastName)
+      .join(", ");
   };
 
   const getLoanStatus = () => {
     if (!loan.loanStatus) return "No Loan";
-
     return loan.loanStatus;
   };
 
@@ -101,9 +102,6 @@ const LoanCard = ({ loan }: { loan: Loan }) => {
             <Icons.dolla className="mr-1 h-3 w-3" />
             {loan.initialPayment ?? 0}
           </div>
-          {loan.beneficiary?.phoneNumber?.length ?? 0 > 0 ? (
-            <div className="truncate">#: {loan.beneficiary?.phoneNumber} </div>
-          ) : null}
         </div>
       </CardContent>
     </Card>

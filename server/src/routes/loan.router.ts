@@ -5,7 +5,11 @@ import {
   getDelinquentPayment,
   getLoanById,
   getLoans,
-  getOutstandingLoansWithinInterval
+  getOutstandingLoansWithinInterval,
+  associateBeneficiaryWithLoan,
+  dissociateBeneficiaryFromLoan,
+  associateSessionWithLoan,
+  dissociateSessionFromLoan
 } from "../controllers/loans.controllers";
 
 import express from "express";
@@ -19,5 +23,11 @@ loanRouter.get("/", getLoanById);
 loanRouter.get("/getall", getLoans);
 loanRouter.get("/getDelinquent", getDelinquentPayment);
 loanRouter.get("/expectedrev", getOutstandingLoansWithinInterval);
+
+// New routes for associating loans and sessions
+loanRouter.put("/:id/beneficiaries/:beneId", associateBeneficiaryWithLoan);
+loanRouter.delete("/:id/beneficiaries/:beneId", dissociateBeneficiaryFromLoan);
+loanRouter.put("/:id/sessions/:sessionId", associateSessionWithLoan);
+loanRouter.delete("/:id/sessions/:sessionId", dissociateSessionFromLoan);
 
 export default loanRouter;
