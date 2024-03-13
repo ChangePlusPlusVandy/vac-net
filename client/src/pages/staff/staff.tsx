@@ -19,7 +19,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 const Staff = () => {
   const [query, setQuery] = useState("");
@@ -164,41 +164,68 @@ const Staff = () => {
           />
         </div>
 
-        <Label>
-          Associated Sessions
-        </Label>
+        <Label>Associated Sessions</Label>
 
-
-        {staff?.sessions != null ? 
+        {staff?.sessions != null ? (
           <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Session ID</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Region</TableHead>
-              <TableHead>Staff</TableHead>
-              <TableHead>Archived</TableHead>
-              <TableHead>Expected Attendance</TableHead>
-              <TableHead>Actual Attendance</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">{staff.sessions._id}</TableCell>
-              {staff.sessions.sessionDate != null ? <TableCell>{(new Date(staff.sessions.sessionDate).toLocaleDateString())}</TableCell> : <TableCell>Unknown</TableCell>}
-              {staff.sessions.region != null ? <TableCell>{staff.sessions.region}</TableCell> : <TableCell>Unknown</TableCell>}
-              {staff.sessions.staff != null ? <TableCell>{staff.sessions.staff.join(", ")}</TableCell> : <TableCell>Unknown</TableCell>}
-              {staff.sessions.archived != null ? <TableCell>{staff.sessions.archived.toString()}</TableCell>: <TableCell>Unknown</TableCell>}
-              {staff.sessions.expectedAttendance.length != 0 ? <TableCell>{staff.sessions.expectedAttendance.join(", ")}</TableCell> : <TableCell>Unknown</TableCell>}
-              {staff.sessions.actualAttendance.length != 0 ? <TableCell>{staff.sessions.actualAttendance.join(", ")}</TableCell> : <TableCell>Unknown</TableCell>}
-            </TableRow>
-          </TableBody>
-        </Table>
-
-        :
-        <div>No Available Sessions</div>
-        }
-        
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Session ID</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Region</TableHead>
+                <TableHead>Staff</TableHead>
+                <TableHead>Archived</TableHead>
+                <TableHead>Expected Attendance</TableHead>
+                <TableHead>Actual Attendance</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="font-medium">
+                  {staff.sessions._id}
+                </TableCell>
+                {staff.sessions.sessionDate != null ? (
+                  <TableCell>
+                    {new Date(staff.sessions.sessionDate).toLocaleDateString()}
+                  </TableCell>
+                ) : (
+                  <TableCell>Unknown</TableCell>
+                )}
+                {staff.sessions.region != null ? (
+                  <TableCell>{staff.sessions.region}</TableCell>
+                ) : (
+                  <TableCell>Unknown</TableCell>
+                )}
+                {staff.sessions.staff != null ? (
+                  <TableCell>{staff.sessions.staff.join(", ")}</TableCell>
+                ) : (
+                  <TableCell>Unknown</TableCell>
+                )}
+                {staff.sessions.archived != null ? (
+                  <TableCell>{staff.sessions.archived.toString()}</TableCell>
+                ) : (
+                  <TableCell>Unknown</TableCell>
+                )}
+                {staff.sessions.expectedAttendance.length != 0 ? (
+                  <TableCell>
+                    {staff.sessions.expectedAttendance.join(", ")}
+                  </TableCell>
+                ) : (
+                  <TableCell>Unknown</TableCell>
+                )}
+                {staff.sessions.actualAttendance.length != 0 ? (
+                  <TableCell>
+                    {staff.sessions.actualAttendance.join(", ")}
+                  </TableCell>
+                ) : (
+                  <TableCell>Unknown</TableCell>
+                )}
+              </TableRow>
+            </TableBody>
+          </Table>
+        ) : (
+          <div>No Available Sessions</div>
+        )}
       </div>
     </DashboardShell>
   );

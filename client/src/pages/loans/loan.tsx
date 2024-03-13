@@ -39,23 +39,22 @@ const LoanPage = () => {
   const [loanName, setLoanName] = useState("");
   const [beneficiaries, setBeneficiaries] = useState<Beneficiary[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [detailedBeneficiaries, setDetailedBeneficiaries] = useState<Beneficiary[]>([]);
+  const [detailedBeneficiaries, setDetailedBeneficiaries] = useState<
+    Beneficiary[]
+  >([]);
   const [detailedSessions, setDetailedSessions] = useState<Session[]>([]);
 
   const handleSaveLoan = async () => {
     if (params.get("f") === "1") {
       setIsLoading(true);
       try {
-        await fetch(
-          `https://vacnet-backend-deploy.vercel.app/loan`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(loan),
+        await fetch(`https://vacnet-backend-deploy.vercel.app/loan`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
           },
-        ).then((res: Response) => res.json() as unknown as Loan);
+          body: JSON.stringify(loan),
+        }).then((res: Response) => res.json() as unknown as Loan);
         setEditing(false);
         setParams({ f: "0" });
       } catch (err) {
@@ -91,7 +90,14 @@ const LoanPage = () => {
           `http://localhost:3001/loan/?id=${id}`,
         ).then((res: Response) => res.json() as unknown as Loan);
         setLoan(res);
-        setLoanName(res.beneficiaries?.length ? "Loan for " + res.beneficiaries.map(b => b.firstName + " " + b.lastName).join(", ") : "Loan");
+        setLoanName(
+          res.beneficiaries?.length
+            ? "Loan for " +
+                res.beneficiaries
+                  .map((b) => b.firstName + " " + b.lastName)
+                  .join(", ")
+            : "Loan",
+        );
         console.log(res);
       } catch (error) {
         // TODO: add loan not found state
@@ -201,10 +207,7 @@ const LoanPage = () => {
   // Function to update beneficiary with associated session
   const handleSelectSession = async (sessionId: string) => {
     if (!loan?._id) return;
-    const updatedSessions = [
-      ...(loan.associatedSessions || []),
-      sessionId,
-    ];
+    const updatedSessions = [...(loan.associatedSessions || []), sessionId];
     const updatedLoan = {
       ...loan,
       associatedSessions: updatedSessions,
@@ -386,10 +389,14 @@ const LoanPage = () => {
                 {beneficiaries.map((bene, index) => (
                   <DropdownMenuItem
                     key={bene._id ?? `loan-fallback-${index}`}
-                    onClick={() => bene._id && handleSelectBeneficiary(bene._id)}
+                    onClick={() =>
+                      bene._id && handleSelectBeneficiary(bene._id)
+                    }
                   >
                     {`Name: ${
-                      bene.firstName ? bene.firstName + " " + bene.lastName : "Not specified"
+                      bene.firstName
+                        ? bene.firstName + " " + bene.lastName
+                        : "Not specified"
                     }`}
                   </DropdownMenuItem>
                 ))}
@@ -442,12 +449,8 @@ const LoanPage = () => {
               <TableBody>
                 {detailedBeneficiaries.map((bene) => (
                   <TableRow key={bene._id}>
-                    <TableCell>
-                      {bene.firstName ?? "Not specified"}
-                    </TableCell>
-                    <TableCell>
-                      {bene.lastName ?? "Not specified"}
-                    </TableCell>
+                    <TableCell>{bene.firstName ?? "Not specified"}</TableCell>
+                    <TableCell>{bene.lastName ?? "Not specified"}</TableCell>
                     <TableCell>
                       {editing && (
                         <button
