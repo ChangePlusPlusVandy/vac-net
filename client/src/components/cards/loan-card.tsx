@@ -28,7 +28,9 @@ const LoanCard = ({ loan }: { loan: Loan }) => {
 
   const getBeneficiaryName = () => {
     if (!loan.beneficiaries?.length) return "No beneficiary";
-    return loan.beneficiaries?.map(b => b.firstName + " " + b.lastName).join(", ");
+    return loan.beneficiaries
+      ?.map((b) => b.firstName + " " + b.lastName)
+      .join(", ");
   };
 
   const getLoanStatus = () => {
@@ -100,9 +102,6 @@ const LoanCard = ({ loan }: { loan: Loan }) => {
             <Icons.dolla className="mr-1 h-3 w-3" />
             {loan.initialPayment ?? 0}
           </div>
-          {loan.beneficiaries?.phoneNumber?.length ?? 0 > 0 ? (
-            <div className="truncate">#: {loan.beneficiaries?.phoneNumber} </div>
-          ) : null}
         </div>
       </CardContent>
     </Card>
