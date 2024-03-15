@@ -125,11 +125,13 @@ const BeneficiaryCard = ({ beneficiary }: { beneficiary: Beneficiary }) => {
               >
                 Edit Beneficiary
               </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`../loans?f=${beneficiary.firstName}`);
+                }}
+              >
                 View User's Loans
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>
-                View User's Sessions
               </DropdownMenuCheckboxItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={(e) => handleGoToBeneficiary(e)}>

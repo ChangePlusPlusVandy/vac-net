@@ -67,7 +67,18 @@ const LoanCard = ({ loan }: { loan: Loan }) => {
                 Bookmark User
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem>Edit Loan</DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (loan?.beneficiaries?.length) {
+                    navigate(
+                      `../beneficiaries?f=${
+                        loan?.beneficiaries[0]?.firstName ?? ""
+                      }`,
+                    );
+                  }
+                }}
+              >
                 View Beneficiary
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem>View Sessions</DropdownMenuCheckboxItem>
