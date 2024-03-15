@@ -343,44 +343,30 @@ const LoanPage = () => {
         </div>
       </DashboardHeader>
       <div className="grid gap-4 py-4">
-        {/* Rest of loans page here */}
-        {/* <div className="grid grid-cols-4 items-center gap-4">
+        <div className="grid grid-cols-4 items-center gap-4">
           <Label htmlFor="name" className="text-left">
-            First Name
+            Initial Payment
           </Label>
           <Input
             id="fname"
             className="col-span-1"
-            value={loan?.firstName}
-            onChange={handleFirstNameChange}
+            value={loan?.initialPayment}
+            onChange={(e) =>
+              setLoan({ ...loan, initialPayment: parseInt(e.target.value) })
+            }
             disabled={params.get("f") !== "1"}
           />
-        </div>
-        <div className="grid grid-cols-4 items-center gap-4">
           <Label htmlFor="name" className="text-left">
-            Last Name
+            Loan Status
           </Label>
           <Input
             id="lname"
             className="col-span-1 pr-1"
-            value={loan?.lastName}
-            onChange={handleLastNameChange}
+            value={loan?.loanStatus}
+            onChange={(e) => setLoan({ ...loan, loanStatus: e.target.value })}
             disabled={params.get("f") !== "1"}
           />
         </div>
-        <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="name" className="text-left">
-            Phone Number
-          </Label>
-          <Input
-            id="pnum"
-            type="number"
-            className="col-span-1"
-            value={loan?.phoneNumber}
-            onChange={handlePhoneNumberChange}
-            disabled={params.get("f") !== "1"}
-          />
-        </div> */}
 
         {editing && (
           <div className="flex flex-row justify-between">
