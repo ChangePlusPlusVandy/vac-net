@@ -26,6 +26,43 @@ export interface Beneficiary {
   children?: number;
   associatedLoans?: Loan[];
   associatedSessions?: Session[];
+  age?: number;
+  villageOrCity?: string;
+  maritalStatus?: string;
+  peopleInHousehold?: number;
+  numFinancialDependents?: number;
+  currentWeeklyIncomeInUGX?: number;
+  currentlyWeeklyIncomeInUSD?: number;
+  currentSpendingInUGX?: number;
+  currentSavingsInUGX?: number;
+  currentSavingsInUSD?: number;
+  locationOfSavings?: string;
+  businessDescription?: string;
+  ownYourLand?: boolean;
+  ownYourHouse?: string;
+  highestEducationLevel?: string;
+  howManyRoomsInHouse?: number;
+  roofMaterial?: string;
+  wallMaterial?: string;
+  floorMaterial?: string;
+  lightSource?: string;
+  ownLivestock?: string;
+  cows?: number;
+  goats?: number;
+  chickens?: number;
+  turkeys?: number;
+  otherLivestock?: string;
+  bio?: string;
+  howManyMealsPerDay?: number;
+  howManyMealsPerWeeksWithChicken?: number;
+  howManyMealsPerWeekWithMeat?: number;
+  howManyMealsPerWeekWithFish?: number;
+  childrenWithShoes?: number;
+  numberInHoseholdNeedMeds?: number;
+  contractedMalria?: boolean;
+  howManyEmployees?: number;
+  howDoesHusbandHelp?: string;
+  electricityAccessInBusiness?: boolean;
 }
 
 const Beneficiaries = () => {

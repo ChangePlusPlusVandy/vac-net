@@ -45,7 +45,7 @@ export function DashboardNav({ items }: DashboardNavProps) {
                   path === item.href ? "bg-accent" : "transparent",
                 )}
               >
-                <Icon className="mr-2 h-4 w-4" />
+                <Icon className="mr-2 h-4 w-4 text-primary" />
                 <span>{item.title}</span>
               </span>
             </a>

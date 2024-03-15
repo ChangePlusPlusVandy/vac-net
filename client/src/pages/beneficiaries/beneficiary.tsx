@@ -386,8 +386,6 @@ const Beneficiary = () => {
             onChange={handleFirstNameChange}
             disabled={params.get("f") !== "1"}
           />
-        </div>
-        <div className="grid grid-cols-4 items-center gap-4">
           <Label htmlFor="name" className="text-left">
             Last Name
           </Label>
@@ -411,21 +409,23 @@ const Beneficiary = () => {
             onChange={handlePhoneNumberChange}
             disabled={params.get("f") !== "1"}
           />
+          <Label htmlFor="name" className="text-left">
+            Age
+          </Label>
+          <Input
+            id="lname"
+            type="number"
+            className="col-span-1 pr-1"
+            value={beneficiary?.age}
+            onChange={(e) =>
+              setBeneficiary({ ...beneficiary, age: parseInt(e.target.value) })
+            }
+            disabled={params.get("f") !== "1"}
+          />
         </div>
-        {beneficiary?.birthday && (
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-left">
-              Birth Date
-            </Label>
-            <DatePicker
-              date={beneficiary?.birthday}
-              // setDate={handleBirthDateChange}
-            />
-          </div>
-        )}
         <div className="grid grid-cols-4 items-center gap-4">
           <Label htmlFor="name" className="text-left">
-            Current Savings
+            Current Savings (UGX)
           </Label>
           <Input
             id="currsavings"
@@ -434,16 +434,319 @@ const Beneficiary = () => {
             onChange={handleCurrentSavingsChange}
             disabled={params.get("f") !== "1"}
           />
-        </div>
-        <div className="grid grid-cols-4 items-center gap-4">
           <Label htmlFor="name" className="text-left">
-            Current Spending
+            Current Spending (UGX)
           </Label>
           <Input
             id="currspending"
             className="col-span-1"
-            value={beneficiary?.currentSpending}
+            type="number"
+            value={beneficiary?.currentSpendingInUGX}
             onChange={handleCurrentSpendingChange}
+            disabled={params.get("f") !== "1"}
+          />
+        </div>
+
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="name" className="text-left">
+            Total Children
+          </Label>
+          <Input
+            id="currsavings"
+            className="col-span-1"
+            type="number"
+            value={beneficiary?.children}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                children: parseInt(e.target.value),
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+          <Label htmlFor="name" className="text-left">
+            Number of children with shoes
+          </Label>
+          <Input
+            id="currspending"
+            className="col-span-1"
+            type="number"
+            value={beneficiary?.childrenWithShoes}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                childrenWithShoes: parseInt(e.target.value),
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+        </div>
+
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="name" className="text-left">
+            # of people in household
+          </Label>
+          <Input
+            id="currsavings"
+            type="number"
+            className="col-span-1"
+            value={beneficiary?.peopleInHousehold}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                peopleInHousehold: parseInt(e.target.value),
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+          <Label htmlFor="name" className="text-left">
+            # of financial dependents
+          </Label>
+          <Input
+            id="currspending"
+            className="col-span-1"
+            type="number"
+            value={beneficiary?.numFinancialDependents}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                numFinancialDependents: parseInt(e.target.value),
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+        </div>
+
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="name" className="text-left">
+            Do you own your house?
+          </Label>
+          <Input
+            id="currsavings"
+            className="col-span-1"
+            value={beneficiary?.ownYourHouse}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                ownYourHouse: e.target.value,
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+          <Label htmlFor="name" className="text-left">
+            How many rooms in your house?
+          </Label>
+          <Input
+            id="currspending"
+            className="col-span-1"
+            type="number"
+            value={beneficiary?.howManyRoomsInHouse}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                howManyRoomsInHouse: parseInt(e.target.value),
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+        </div>
+
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="name" className="text-left">
+            House Roof Material
+          </Label>
+          <Input
+            id="currsavings"
+            className="col-span-1"
+            value={beneficiary?.roofMaterial}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                roofMaterial: e.target.value,
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+          <Label htmlFor="name" className="text-left">
+            House Wall Material
+          </Label>
+          <Input
+            id="currspending"
+            className="col-span-1"
+            value={beneficiary?.wallMaterial}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                wallMaterial: e.target.value,
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+        </div>
+
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="name" className="text-left">
+            House Floor Material
+          </Label>
+          <Input
+            id="currsavings"
+            className="col-span-1"
+            value={beneficiary?.floorMaterial}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                floorMaterial: e.target.value,
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+          <Label htmlFor="name" className="text-left">
+            House Light Source
+          </Label>
+          <Input
+            id="currspending"
+            className="col-span-1"
+            value={beneficiary?.lightSource}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                lightSource: e.target.value,
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+        </div>
+
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="name" className="text-left">
+            Highest Education Level
+          </Label>
+          <Input
+            id="currsavings"
+            className="col-span-1"
+            value={beneficiary?.highestEducationLevel}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                highestEducationLevel: e.target.value,
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+          <Label htmlFor="name" className="text-left">
+            Cows Owned
+          </Label>
+          <Input
+            id="currspending"
+            type="number"
+            className="col-span-1"
+            value={beneficiary?.cows}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                cows: parseInt(e.target.value),
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+        </div>
+
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="name" className="text-left">
+            Goats Owned
+          </Label>
+          <Input
+            id="currsavings"
+            className="col-span-1"
+            value={beneficiary?.goats}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                goats: parseInt(e.target.value),
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+          <Label htmlFor="name" className="text-left">
+            Chickens Owned
+          </Label>
+          <Input
+            id="currspending"
+            type="number"
+            className="col-span-1"
+            value={beneficiary?.chickens}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                chickens: parseInt(e.target.value),
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+        </div>
+
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="name" className="text-left">
+            Turkeys Owned
+          </Label>
+          <Input
+            id="currsavings"
+            className="col-span-1"
+            value={beneficiary?.turkeys}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                turkeys: parseInt(e.target.value),
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+          <Label htmlFor="name" className="text-left">
+            Other Livestock?
+          </Label>
+          <Input
+            id="currspending"
+            className="col-span-1"
+            value={beneficiary?.otherLivestock}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                otherLivestock: e.target.value,
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+        </div>
+
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="name" className="text-left">
+            How many meals per day?
+          </Label>
+          <Input
+            id="currsavings"
+            className="col-span-1"
+            value={beneficiary?.howManyMealsPerDay}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                howManyMealsPerDay: parseInt(e.target.value),
+              })
+            }
+            disabled={params.get("f") !== "1"}
+          />
+          <Label htmlFor="name" className="text-left">
+            How many employees?
+          </Label>
+          <Input
+            id="currspending"
+            className="col-span-1"
+            value={beneficiary?.howManyEmployees}
+            onChange={(e) =>
+              setBeneficiary({
+                ...beneficiary,
+                howManyEmployees: parseInt(e.target.value),
+              })
+            }
             disabled={params.get("f") !== "1"}
           />
         </div>
