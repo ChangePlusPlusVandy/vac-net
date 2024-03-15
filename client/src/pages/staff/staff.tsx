@@ -121,9 +121,6 @@ const Staff = () => {
             onChange={handleFirstNameChange}
             disabled={params.get("f") !== "1"}
           />
-        </div>
-
-        <div className="grid grid-cols-4 items-center gap-4">
           <Label htmlFor="lname" className="text-left">
             Last Name
           </Label>
@@ -149,9 +146,6 @@ const Staff = () => {
             onChange={handleStatusChange}
             disabled={params.get("f") !== "1"}
           />
-        </div>
-
-        <div className="grid grid-cols-4 items-center gap-4">
           <Label htmlFor="clearance" className="text-left">
             Clearance
           </Label>
