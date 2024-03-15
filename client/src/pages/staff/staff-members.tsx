@@ -4,7 +4,7 @@ import { AddBeneficiary } from "../beneficiaries/add-beneficiary";
 import { AddStaff } from "./add-staff";
 import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
-import type { ISession } from "../sessions/sessions";
+import type { Session } from "../sessions/sessions";
 import StaffCard from "@/components/cards/staff-card";
 import StaffToolbar from "@/components/toolbars/staff-toolbar";
 import { useAuth } from "@/contexts/AuthContext";
@@ -20,7 +20,7 @@ export interface IStaff {
   clearance?: string;
   bookmarkedBeneficiaries?: string[];
   trackedSessions?: string[];
-  sessions?: ISession;
+  sessions?: Session[];
 }
 
 const StaffMembers = () => {

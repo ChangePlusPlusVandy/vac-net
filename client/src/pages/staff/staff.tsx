@@ -1,4 +1,13 @@
 import React, { useEffect, useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useParams, useSearchParams } from "react-router-dom";
 
 import { DashboardHeader } from "@/components/header";
@@ -11,15 +20,6 @@ import { Label } from "@/components/ui/label";
 import StaffToolbar from "@/components/toolbars/staff-toolbar";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
 const Staff = () => {
   const [query, setQuery] = useState("");
@@ -61,10 +61,10 @@ const Staff = () => {
       setIsLoading(true);
       try {
         const data: IStaff = await fetch(
-          "https://vacnet-backend-deploy.vercel.app/user/getstaff?staffId=" +
-            id,
+          "http://localhost:3001/user/getstaff?staffId=" + id,
         ).then((res: Response) => res.json() as unknown as IStaff);
         setStaff(data);
+        console.log(data);
       } catch (e) {
         console.log(e);
       } finally {
@@ -180,47 +180,49 @@ const Staff = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">
-                  {staff.sessions._id}
-                </TableCell>
-                {staff.sessions.sessionDate != null ? (
-                  <TableCell>
-                    {new Date(staff.sessions.sessionDate).toLocaleDateString()}
-                  </TableCell>
-                ) : (
-                  <TableCell>Unknown</TableCell>
-                )}
-                {staff.sessions.region != null ? (
-                  <TableCell>{staff.sessions.region}</TableCell>
-                ) : (
-                  <TableCell>Unknown</TableCell>
-                )}
-                {staff.sessions.staff != null ? (
-                  <TableCell>{staff.sessions.staff.join(", ")}</TableCell>
-                ) : (
-                  <TableCell>Unknown</TableCell>
-                )}
-                {staff.sessions.archived != null ? (
-                  <TableCell>{staff.sessions.archived.toString()}</TableCell>
-                ) : (
-                  <TableCell>Unknown</TableCell>
-                )}
-                {staff.sessions.expectedAttendance.length != 0 ? (
-                  <TableCell>
-                    {staff.sessions.expectedAttendance.join(", ")}
-                  </TableCell>
-                ) : (
-                  <TableCell>Unknown</TableCell>
-                )}
-                {staff.sessions.actualAttendance.length != 0 ? (
-                  <TableCell>
-                    {staff.sessions.actualAttendance.join(", ")}
-                  </TableCell>
-                ) : (
-                  <TableCell>Unknown</TableCell>
-                )}
-              </TableRow>
+              {staff.sessions.map((session) => {
+                return (
+                  <TableRow>
+                    <TableCell className="font-medium">{session._id}</TableCell>
+                    {session.sessionDate != null ? (
+                      <TableCell>
+                        {new Date(session.sessionDate).toLocaleDateString()}
+                      </TableCell>
+                    ) : (
+                      <TableCell>Unknown</TableCell>
+                    )}
+                    {session.region != null ? (
+                      <TableCell>{session.region}</TableCell>
+                    ) : (
+                      <TableCell>Unknown</TableCell>
+                    )}
+                    {session.staff != null ? (
+                      <TableCell>{session.staff?.join(", ")}</TableCell>
+                    ) : (
+                      <TableCell>Unknown</TableCell>
+                    )}
+                    {session.archived != null ? (
+                      <TableCell>{session.archived?.toString()}</TableCell>
+                    ) : (
+                      <TableCell>Unknown</TableCell>
+                    )}
+                    {session.expectedAttendance?.length != 0 ? (
+                      <TableCell>
+                        {session.expectedAttendance?.join(", ")}
+                      </TableCell>
+                    ) : (
+                      <TableCell>Unknown</TableCell>
+                    )}
+                    {session.actualAttendance?.length != 0 ? (
+                      <TableCell>
+                        {session.actualAttendance?.join(", ")}
+                      </TableCell>
+                    ) : (
+                      <TableCell>Unknown</TableCell>
+                    )}
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         ) : (

@@ -11,7 +11,7 @@ export interface IStaff {
   clearance?: string;
   bookmarkedBeneficiaries?: string[];
   trackedSessions?: string[];
-  sessions?: ObjectId;
+  sessions?: ObjectId[];
 }
 
 const StaffSchema = new mongoose.Schema<IStaff>({
@@ -46,7 +46,7 @@ const StaffSchema = new mongoose.Schema<IStaff>({
     type: [String],
   },
   sessions: {
-    type: Schema.Types.ObjectId,
+    type: [Schema.Types.ObjectId],
     ref: "Session",
   },
 });
