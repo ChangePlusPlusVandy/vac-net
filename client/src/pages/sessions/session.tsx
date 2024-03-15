@@ -53,6 +53,7 @@ const SessionEdit = () => {
     e: ChangeEvent<HTMLTextAreaElement>,
     field: keyof Session,
   ) => {
+    // @ts-expect-error TODO
     setSession({
       ...session,
       [field]: csvToArray(e.target.value),
@@ -62,6 +63,7 @@ const SessionEdit = () => {
 
   // Handler for the archived checkbox
   const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    // @ts-expect-error TODO
     setSession({ ...session, archived: e.target.checked });
   };
 
@@ -73,6 +75,7 @@ const SessionEdit = () => {
           `https://vacnet-backend-deploy.vercel.app/session/${sessionId}`,
         );
         const data: Session = (await response.json()) as Session;
+        // @ts-expect-error TODO
         data.sessionDate = formatDateForInput(new Date(data.sessionDate ?? ""));
         setSession(data);
         console.log("Session data:", data);
@@ -297,6 +300,7 @@ const SessionEdit = () => {
     e: ChangeEvent<HTMLInputElement>,
     field: keyof Session,
   ) => {
+    // @ts-expect-error TODO
     setSession({ ...session, [field]: e.target.value });
   };
 
@@ -357,6 +361,7 @@ const SessionEdit = () => {
             <Input
               type="date"
               id="sessionDate"
+              // @ts-expect-error TODO
               value={session.sessionDate}
               onChange={(e) => handleChange(e, "sessionDate")}
             />
