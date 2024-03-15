@@ -62,14 +62,18 @@ const BeneficiarySchema = new mongoose.Schema<IBeneficiary>({
   children: {
     type: Number,
   },
-  associatedLoans: [{
-    type: Schema.Types.ObjectId,
-    ref: "OutstandingLoan" // Use the correct model name for the Loan model
-  }],
-  associatedSessions: [{
-    type: Schema.Types.ObjectId,
-    ref: "Session" // Use the correct model name for the Session model
-  }],
+  associatedLoans: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "OutstandingLoan", // Use the correct model name for the Loan model
+    },
+  ],
+  associatedSessions: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Session", // Use the correct model name for the Session model
+    },
+  ],
 });
 
 export default mongoose.model<IBeneficiary>("Beneficiary", BeneficiarySchema);

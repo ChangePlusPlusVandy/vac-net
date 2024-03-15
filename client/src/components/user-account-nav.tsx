@@ -13,6 +13,7 @@ import { UserAvatar } from "@/components/user-avatar";
 import { auth } from "@/../firebase/config";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 interface UserAccountNavProps extends React.HTMLAttributes<HTMLDivElement> {
   user: FirebaseUserType;
@@ -58,6 +59,7 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
           onSelect={(event) => {
             event.preventDefault();
             void signOut(auth);
+            toast.success("Signed Out!");
             navigate("/login");
           }}
         >

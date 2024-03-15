@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ItemCreateButton } from "@/components/create-item-button";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 export function AddLoan({
   notify,
@@ -36,14 +37,32 @@ export function AddLoan({
       loanStatus,
     };
     try {
-      await fetch("https://vacnet-backend-deploy.vercel.app/loan/", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" },
-      });
-      setNotify(!notify);
+      toast.promise(
+        async () => {
+          const res = await fetch(
+            "https://vacnet-backend-deploy.vercel.app/loan/",
+            {
+              method: "POST",
+              body: JSON.stringify(data),
+              headers: { "Content-Type": "application/json" },
+            },
+          );
+          setNotify(!notify);
+          return res;
+        },
+        {
+          loading: "Saving Loan...",
+          success: () => {
+            return "Loan successfully saved";
+          },
+          error: "Error adding loan",
+        },
+      );
     } catch (err) {
       console.log(err);
+      toast.error("Error adding loan", {
+        description: (err as Error).message,
+      });
     }
   };
 

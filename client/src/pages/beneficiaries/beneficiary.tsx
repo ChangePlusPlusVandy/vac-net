@@ -10,6 +10,8 @@ import { type Beneficiary as BeneType } from "@/pages/beneficiaries/beneficiarie
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/date-picker";
+import { toast } from "sonner";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -46,20 +48,33 @@ const Beneficiary = () => {
     if (params.get("f") === "1") {
       setIsLoading(true);
       try {
-        await fetch(
-          `https://vacnet-backend-deploy.vercel.app/beneficiary?_id=${beneficiary?._id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(beneficiary),
+        toast.promise(
+          async () => {
+            await fetch(
+              `https://vacnet-backend-deploy.vercel.app/beneficiary?_id=${beneficiary?._id}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(beneficiary),
+              },
+            ).then((res: Response) => res.json() as unknown as BeneType);
+            setEditing(false);
+            setParams({ f: "0" });
           },
-        ).then((res: Response) => res.json() as unknown as BeneType);
-        setEditing(false);
-        setParams({ f: "0" });
+          {
+            loading: "Saving Beneficiary...",
+            success: () => {
+              return `Saved ${beneficiary?.firstName}`;
+            },
+          },
+        );
       } catch (err) {
         console.error(err);
+        toast.error("Something went wrong saving the beneficiary", {
+          description: (err as Error).message,
+        });
       }
     } else {
       setParams({ f: "1" });

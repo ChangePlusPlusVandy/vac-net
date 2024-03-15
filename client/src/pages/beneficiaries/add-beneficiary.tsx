@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ItemCreateButton } from "@/components/create-item-button";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 export function AddBeneficiary({
   notify,
@@ -36,19 +37,33 @@ export function AddBeneficiary({
       currentSavings,
       currentSpending,
     };
-    console.log(data);
     try {
-      await fetch(
-        "https://vacnet-backend-deploy.vercel.app/beneficiary/create",
+      toast.promise(
+        async () => {
+          const res = await fetch(
+            "https://vacnet-backend-deploy.vercel.app/beneficiary/create",
+            {
+              method: "POST",
+              body: JSON.stringify(data),
+              headers: { "Content-Type": "application/json" },
+            },
+          );
+          setNotify(!notify);
+          return res;
+        },
         {
-          method: "POST",
-          body: JSON.stringify(data),
-          headers: { "Content-Type": "application/json" },
+          loading: "Adding Beneficiary...",
+          success: () => {
+            return `${firstName} has been added`;
+          },
+          error: "Error adding beneficiary",
         },
       );
-      setNotify(!notify);
     } catch (err) {
       console.log(err);
+      toast.error(`There was an error adding ${firstName}`, {
+        description: (err as Error).message,
+      });
     }
   };
 

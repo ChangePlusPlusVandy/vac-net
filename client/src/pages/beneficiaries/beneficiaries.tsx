@@ -30,7 +30,7 @@ export interface Beneficiary {
 
 const Beneficiaries = () => {
   const [query, setQuery] = useSearchParams();
-  const [status, setStatus] = useState(""); // TODO: sort with status, get associated loan data in og fetch
+  const [status, setStatus] = useState("");
   const [sort, setSort] = useState("");
   const [notifyNew, setNotifyNew] = useState(false);
   const [beneficiaries, setBeneficiaries] = useState<Beneficiary[]>([]);

@@ -10,19 +10,20 @@ import {
 import { AuthProvider } from "./contexts/AuthContext";
 import Beneficiaries from "./pages/beneficiaries/beneficiaries";
 import Beneficiary from "./pages/beneficiaries/beneficiary";
-import DashboardLayout from "./layouts/DashboardLayout";
-import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Dashboard from "./pages/dashboard/dashboard";
+import DashboardLayout from "./layouts/DashboardLayout";
+import EditSession from "./pages/sessions/session";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Loan from "./pages/loans/loan";
 import Loans from "./pages/loans/loans";
 import Login from "./pages/Auth/Login";
 // import PrivateRoute from "./pages/Auth/PrivateRoute";
 import React from "react";
 import Session from "./pages/sessions/sessions";
-import EditSession from "./pages/sessions/session";
 import Staff from "@/pages/staff/staff";
 import StaffMembers from "@/pages/staff/staff-members";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { Toaster } from "@/components/ui/sonner";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -55,6 +56,7 @@ const App: React.FC = () => (
   <ThemeProvider>
     <AuthProvider>
       <RouterProvider router={router} />
+      <Toaster position="top-center" />
     </AuthProvider>
   </ThemeProvider>
 );

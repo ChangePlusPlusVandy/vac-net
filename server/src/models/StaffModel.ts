@@ -1,5 +1,6 @@
-import { ObjectId } from "mongodb";
 import mongoose, { Schema } from "mongoose";
+
+import { type ObjectId } from "mongodb";
 
 export interface IStaff {
   firstName?: string;
@@ -46,7 +47,7 @@ const StaffSchema = new mongoose.Schema<IStaff>({
   },
   sessions: {
     type: Schema.Types.ObjectId,
-    ref: "Session"
+    ref: "Session",
   },
 });
 

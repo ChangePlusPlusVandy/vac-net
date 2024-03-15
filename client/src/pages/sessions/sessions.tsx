@@ -5,6 +5,8 @@ import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
 import SessionCard from "@/components/cards/session-card";
 import SessionToolbar from "@/components/toolbars/session-toolbar";
+import { type Beneficiary } from "../beneficiaries/beneficiaries";
+import { type Staff } from "@/contexts/AuthContext";
 
 export interface Session {
   _id: string;
@@ -14,6 +16,8 @@ export interface Session {
   archived?: boolean;
   expectedAttendance: string[];
   actualAttendance: string[];
+  associatedBeneficiaries: Beneficiary[];
+  associatedStaff: Staff[];
 }
 
 export interface ISession {
@@ -24,6 +28,8 @@ export interface ISession {
   archived?: boolean;
   expectedAttendance: string[];
   actualAttendance: string[];
+  associatedBeneficiaries: Beneficiary[];
+  associatedStaff: Staff[];
 }
 
 const Sessions = () => {

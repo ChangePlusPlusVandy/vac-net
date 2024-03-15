@@ -30,6 +30,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { toast } from "sonner";
 const LoanPage = () => {
   const { id } = useParams();
   const [params, setParams] = useSearchParams();
@@ -48,15 +49,28 @@ const LoanPage = () => {
     if (params.get("f") === "1") {
       setIsLoading(true);
       try {
-        await fetch(`https://vacnet-backend-deploy.vercel.app/loan`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
+        toast.promise(
+          async () => {
+            const res = await fetch(
+              `https://vacnet-backend-deploy.vercel.app/loan`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(loan),
+              },
+            ).then((res: Response) => res.json() as unknown as Loan);
+            setEditing(false);
+            setParams({ f: "0" });
+            return res;
           },
-          body: JSON.stringify(loan),
-        }).then((res: Response) => res.json() as unknown as Loan);
-        setEditing(false);
-        setParams({ f: "0" });
+          {
+            loading: "Saving loan...",
+            success: "Loan successfully saved!",
+            error: "Error saving loan",
+          },
+        );
       } catch (err) {
         console.error(err);
       }
@@ -113,6 +127,7 @@ const LoanPage = () => {
     const fetchBeneficiaryDetails = async () => {
       // Check if there are associated loans to fetch
       if (loan?.beneficiaries?.length) {
+        console.log("TEST", loan.beneficiaries);
         try {
           // Fetch details for each associated loan
           const beneInfo = await Promise.all(

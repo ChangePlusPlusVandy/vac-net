@@ -9,6 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,12 +45,25 @@ export function AddSession({
 
   const handleAddSession = async () => {
     try {
-      await fetch("https://vacnet-backend-deploy.vercel.app/session", {
-        method: "POST",
-        body: JSON.stringify(newSession),
-        headers: { "Content-Type": "application/json" },
-      });
-      setNotify(!notify);
+      toast.promise(
+        async () => {
+          const res = await fetch(
+            "https://vacnet-backend-deploy.vercel.app/session",
+            {
+              method: "POST",
+              body: JSON.stringify(newSession),
+              headers: { "Content-Type": "application/json" },
+            },
+          );
+          setNotify(!notify);
+          return res;
+        },
+        {
+          loading: "Adding session...",
+          success: "Session successfully added",
+          error: "Error adding session",
+        },
+      );
     } catch (err) {
       console.log(err);
     }

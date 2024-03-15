@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { type ObjectId } from "mongodb";
 
 export interface ISession {
   _id?: string;
@@ -8,6 +9,8 @@ export interface ISession {
   archived?: boolean;
   expectedAttendance: string[];
   actualAttendance: string[];
+  associatedBeneficiaries: mongoose.Types.ObjectId[];
+  associatedStaff: mongoose.Types.ObjectId[];
 }
 
 const SessionSchema = new mongoose.Schema<ISession>({
@@ -29,6 +32,18 @@ const SessionSchema = new mongoose.Schema<ISession>({
   actualAttendance: {
     type: [String],
   },
+  associatedBeneficiaries: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Beneficiary",
+    },
+  ],
+  associatedStaff: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Staff",
+    },
+  ],
 });
 
 export default mongoose.model<ISession>("Session", SessionSchema);
