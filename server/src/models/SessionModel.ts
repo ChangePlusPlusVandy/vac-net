@@ -7,9 +7,8 @@ export interface ISession {
   region?: string;
   staff?: string[];
   archived?: boolean;
-  expectedAttendance: string[];
-  actualAttendance: string[];
-  associatedBeneficiaries: mongoose.Types.ObjectId[];
+  expectedAttendance: mongoose.Types.ObjectId[];
+  actualAttendance: mongoose.Types.ObjectId[];
   associatedStaff: mongoose.Types.ObjectId[];
 }
 
@@ -26,13 +25,13 @@ const SessionSchema = new mongoose.Schema<ISession>({
   archived: {
     type: Boolean,
   },
-  expectedAttendance: {
-    type: [String],
-  },
-  actualAttendance: {
-    type: [String],
-  },
-  associatedBeneficiaries: [
+  expectedAttendance: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Beneficiary",
+    },
+  ],
+  actualAttendance: [
     {
       type: Schema.Types.ObjectId,
       ref: "Beneficiary",
