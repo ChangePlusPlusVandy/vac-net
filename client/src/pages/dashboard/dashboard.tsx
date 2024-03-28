@@ -25,7 +25,7 @@ const Dashboard = () => {
   const [upcomingSesions, setUpcomingSessions] = useState(0);
 
   useEffect(() => {
-    fetch("https://vac-net-backend.vercel.app/beneficiary/count")
+    void fetch("https://vac-net-backend.vercel.app/beneficiary/count")
       .then((res) => res.json())
       .then((data) => {
         setTotalBeneficiaries(data.totalBeneficiaries);
@@ -34,7 +34,7 @@ const Dashboard = () => {
         console.error("Error fetching data:", error);
       });
 
-    fetch(
+    void fetch(
       "https://vac-net-backend.vercel.app/session/noshows?id=65a45fd23f430f539ae0e1c3",
     )
       .then((res) => res.json())
@@ -42,7 +42,20 @@ const Dashboard = () => {
         setDelinquentLoans(data);
       });
 
-    fetch("https://vac-net-backend.vercel.app/loan/expectedrev?days=14")
+    void fetch("https://vac-net-backend.vercel.app/session/count",{
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ days: 14 }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setUpcomingSessions(data.total);
+      });
+
+    void fetch("https://vac-net-backend.vercel.app/loan/expectedrev?days=14")
       .then((res) => res.json())
       .then((data) => {
         setExpectedIncome(data.total);
@@ -106,7 +119,9 @@ const Dashboard = () => {
                 </svg>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+{upcomingSesions}</div>
+                <div className="text-2xl font-bold">
+                  +{upcomingSesions}
+                </div>
                 <p className="text-xs text-muted-foreground">
                   in next two weeks
                 </p>

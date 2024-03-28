@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import { type ObjectId } from "mongodb";
 
 export interface ISession {
-  _id?: string;
+  _id: string;
   sessionDate?: Date;
   region?: string;
   staff?: string[];

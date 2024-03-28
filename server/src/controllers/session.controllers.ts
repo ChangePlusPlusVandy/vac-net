@@ -129,14 +129,14 @@ const getSessionCountWithinInterval = async (req: Request, res: Response) => {
     endDate.setDate(currentDate.getDate() + days);
 
     // Find Session objects within the future interval
-    const sessionCount = await Session.countDocuments({
+    const sessionCount = await Session.find({
       sessionDate: {
         $gte: currentDate,
         $lte: endDate,
       },
     });
 
-    return res.status(200).json({ total: sessionCount });
+    return res.status(200).json({ total: sessionCount.length });
   } catch (err) {
     if (err instanceof Error) {
       console.log(err, err.message);

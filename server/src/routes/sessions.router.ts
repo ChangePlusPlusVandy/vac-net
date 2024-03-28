@@ -18,6 +18,6 @@ sessionRouter.get("/noshows", getNoShows);
 sessionRouter.get("/:sessionId", getSessionById);
 sessionRouter.put("/", editSession);
 sessionRouter.delete("/", deleteSession);
-sessionRouter.get("/count", getSessionCountWithinInterval);
+sessionRouter.put("/count", getSessionCountWithinInterval);
 
 export default sessionRouter;
