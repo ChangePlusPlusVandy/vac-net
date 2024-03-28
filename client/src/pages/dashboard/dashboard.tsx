@@ -34,13 +34,15 @@ const Dashboard = () => {
         console.error("Error fetching data:", error);
       });
 
-    fetch("http://localhost:3001/session/noshows?id=65a45fd23f430f539ae0e1c3")
+    fetch(
+      "https://vac-net-backend.vercel.app/session/noshows?id=65a45fd23f430f539ae0e1c3",
+    )
       .then((res) => res.json())
       .then((data) => {
         setDelinquentLoans(data);
       });
 
-    fetch("http://localhost:3001/loan/expectedrev?days=14")
+    fetch("https://vac-net-backend.vercel.app/loan/expectedrev?days=14")
       .then((res) => res.json())
       .then((data) => {
         setExpectedIncome(data.total);

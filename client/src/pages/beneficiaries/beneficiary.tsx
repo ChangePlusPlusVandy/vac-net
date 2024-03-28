@@ -108,7 +108,7 @@ const Beneficiary = () => {
       setIsLoading(true);
       try {
         const res: BeneType = await fetch(
-          `http://localhost:3001/beneficiary/id/?id=${id}`,
+          `https://vac-net-backend.vercel.app/beneficiary/id/?id=${id}`,
         ).then((res: Response) => res.json() as unknown as BeneType);
         setBeneficiary(res);
         setBeneName(res.firstName + " " + res.lastName);
@@ -132,7 +132,7 @@ const Beneficiary = () => {
           const loansInfo = await Promise.all(
             beneficiary.associatedLoans.map(async (loanId) => {
               const response = await fetch(
-                `http://localhost:3001/loan?id=${loanId}`,
+                `https://vac-net-backend.vercel.app/loan?id=${loanId}`,
               );
               if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -164,7 +164,7 @@ const Beneficiary = () => {
           const sessionsInfo = await Promise.all(
             beneficiary.associatedSessions.map(async (sessionId) => {
               const response = await fetch(
-                `http://localhost:3001/session/${sessionId}`,
+                `https://vac-net-backend.vercel.app/session/${sessionId}`,
               );
               if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -229,7 +229,7 @@ const Beneficiary = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3001/beneficiary/${beneficiary._id}/loans/${loanId}`,
+        `https://vac-net-backend.vercel.app/beneficiary/${beneficiary._id}/loans/${loanId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -241,7 +241,7 @@ const Beneficiary = () => {
       // Optionally, fetch updated beneficiary or set state directly
       setBeneficiary(await response.json());
       const newLoanDetails = await fetch(
-        `http://localhost:3001/loan?id=${loanId}`,
+        `https://vac-net-backend.vercel.app/loan?id=${loanId}`,
       ).then((res) => res.json());
       setDetailedLoans((prevLoans) => [...prevLoans, newLoanDetails]);
     } catch (error) {
@@ -263,7 +263,7 @@ const Beneficiary = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3001/beneficiary/${beneficiary._id}/sessions/${sessionId}`,
+        `https://vac-net-backend.vercel.app/beneficiary/${beneficiary._id}/sessions/${sessionId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -274,7 +274,7 @@ const Beneficiary = () => {
         throw new Error("Failed to associate session with beneficiary");
 
       const newSessionDetails = await fetch(
-        `http://localhost:3001/session/${sessionId}`,
+        `https://vac-net-backend.vercel.app/session/${sessionId}`,
       ).then((res) => res.json());
       setDetailedSessions((prevSessions) => [
         ...prevSessions,
@@ -291,7 +291,7 @@ const Beneficiary = () => {
   const handleRemoveLoan = async (loanId: string) => {
     if (!beneficiary) return; // Add null check for beneficiary
     const response = await fetch(
-      `http://localhost:3001/beneficiary/${beneficiary._id}/loans/${loanId}`,
+      `https://vac-net-backend.vercel.app/beneficiary/${beneficiary._id}/loans/${loanId}`,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -322,7 +322,7 @@ const Beneficiary = () => {
     if (!beneficiary) return; // Add null check for beneficiary
 
     const response = await fetch(
-      `http://localhost:3001/beneficiary/${beneficiary._id}/sessions/${sessionId}`,
+      `https://vac-net-backend.vercel.app/beneficiary/${beneficiary._id}/sessions/${sessionId}`,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },

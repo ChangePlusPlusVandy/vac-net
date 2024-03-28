@@ -100,7 +100,7 @@ const SessionEdit = () => {
         const beneInfo = await Promise.all(
           session.associatedBeneficiaries.map(async (bene) => {
             const response = await fetch(
-              `http://localhost:3001/beneficiary/id?id=${bene}`,
+              `https://vac-net-backend.vercel.app/beneficiary/id?id=${bene}`,
             );
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
@@ -130,7 +130,7 @@ const SessionEdit = () => {
         const staffInfo = await Promise.all(
           session.associatedStaff.map(async (staff) => {
             const response = await fetch(
-              `http://localhost:3001/user/getstaff/?staffId=${staff}`,
+              `https://vac-net-backend.vercel.app/user/getstaff/?staffId=${staff}`,
             );
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
@@ -192,7 +192,7 @@ const SessionEdit = () => {
     };
 
     try {
-      const res = await fetch(`http://localhost:3001/session`, {
+      const res = await fetch(`https://vac-net-backend.vercel.app/session`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -214,7 +214,7 @@ const SessionEdit = () => {
     const updatedSession = { ...session, associatedStaff: updatedStaff };
 
     try {
-      const res = await fetch(`http://localhost:3001/session`, {
+      const res = await fetch(`https://vac-net-backend.vercel.app/session`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -246,7 +246,7 @@ const SessionEdit = () => {
     console.log(updatedBeneficiaries);
 
     try {
-      const res = await fetch(`http://localhost:3001/session`, {
+      const res = await fetch(`https://vac-net-backend.vercel.app/session`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -271,7 +271,7 @@ const SessionEdit = () => {
     const updatedSession = { ...session, associatedStaff: updatedStaff };
 
     try {
-      const res = await fetch(`http://localhost:3001/session`, {
+      const res = await fetch(`https://vac-net-backend.vercel.app/session`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -60,7 +60,7 @@ const Staff = () => {
       setIsLoading(true);
       try {
         const data: IStaff = await fetch(
-          "http://localhost:3001/user/getstaff?staffId=" + id,
+          "https://vac-net-backend.vercel.app/user/getstaff?staffId=" + id,
         ).then((res: Response) => res.json() as unknown as IStaff);
         setStaff(data);
         console.log(data);

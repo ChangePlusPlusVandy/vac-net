@@ -101,7 +101,7 @@ const LoanPage = () => {
       setIsLoading(true);
       try {
         const res: Loan = await fetch(
-          `http://localhost:3001/loan/?id=${id}`,
+          `https://vac-net-backend.vercel.app/loan/?id=${id}`,
         ).then((res: Response) => res.json() as unknown as Loan);
         setLoan(res);
         setLoanName(
@@ -133,7 +133,7 @@ const LoanPage = () => {
           const beneInfo = await Promise.all(
             loan.beneficiaries.map(async (bene) => {
               const response = await fetch(
-                `http://localhost:3001/beneficiary/id?id=${bene._id}`,
+                `https://vac-net-backend.vercel.app/beneficiary/id?id=${bene._id}`,
               );
               if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -165,7 +165,7 @@ const LoanPage = () => {
           const sessionsInfo = await Promise.all(
             loan.associatedSessions.map(async (sessionId) => {
               const response = await fetch(
-                `http://localhost:3001/session/${sessionId}`,
+                `https://vac-net-backend.vercel.app/session/${sessionId}`,
               );
               if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -200,7 +200,7 @@ const LoanPage = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3001/loan/${loan._id}/beneficiaries/${beneId}`,
+        `https://vac-net-backend.vercel.app/loan/${loan._id}/beneficiaries/${beneId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -211,7 +211,7 @@ const LoanPage = () => {
         throw new Error("Failed to associate beneficiary with loan");
       setLoan(await response.json());
       const newBeneDetails = await fetch(
-        `http://localhost:3001/beneficiary/id?id=${beneId}`,
+        `https://vac-net-backend.vercel.app/beneficiary/id?id=${beneId}`,
       ).then((res) => res.json());
       setDetailedBeneficiaries((prevBenes) => [...prevBenes, newBeneDetails]);
     } catch (error) {
@@ -230,7 +230,7 @@ const LoanPage = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3001/loan/${loan._id}/sessions/${sessionId}`,
+        `https://vac-net-backend.vercel.app/loan/${loan._id}/sessions/${sessionId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -241,7 +241,7 @@ const LoanPage = () => {
         throw new Error("Failed to associate session with loan");
 
       const newSessionDetails = await fetch(
-        `http://localhost:3001/session/${sessionId}`,
+        `https://vac-net-backend.vercel.app/session/${sessionId}`,
       ).then((res) => res.json());
       setDetailedSessions((prevSessions) => [
         ...prevSessions,
@@ -258,7 +258,7 @@ const LoanPage = () => {
   const handleRemoveBeneficiary = async (beneId: string) => {
     if (!loan) return;
     const response = await fetch(
-      `http://localhost:3001/loan/${loan._id}/beneficiaries/${beneId}`,
+      `https://vac-net-backend.vercel.app/loan/${loan._id}/beneficiaries/${beneId}`,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -289,7 +289,7 @@ const LoanPage = () => {
     if (!loan) return; // Add null check for beneficiary
 
     const response = await fetch(
-      `http://localhost:3001/loan/${loan._id}/sessions/${sessionId}`,
+      `https://vac-net-backend.vercel.app/loan/${loan._id}/sessions/${sessionId}`,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
