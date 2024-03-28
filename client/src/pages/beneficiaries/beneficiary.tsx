@@ -819,7 +819,7 @@ const Beneficiary = () => {
                             : "Not specified"
                           } - Status: ${loan.loanStatus ?? "Not specified"}`}
                         onSelect={() => {
-                          handleSelectLoan(loan._id);
+                          void handleSelectLoan(loan._id);
                           setValue(`Payment: ${loan.initialPayment ?? "Not specified"
                         } - Date: ${loan.initialPaymentDate
                           ? new Date(loan.initialPaymentDate).toLocaleDateString()
