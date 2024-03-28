@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 const Dashboard = () => {
   const [totalBeneficiaries, setTotalBeneficiaries] = useState(0);
   const [delinquentLoans, setDelinquentLoans] = useState([]);
+  const [absentBeneficiaries, setAbsentBeneficiaries] = useState([]);
   const [expectedIncome, setExpectedIncome] = useState(0);
   const [upcomingSesions, setUpcomingSessions] = useState(0);
 
@@ -39,8 +40,10 @@ const Dashboard = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        setDelinquentLoans(data);
+        setAbsentBeneficiaries(data);
       });
+
+      // TODO: fetch delinquent loans
 
     void fetch("https://vac-net-backend.vercel.app/session/count",{
       method: "PUT",
