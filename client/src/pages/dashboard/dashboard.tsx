@@ -17,10 +17,11 @@ import { Icons } from "@/components/ui/icons";
 import { ItemCreateButton } from "@/components/create-item-button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { type Loan } from "../loans/loans";
 
 const Dashboard = () => {
   const [totalBeneficiaries, setTotalBeneficiaries] = useState(0);
-  const [delinquentLoans, setDelinquentLoans] = useState([]);
+  const [delinquentLoans, setDelinquentLoans] = useState<Loan[]>([]);
   const [absentBeneficiaries, setAbsentBeneficiaries] = useState([]);
   const [expectedIncome, setExpectedIncome] = useState(0);
   const [upcomingSesions, setUpcomingSessions] = useState(0);
@@ -43,9 +44,14 @@ const Dashboard = () => {
         setAbsentBeneficiaries(data);
       });
 
-      // TODO: fetch delinquent loans
+    void fetch("http://localhost:3001/loan/getDelinquent")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setDelinquentLoans(data);
+      });
 
-    void fetch("https://vac-net-backend.vercel.app/session/count",{
+    void fetch("https://vac-net-backend.vercel.app/session/count", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -54,7 +60,6 @@ const Dashboard = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setUpcomingSessions(data.total);
       });
 
@@ -122,9 +127,7 @@ const Dashboard = () => {
                 </svg>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
-                  +{upcomingSesions}
-                </div>
+                <div className="text-2xl font-bold">+{upcomingSesions}</div>
                 <p className="text-xs text-muted-foreground">
                   in next two weeks
                 </p>
@@ -166,7 +169,15 @@ const Dashboard = () => {
                 {delinquentLoans.length > 0 && (
                   <div>
                     {delinquentLoans.map((loan, i) => {
-                      return <p key={i}>{loan}</p>;
+                      if ((loan?.beneficiaries ?? []).length === 0) {
+                        return null;
+                      }
+                      return (
+                        <p key={i}>
+                          {loan.beneficiaries[0].firstName}{" "}
+                          {loan.beneficiaries[0]?.lastName}
+                        </p>
+                      );
                     })}
                   </div>
                 )}

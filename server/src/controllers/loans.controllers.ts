@@ -88,7 +88,7 @@ const getDelinquentPayment = async (req: Request, res: Response) => {
   try {
     const loans = await OutstandingLoan.find({
       nextPaymentDate: { $lt: date },
-    });
+    }).populate("beneficiaries");
     return res.status(200).json(loans);
   } catch (err) {
     if (err instanceof Error) {
