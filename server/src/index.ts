@@ -3,8 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
-import { exampleRoute } from "./routes/exampleRoute";
-import { verifyToken } from "./middlewares/verifyToken";
+// import { exampleRoute } from "./routes/exampleRoute";
+// import { verifyToken } from "./middlewares/verifyToken";
 import { notFound, errorHandler } from "./middlewares/errors";
 import { connectDB } from "../config/database";
 
