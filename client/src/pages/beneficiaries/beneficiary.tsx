@@ -9,18 +9,7 @@ import { cn } from "@/lib/utils";
 import { type Beneficiary as BeneType } from "@/pages/beneficiaries/beneficiaries";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { DatePicker } from "@/components/date-picker";
 import { toast } from "sonner";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { BellIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import { type Loan } from "../loans/loans";
 import { type Session } from "../sessions/sessions";
 import {
@@ -32,6 +21,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ChevronsUpDown, Check } from "lucide-react";
 const Beneficiary = () => {
   const { id } = useParams();
   const [params, setParams] = useSearchParams();
@@ -43,6 +45,9 @@ const Beneficiary = () => {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [detailedLoans, setDetailedLoans] = useState<Loan[]>([]);
   const [detailedSessions, setDetailedSessions] = useState<Session[]>([]);
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
+  const [openLoans, setOpenLoans] = React.useState(false);
 
   const handleSaveBeneficiary = async () => {
     if (params.get("f") === "1") {
@@ -751,21 +756,23 @@ const Beneficiary = () => {
           />
         </div>
 
-        {editing && (
-          <div className="flex flex-row justify-between">
-            <Label htmlFor="loans" className="text-left">
-              Associated Loans
-            </Label>
+        <div className="flex flex-row justify-between">
+          <Label htmlFor="loans" className="text-left">
+            Associated Loans
+          </Label>
+
+          {/* {editing && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="secondary" className="px-2 shadow-none">
+                  Choose loans to add
                   <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
                 alignOffset={-5}
-                className="w-[200px]"
+                className="w-[500px]"
                 forceMount
               >
                 <DropdownMenuLabel>Choose a Loan</DropdownMenuLabel>
@@ -775,50 +782,139 @@ const Beneficiary = () => {
                     key={loan._id ?? `loan-fallback-${index}`}
                     onClick={() => loan._id && handleSelectLoan(loan._id)}
                   >
-                    {`Payment: ${
-                      loan.initialPayment ?? "Not specified"
-                    } - Date: ${
-                      loan.initialPaymentDate
+                    {`Payment: ${loan.initialPayment ?? "Not specified"
+                      } - Date: ${loan.initialPaymentDate
                         ? new Date(loan.initialPaymentDate).toLocaleDateString()
                         : "Not specified"
-                    } - Status: ${loan.loanStatus ?? "Not specified"}`}
+                      } - Status: ${loan.loanStatus ?? "Not specified"}`}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu>)} */}
 
-            <Label htmlFor="sessions" className="text-left">
-              Associated Sessions
-            </Label>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="secondary" className="px-2 shadow-none">
-                  <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
+          {editing && (
+            <Popover open={openLoans} onOpenChange={setOpenLoans}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="secondary"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="px-2 shadow-none justify-between"
+                >
+                  {"Choose loans to add"}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                alignOffset={-5}
-                className="w-[200px]"
-                forceMount
-              >
-                <DropdownMenuLabel>Choose a Session</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {sessions.map((session) => (
-                  <DropdownMenuItem
-                    key={session._id}
-                    onClick={() => handleSelectSession(session._id)}
-                  >
-                    {`${new Date(session.sessionDate).toLocaleDateString()} - ${
-                      session.region
-                    }`}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        )}
+              </PopoverTrigger>
+              <PopoverContent className="w-[500px]">
+                <Command>
+                  <CommandInput placeholder="Search loans..." />
+                  <CommandEmpty>No loans found.</CommandEmpty>
+                  <CommandGroup>
+                    {loans.map((loan) => (
+                      <CommandItem
+                        key={loan._id}
+                        value={`Payment: ${
+                          loan.initialPayment ?? "Not specified"
+                        } - Date: ${
+                          loan.initialPaymentDate
+                            ? new Date(
+                                loan.initialPaymentDate,
+                              ).toLocaleDateString()
+                            : "Not specified"
+                        } - Status: ${loan.loanStatus ?? "Not specified"}`}
+                        onSelect={() => {
+                          void handleSelectLoan(loan._id ?? "");
+                          setValue(
+                            `Payment: ${
+                              loan.initialPayment ?? "Not specified"
+                            } - Date: ${
+                              loan.initialPaymentDate
+                                ? new Date(
+                                    loan.initialPaymentDate,
+                                  ).toLocaleDateString()
+                                : "Not specified"
+                            } - Status: ${loan.loanStatus ?? "Not specified"}`,
+                          );
+                          setOpen(false);
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            value === loan._id ? "opacity-100" : "opacity-0",
+                          )}
+                        />
+                        {`Payment: ${
+                          loan.initialPayment ?? "Not specified"
+                        } - Date: ${
+                          loan.initialPaymentDate
+                            ? new Date(
+                                loan.initialPaymentDate,
+                              ).toLocaleDateString()
+                            : "Not specified"
+                        } - Status: ${loan.loanStatus ?? "Not specified"}`}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          )}
 
+          <Label htmlFor="sessions" className="text-left">
+            Associated Sessions
+          </Label>
+          {editing && (
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="secondary"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="px-2 shadow-none justify-between"
+                >
+                  {"Choose sessions to add"}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[500px]">
+                <Command>
+                  <CommandInput placeholder="Search sessions by region..." />
+                  <CommandEmpty>No sessions found.</CommandEmpty>
+                  <CommandGroup>
+                    {sessions.map((session) => (
+                      <CommandItem
+                        key={session._id}
+                        value={`${new Date(
+                          session.sessionDate,
+                        ).toLocaleDateString()} - ${session.region}`}
+                        onSelect={() => {
+                          handleSelectSession(session._id);
+                          setValue(
+                            `${new Date(
+                              session.sessionDate,
+                            ).toLocaleDateString()} - ${session.region}`,
+                          );
+                          setOpen(false);
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            value === session._id ? "opacity-100" : "opacity-0",
+                          )}
+                        />
+                        {`${new Date(
+                          session.sessionDate,
+                        ).toLocaleDateString()} - ${session.region}`}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
         <div className="flex flex-wrap -mx-2">
           <div className="w-full md:w-1/2 px-2">
             <Table>
