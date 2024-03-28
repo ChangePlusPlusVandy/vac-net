@@ -25,7 +25,7 @@ const Dashboard = () => {
   const [upcomingSesions, setUpcomingSessions] = useState(0);
 
   useEffect(() => {
-    fetch("https://vacnet-backend-deploy.vercel.app/beneficiary/count")
+    fetch("https://vac-net-backend.vercel.app/beneficiary/count")
       .then((res) => res.json())
       .then((data) => {
         setTotalBeneficiaries(data.totalBeneficiaries);
