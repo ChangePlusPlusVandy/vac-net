@@ -104,7 +104,7 @@ const Dashboard = () => {
                 </svg>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+5</div>
+                <div className="text-2xl font-bold">+{upcomingSesions}</div>
                 <p className="text-xs text-muted-foreground">
                   in next two weeks
                 </p>

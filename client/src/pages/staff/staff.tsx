@@ -52,7 +52,6 @@ const Staff = () => {
       }
     } else {
       setParams({ f: "1" });
-      setEditing(true);
     }
   };
 

@@ -81,10 +81,8 @@ const LoanCard = ({ loan }: { loan: Loan }) => {
               >
                 View Beneficiary
               </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>View Sessions</DropdownMenuCheckboxItem>
-              <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Icons.search className="mr-2 h-4 w-4" /> View Profile
+                <Icons.search className="mr-2 h-4 w-4" /> View Loan
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
