@@ -5,6 +5,7 @@ import { type ObjectId } from "mongodb";
 export interface IStaff {
   firstName?: string;
   lastName?: string;
+  email?: string;
   firebaseUID?: string;
   joinDate?: Date;
   status?: string;
@@ -17,9 +18,11 @@ export interface IStaff {
 const StaffSchema = new mongoose.Schema<IStaff>({
   firstName: {
     type: String,
-    required: true,
   },
   lastName: {
+    type: String,
+  },
+  email: {
     type: String,
     required: true,
   },
@@ -29,15 +32,14 @@ const StaffSchema = new mongoose.Schema<IStaff>({
   },
   joinDate: {
     type: Date,
+    default: Date.now,
     required: true,
   },
   status: {
     type: String,
-    required: true,
   },
   clearance: {
     type: String,
-    required: true,
   },
   bookmarkedBeneficiaries: {
     type: [String],

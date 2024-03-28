@@ -1,6 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 import { AlertDestructive } from "@/components/alert-destructive";
 import { Button } from "@/components/ui/button";
@@ -9,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { auth } from "@/../firebase/config";
 import { cn } from "@/lib/utils";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { type Staff } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const ERRORS: Record<string, string> = {
@@ -20,15 +24,19 @@ const ERRORS: Record<string, string> = {
   "Firebase: Error (auth/invalid-email).": "Incorrect username or password",
   "Firebase: Error (auth/internal-error).": "Server error, please try again",
   "Firebase: Error (auth/missing-password).": "Password is required",
+  "Firebase: Error (auth/email-already-in-use).": "Email already in use",
+  "Passwords do not match": "Passwords do not match",
 };
 
 export function UserAuthForm({
   className,
+  isSignUp,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
@@ -37,20 +45,53 @@ export function UserAuthForm({
     event.preventDefault();
     setIsLoading(true);
 
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
-      const user = userCredential.user;
-      console.log(user);
-      navigate("/app/dashboard");
-    } catch (error) {
-      setError((error as Error).message);
-    }
+    if (isSignUp) {
+      if (password !== confirmPassword) {
+        setError("Passwords do not match");
+        setIsLoading(false);
+      } else {
+        try {
+          const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password,
+          );
+          const user = userCredential.user;
 
-    setIsLoading(false);
+          const mongoUser = await fetch("http://localhost:3001/user/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: email,
+              firebaseUID: user.uid,
+            }),
+          }).then((res) => res.json() as unknown as Staff);
+          console.log(mongoUser);
+
+          // navigate("/app/dashboard");
+        } catch (error) {
+          setError((error as Error).message);
+        }
+
+        setIsLoading(false);
+      }
+    } else {
+      try {
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password,
+        );
+        const user = userCredential.user;
+        navigate("/app/dashboard");
+      } catch (error) {
+        setError((error as Error).message);
+      }
+
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -98,11 +139,29 @@ export function UserAuthForm({
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          {isSignUp && (
+            <div className="grid gap-1 mt-4">
+              <Label className="sr-only" htmlFor="email">
+                Confirm Password
+              </Label>
+              <Input
+                id="pass"
+                type="password"
+                placeholder="Confirm Password"
+                autoCapitalize="none"
+                autoComplete="email"
+                autoCorrect="off"
+                disabled={isLoading}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+          )}
           <Button disabled={isLoading} className="mt-4">
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In
+            {isSignUp ? "Sign Up" : "Sign In"}
           </Button>
         </div>
       </form>

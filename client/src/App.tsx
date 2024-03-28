@@ -19,6 +19,7 @@ import Loans from "./pages/loans/loans";
 import Login from "./pages/Auth/Login";
 // import PrivateRoute from "./pages/Auth/PrivateRoute";
 import React from "react";
+import Register from "./pages/Auth/Register";
 import Session from "./pages/sessions/sessions";
 import Staff from "@/pages/staff/staff";
 import StaffMembers from "@/pages/staff/staff-members";
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<Outlet />}>
       <Route index element={<Navigate to="/login" />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       <Route path="/app" element={<DashboardLayout />}>
         <Route index element={<Navigate to="/app/dashboard" />} />
