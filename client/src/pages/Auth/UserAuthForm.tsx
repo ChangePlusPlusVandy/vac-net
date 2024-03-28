@@ -32,7 +32,7 @@ export function UserAuthForm({
   className,
   isSignUp,
   ...props
-}: React.HTMLAttributes<HTMLDivElement> & { isSignUp: boolean }) {
+}: React.HTMLAttributes<HTMLDivElement> & { isSignUp?: boolean }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
