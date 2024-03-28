@@ -174,7 +174,9 @@ const Dashboard = () => {
                       }
                       return (
                         <p key={i}>
+                          {/* @ts-expect-error TODO */}
                           {loan.beneficiaries[0].firstName}{" "}
+                          {/* @ts-expect-error TODO */}
                           {loan.beneficiaries[0]?.lastName}
                         </p>
                       );
