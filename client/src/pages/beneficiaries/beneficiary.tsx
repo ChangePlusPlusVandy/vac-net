@@ -336,7 +336,7 @@ const Beneficiary = () => {
           ...prev,
           associatedSessions: prev.associatedSessions
             ? // @ts-expect-error TODO
-            prev.associatedSessions.filter((id) => id !== sessionId)
+              prev.associatedSessions.filter((id) => id !== sessionId)
             : [],
         };
       });
@@ -813,38 +813,53 @@ const Beneficiary = () => {
                     {loans.map((loan) => (
                       <CommandItem
                         key={loan._id}
-                        value={`Payment: ${loan.initialPayment ?? "Not specified"
-                          } - Date: ${loan.initialPaymentDate
-                            ? new Date(loan.initialPaymentDate).toLocaleDateString()
+                        value={`Payment: ${
+                          loan.initialPayment ?? "Not specified"
+                        } - Date: ${
+                          loan.initialPaymentDate
+                            ? new Date(
+                                loan.initialPaymentDate,
+                              ).toLocaleDateString()
                             : "Not specified"
-                          } - Status: ${loan.loanStatus ?? "Not specified"}`}
+                        } - Status: ${loan.loanStatus ?? "Not specified"}`}
                         onSelect={() => {
-                          void handleSelectLoan(loan._id);
-                          setValue(`Payment: ${loan.initialPayment ?? "Not specified"
-                        } - Date: ${loan.initialPaymentDate
-                          ? new Date(loan.initialPaymentDate).toLocaleDateString()
-                          : "Not specified"
-                        } - Status: ${loan.loanStatus ?? "Not specified"}`);
+                          void handleSelectLoan(loan._id ?? "");
+                          setValue(
+                            `Payment: ${
+                              loan.initialPayment ?? "Not specified"
+                            } - Date: ${
+                              loan.initialPaymentDate
+                                ? new Date(
+                                    loan.initialPaymentDate,
+                                  ).toLocaleDateString()
+                                : "Not specified"
+                            } - Status: ${loan.loanStatus ?? "Not specified"}`,
+                          );
                           setOpen(false);
                         }}
                       >
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4",
-                            value === loan._id ? "opacity-100" : "opacity-0"
+                            value === loan._id ? "opacity-100" : "opacity-0",
                           )}
                         />
-                        {`Payment: ${loan.initialPayment ?? "Not specified"
-                      } - Date: ${loan.initialPaymentDate
-                        ? new Date(loan.initialPaymentDate).toLocaleDateString()
-                        : "Not specified"
-                      } - Status: ${loan.loanStatus ?? "Not specified"}`}
+                        {`Payment: ${
+                          loan.initialPayment ?? "Not specified"
+                        } - Date: ${
+                          loan.initialPaymentDate
+                            ? new Date(
+                                loan.initialPaymentDate,
+                              ).toLocaleDateString()
+                            : "Not specified"
+                        } - Status: ${loan.loanStatus ?? "Not specified"}`}
                       </CommandItem>
                     ))}
                   </CommandGroup>
                 </Command>
               </PopoverContent>
-            </Popover>)}
+            </Popover>
+          )}
 
           <Label htmlFor="sessions" className="text-left">
             Associated Sessions
@@ -870,27 +885,35 @@ const Beneficiary = () => {
                     {sessions.map((session) => (
                       <CommandItem
                         key={session._id}
-                        value={`${new Date(session.sessionDate).toLocaleDateString()} - ${session.region}`}
+                        value={`${new Date(
+                          session.sessionDate,
+                        ).toLocaleDateString()} - ${session.region}`}
                         onSelect={() => {
                           handleSelectSession(session._id);
-                          setValue(`${new Date(session.sessionDate).toLocaleDateString()} - ${session.region}`);
+                          setValue(
+                            `${new Date(
+                              session.sessionDate,
+                            ).toLocaleDateString()} - ${session.region}`,
+                          );
                           setOpen(false);
                         }}
                       >
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4",
-                            value === session._id ? "opacity-100" : "opacity-0"
+                            value === session._id ? "opacity-100" : "opacity-0",
                           )}
                         />
-                        {`${new Date(session.sessionDate).toLocaleDateString()} - ${session.region}`}
+                        {`${new Date(
+                          session.sessionDate,
+                        ).toLocaleDateString()} - ${session.region}`}
                       </CommandItem>
                     ))}
                   </CommandGroup>
                 </Command>
               </PopoverContent>
-            </Popover>)}
-
+            </Popover>
+          )}
         </div>
         <div className="flex flex-wrap -mx-2">
           <div className="w-full md:w-1/2 px-2">
