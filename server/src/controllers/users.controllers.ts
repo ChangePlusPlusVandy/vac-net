@@ -112,7 +112,7 @@ export const associateSessionWithStaff = async (req: Request, res: Response) => 
   try {
     const updatedStaff = await StaffModel.findByIdAndUpdate(
       id,
-      { $set: { sessions: sessionId } }, // Use $addToSet to prevent duplicates
+      { $set: { sessions: sessionId } }, 
     ).populate('sessions');
     
     return res.status(200).json(updatedStaff);
@@ -127,7 +127,6 @@ export const dissociateSessionFromStaff = async (req: Request, res: Response) =>
     const updatedStaff = await StaffModel.findByIdAndUpdate(
       id,
       { $set: { sessions: null } },
-      { new: true }
     ).exec();
     
     return res.status(200).json(updatedStaff);
