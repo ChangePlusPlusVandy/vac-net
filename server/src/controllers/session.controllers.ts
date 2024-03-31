@@ -118,18 +118,19 @@ const getNoShows = async (req: Request, res: Response) => {
       }
     } else {
       const all = await Session.find({});
-      
+
       const noShows: Types.ObjectId[][] = [];
       all.forEach((e) => {
         const expectedAttendance = e?.expectedAttendance;
         // If expectedAttendance is acutally filled out
         console.log(expectedAttendance);
         console.log(e?.actualAttendance);
-        if (expectedAttendance)
-          noShows.push(
-            // This doesn't fully work, because some elements don't have actualAttendance, and some have "attendance" instead
-            e.expectedAttendance.filter((x) => !e.actualAttendance.includes(x)),
+        if (expectedAttendance) {
+          const missing = expectedAttendance.filter(
+            (x) => !e.actualAttendance.includes(x),
           );
+          if (missing) noShows.push(missing);
+        }
       });
 
       return res.status(200).json(noShows);
