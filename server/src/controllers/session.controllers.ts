@@ -1,5 +1,6 @@
 import { type Request, type Response } from "express";
 import Session, { type ISession } from "../models/SessionModel";
+import { Types } from "mongoose";
 
 const createSession = async (req: Request, res: Response) => {
   try {
@@ -102,12 +103,36 @@ const getNoShows = async (req: Request, res: Response) => {
         return res.status(500).send("Invalid ID query");
       }
 
-      const noShows = session.expectedAttendance.filter(
-        (x) => !session.actualAttendance.includes(x),
-      );
-      return res.status(200).json(noShows);
+      const expectedAttendance = session.expectedAttendance;
+      if (expectedAttendance) {
+        const noShows = session.expectedAttendance.filter(
+          (x) => !session.actualAttendance.includes(x),
+        );
+        return res.status(200).json(noShows);
+      } else {
+        // const attendance = session.attendance;
+        // const noShows = session.attendance.filter(
+        //   (x: Types.ObjectId) => !session.actualAttendance.includes(x),
+        // );
+        return res.status(200).json(expectedAttendance);
+      }
     } else {
-      return res.status(400).send({ message: "Missing Session ID" });
+      const all = await Session.find({});
+      
+      const noShows: Types.ObjectId[][] = [];
+      all.forEach((e) => {
+        const expectedAttendance = e?.expectedAttendance;
+        // If expectedAttendance is acutally filled out
+        console.log(expectedAttendance);
+        console.log(e?.actualAttendance);
+        if (expectedAttendance)
+          noShows.push(
+            // This doesn't fully work, because some elements don't have actualAttendance, and some have "attendance" instead
+            e.expectedAttendance.filter((x) => !e.actualAttendance.includes(x)),
+          );
+      });
+
+      return res.status(200).json(noShows);
     }
   } catch (err: unknown) {
     if (err instanceof Error) {
