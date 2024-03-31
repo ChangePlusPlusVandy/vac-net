@@ -112,8 +112,7 @@ export const associateSessionWithStaff = async (req: Request, res: Response) => 
   try {
     const updatedStaff = await StaffModel.findByIdAndUpdate(
       id,
-      { $addToSet: { sessions: sessionId } }, // Use $addToSet to prevent duplicates
-      { new: true }
+      { $set: { sessions: sessionId } }, // Use $addToSet to prevent duplicates
     ).populate('sessions');
     
     return res.status(200).json(updatedStaff);
@@ -123,11 +122,11 @@ export const associateSessionWithStaff = async (req: Request, res: Response) => 
 };
 
 export const dissociateSessionFromStaff = async (req: Request, res: Response) => {
-  const { id, sessionId } = req.params;
+  const { id } = req.params;
   try {
     const updatedStaff = await StaffModel.findByIdAndUpdate(
       id,
-      { $pull: { sessions: sessionId } }, // Use $pull to remove the loanId from the array
+      { $set: { sessions: null } },
       { new: true }
     ).exec();
     

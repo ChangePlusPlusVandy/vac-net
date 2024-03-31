@@ -119,11 +119,10 @@ const Staff = () => {
     setStaff({ ...staff, clearance: e.target.value });
   };
 
-  const handleRemoveSession = async (sessionId: string) => {
-    console.log("removing");
-    
+  const handleRemoveSession = async () => {
+   
     const response = await fetch(
-      `http://localhost:3001/user/${staff?._id}/sessions/${sessionId}`,
+      `http://localhost:3001/user/${staff?._id}/sessions`,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -261,7 +260,7 @@ const Staff = () => {
               <TableCell>
                 {editing && (
                   <button
-                    onClick={() => handleRemoveSession(staff.sessions?._id ?? "")}
+                    onClick={() => handleRemoveSession()}
                     aria-label="Remove session"
                   >
                     <Icons.close />

@@ -20,6 +20,6 @@ staffRouter.get("/", getStaffByFirebaseId);
 staffRouter.post("/edit", editStaff);
 staffRouter.delete("/", deleteStaff);
 staffRouter.put("/:id/sessions/:sessionId", associateSessionWithStaff);
-staffRouter.delete("/:id/sessions/:sessionId", dissociateSessionFromStaff);
+staffRouter.delete("/:id/sessions", dissociateSessionFromStaff);
 
 export default staffRouter;
