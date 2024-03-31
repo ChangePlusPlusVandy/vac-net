@@ -37,7 +37,7 @@ const Dashboard = () => {
       });
 
     void fetch(
-      "https://vac-net-backend.vercel.app/session/noshows?id=65a45fd23f430f539ae0e1c3",
+      "https://vac-net-backend.vercel.app/session/noshows",
     )
       .then((res) => res.json())
       .then((data) => {

@@ -123,13 +123,11 @@ const getNoShows = async (req: Request, res: Response) => {
       all.forEach((e) => {
         const expectedAttendance = e?.expectedAttendance;
         // If expectedAttendance is acutally filled out
-        console.log(expectedAttendance);
-        console.log(e?.actualAttendance);
         if (expectedAttendance) {
           const missing = expectedAttendance.filter(
             (x) => !e.actualAttendance.includes(x),
           );
-          if (missing) noShows.push(missing);
+          if (missing.length > 0) noShows.push(missing);
         }
       });
 
