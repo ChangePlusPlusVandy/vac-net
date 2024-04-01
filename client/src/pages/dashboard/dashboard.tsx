@@ -44,10 +44,9 @@ const Dashboard = () => {
         setAbsentBeneficiaries(data);
       });
 
-    void fetch("http://localhost:3001/loan/getDelinquent")
+    void fetch("https://vac-net-backend.vercel.app/loan/getDelinquent")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setDelinquentLoans(data);
       });
 

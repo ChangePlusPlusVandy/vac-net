@@ -58,16 +58,19 @@ export function UserAuthForm({
           );
           const user = userCredential.user;
 
-          const mongoUser = await fetch("http://localhost:3001/user/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
+          const mongoUser = await fetch(
+            "https://vac-net-backend.vercel.app/user",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: email,
+                firebaseUID: user.uid,
+              }),
             },
-            body: JSON.stringify({
-              email: email,
-              firebaseUID: user.uid,
-            }),
-          }).then((res) => res.json() as unknown as Staff);
+          ).then((res) => res.json() as unknown as Staff);
           console.log(mongoUser);
 
           // navigate("/app/dashboard");
