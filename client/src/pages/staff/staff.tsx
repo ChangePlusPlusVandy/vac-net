@@ -10,15 +10,25 @@ import {
 } from "@/components/ui/table";
 import { useParams, useSearchParams } from "react-router-dom";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { BellIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
 import type { IStaff } from "@/pages/staff/staff-members";
+import type { Session } from "@/pages/sessions/sessions";
 import { Icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { ItemCreateButton } from "@/components/create-item-button";
 import { Label } from "@/components/ui/label";
 import StaffToolbar from "@/components/toolbars/staff-toolbar";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const Staff = () => {
@@ -28,6 +38,8 @@ const Staff = () => {
   const { id } = useParams();
   const [params, setParams] = useSearchParams();
   const [staff, setStaff] = useState<IStaff | null>(null);
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [detailedSessions, setDetailedSessions] = useState<Session[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [editing, setEditing] = useState(false);
 
@@ -71,9 +83,45 @@ const Staff = () => {
         setIsLoading(false);
       }
     };
-
     void getStaffById();
   }, [id, editing]);
+
+  useEffect(() => {
+    const fetchSessions = async () => {
+      const sessionsData = await fetch(
+        "https://vacnet-backend-deploy.vercel.app/session/sessions",
+      ).then((res) => res.json());
+      setSessions(sessionsData);
+    };
+    fetchSessions();
+  }, []);
+
+  const handleSelectSession = async (sessionId: string) => {
+    if (!staff?._id) return;
+    const updatedSessions = [...(staff.sessions || []), sessionId];
+    const updatedStaff = {
+      ...staff,
+      sessions: updatedSessions,
+    };
+    //problem somewhere within this api cal
+    try {
+      const response = await fetch(
+        `http://localhost:3001/user/${staff._id}/sessions/${sessionId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedStaff),
+        },
+      );
+      if (!response.ok)
+        throw new Error("Failed to associate session with staff");
+
+      // Update the staff with the newly associated session(s)
+      setStaff(await response.json());
+    } catch (error) {
+      console.error("Error associating session with loan:", error);
+    }
+  };
 
   const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStaff({ ...staff, firstName: e.target.value });
@@ -159,6 +207,34 @@ const Staff = () => {
         </div>
 
         <Label>Associated Sessions</Label>
+        {editing && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" className="px-2 shadow-none">
+                <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              alignOffset={-5}
+              className="w-[200px]"
+              forceMount
+            >
+              <DropdownMenuLabel>Choose a Session</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {sessions.map((session) => (
+                <DropdownMenuItem
+                  key={session._id}
+                  onClick={() => handleSelectSession(session._id)}
+                >
+                  {`${new Date(session.sessionDate).toLocaleDateString()} - ${
+                    session.region
+                  }`}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
 
         {staff?.sessions != null ? (
           <Table>

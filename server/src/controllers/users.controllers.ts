@@ -1,5 +1,5 @@
 import StaffModel, { type IStaff } from "../models/StaffModel";
-import type { Request, Response } from "express";
+import { type Request, type Response } from "express";
 
 export const createStaff = async (req: Request, res: Response) => {
   try {
@@ -16,9 +16,7 @@ export const createStaff = async (req: Request, res: Response) => {
 
 export const getAllStaff = async (req: Request, res: Response) => {
   try {
-    const allStaff = await StaffModel.find({})
-    .populate("sessions")
-    .exec();
+    const allStaff = await StaffModel.find({}).populate("sessions").exec();
     return res.status(200).json(allStaff);
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -33,8 +31,8 @@ export const getStaffById = async (req: Request, res: Response) => {
   try {
     if (staffId) {
       const staff = await StaffModel.findById(staffId)
-      .populate("sessions")
-      .exec();
+        .populate("sessions")
+        .exec();
       return res.status(200).json(staff);
     } else {
       return res.status(500).send("Invalid ID query");
@@ -106,5 +104,46 @@ export const deleteStaff = async (
       console.log(error, error.message);
       res.status(500).send({ message: error.message });
     }
+  }
+};
+
+export const associateSessionWithStaff = async (
+  req: Request,
+  res: Response,
+) => {
+  const { id, sessionId } = req.params;
+  console.log(req.params); //passes in correctly
+  try {
+    console.log("a");
+    //failing somewhere here
+    const updatedStaff = await StaffModel.findByIdAndUpdate(
+      id,
+      { $addToSet: { sessions: sessionId } },
+      { new: true },
+    ).populate("sessions");
+    console.log("b");
+
+    return res.status(200).json(updatedStaff);
+  } catch (error) {
+    // ... error handling
+  }
+};
+
+// Controller to dissociate a session from a beneficiary
+export const dissociateSessionFromStaff = async (
+  req: Request,
+  res: Response,
+) => {
+  const { id, sessionId } = req.params;
+  try {
+    const updatedStaff = await StaffModel.findByIdAndUpdate(
+      id,
+      { $pull: { sessions: sessionId } }, // Use $pull to remove the sessionId from the array
+      { new: true },
+    ).populate("sessions");
+
+    return res.status(200).json(updatedStaff);
+  } catch (error) {
+    // ... error handling
   }
 };
