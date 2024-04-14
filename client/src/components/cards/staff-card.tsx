@@ -74,11 +74,12 @@ const StaffCard = ({ staff }: { staff: IStaff }) => {
         <div className="flex space-x-4 text-sm text-muted-foreground">
           <div className="flex items-center">
             <Icons.dolla className="mr-1 h-3 w-3" />
-            Sessions:{" "}
-            {Array.isArray(staff?.sessions) ? staff.sessions.length : 0}
+            Sessions: {staff?.sessions != null ? 1 : 0}
           </div>
         </div>
-        <div className="truncate text-muted-foreground">{staff?.email}</div>
+        <div className="truncate text-muted-foreground text-sm">
+          {staff?.email}
+        </div>
       </CardContent>
     </Card>
   );

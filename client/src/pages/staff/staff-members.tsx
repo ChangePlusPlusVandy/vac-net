@@ -15,6 +15,7 @@ export interface IStaff {
   firstName?: string;
   lastName?: string;
   firebaseUID?: string;
+  email?: string;
   joinDate?: Date;
   status?: string;
   clearance?: string;
