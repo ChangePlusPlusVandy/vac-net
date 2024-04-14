@@ -40,10 +40,6 @@ const dashboardConfig: DashboardConfig = {
       title: "Staff",
       href: "/app/staff",
     },
-    {
-      title: "Support",
-      href: "/app/support",
-    },
   ],
   sidebarNav: [
     {
@@ -65,11 +61,6 @@ const dashboardConfig: DashboardConfig = {
       title: "Sessions",
       href: "/app/sessions",
       icon: "session",
-    },
-    {
-      title: "Settings",
-      href: "/app/settings",
-      icon: "settings",
     },
   ],
 };
