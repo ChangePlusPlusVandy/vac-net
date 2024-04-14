@@ -5,6 +5,7 @@ import {
   getAllStaff,
   getStaffByFirebaseId,
   getStaffById,
+  associateSessionWithStaff,
 } from "../controllers/users.controllers";
 
 import express from "express";
@@ -17,5 +18,8 @@ staffRouter.get("/getstaff", getStaffById);
 staffRouter.get("/", getStaffByFirebaseId);
 staffRouter.post("/edit", editStaff);
 staffRouter.delete("/", deleteStaff);
+
+// New routes for associating sessions
+staffRouter.put("/:id/sessions/:sessionId", associateSessionWithStaff);
 
 export default staffRouter;
