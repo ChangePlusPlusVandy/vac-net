@@ -468,7 +468,9 @@ const SessionEdit = () => {
           <div className="flex flex-wrap -mx-2">
             <div className="w-full md:w-1/3 px-2">
               <div className="mb-4">
-                <Label htmlFor="expectedAttendance">Expected Attendance</Label>
+                <Label htmlFor="expectedAttendance" className="pr-3">
+                  Expected Attendance
+                </Label>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="secondary" className="px-2 shadow-none">
@@ -532,7 +534,9 @@ const SessionEdit = () => {
             {/* Actual Attendance Section */}
             <div className="w-full md:w-1/3 px-2">
               <div className="mb-4">
-                <Label htmlFor="actualAttendance">Actual Attendance</Label>
+                <Label htmlFor="actualAttendance" className="pr-3">
+                  Actual Attendance
+                </Label>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="secondary" className="px-2 shadow-none">
@@ -597,7 +601,9 @@ const SessionEdit = () => {
             {/* Associated Staff Section */}
             <div className="w-full md:w-1/3 px-2">
               <div className="mb-4">
-                <Label htmlFor="associatedStaff">Associated Staff</Label>
+                <Label htmlFor="associatedStaff" className="pr-3">
+                  Associated Staff
+                </Label>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="secondary" className="px-2 shadow-none">
