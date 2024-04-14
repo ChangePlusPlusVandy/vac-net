@@ -1,5 +1,6 @@
 import { type Request, type Response } from "express";
 import Session, { type ISession } from "../models/SessionModel";
+import mongoose from "mongoose";
 
 const createSession = async (req: Request, res: Response) => {
   try {
@@ -57,9 +58,14 @@ const editSession = async (req: Request, res: Response) => {
     const sessionContent = req.body as ISession;
     const sessionID = sessionContent._id;
     if (sessionID) {
+      // Convert associatedStaff to ObjectId
+      if (sessionContent.associatedStaff) {
+        sessionContent.associatedStaff = sessionContent.associatedStaff.map(staffId => new mongoose.Types.ObjectId(staffId));
+      }
       const updatedSession = await Session.findByIdAndUpdate(
         sessionID,
         sessionContent,
+        { new: true }  // return the updated document
       );
       return res.status(200).json(updatedSession);
     } else {

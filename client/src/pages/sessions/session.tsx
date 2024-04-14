@@ -38,6 +38,9 @@ const SessionEdit = () => {
   const [detailedBeneficiaries, setDetailedBeneficiaries] = useState<
     Beneficiary[]
   >([]);
+  const [detailedActualAttendance, setDetailedActualAttendance] = useState<
+    Beneficiary[]
+  >([]);
   const [notifyChange, setNotifyChange] = useState(false);
   const [detailedStaff, setDetailedStaff] = useState<Staff[]>([]);
   const [staff, setStaff] = useState<Staff[]>([]);
@@ -93,12 +96,12 @@ const SessionEdit = () => {
 
   useEffect(() => {
     const fetchBeneficiaryDetails = async () => {
-      if (!session?.associatedBeneficiaries) return;
+      if (!session?.expectedAttendance) return;
 
       try {
         // Fetch details for each associated loan
         const beneInfo = await Promise.all(
-          session.associatedBeneficiaries.map(async (bene) => {
+          session.expectedAttendance.map(async (bene) => {
             const response = await fetch(
               `https://vac-net-backend.vercel.app/beneficiary/id?id=${bene}`,
             );
@@ -116,7 +119,7 @@ const SessionEdit = () => {
       }
     };
 
-    if (session?.associatedBeneficiaries) {
+    if (session?.expectedAttendance) {
       void fetchBeneficiaryDetails();
     }
   }, [session, notifyChange]);
@@ -152,6 +155,36 @@ const SessionEdit = () => {
   }, [session, notifyChange]);
 
   useEffect(() => {
+    const fetchActualAttendanceDetails = async () => {
+      if (!session?.actualAttendance) return;
+
+      try {
+        // Fetch details for each beneficiary in actual attendance
+        const attendanceInfo = await Promise.all(
+          session.actualAttendance.map(async (bene) => {
+            const response = await fetch(
+              `https://vac-net-backend.vercel.app/beneficiary/id?id=${bene}`,
+            );
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return await response.json();
+          }),
+        );
+
+        // Update the state with the fetched beneficiary details
+        setDetailedActualAttendance(attendanceInfo); // You might need a different state variable here if expected and actual attendance are supposed to be independent
+      } catch (error) {
+        console.error("Error fetching actual attendance details:", error);
+      }
+    };
+
+    if (session?.actualAttendance) {
+      fetchActualAttendanceDetails();
+    }
+  }, [session, notifyChange]); // Ensure dependency on the correct session property
+
+  useEffect(() => {
     const fetchBeneficiariesAndStaff = async () => {
       const beneData = await fetch(
         "https://vacnet-backend-deploy.vercel.app/beneficiary/all",
@@ -179,16 +212,40 @@ const SessionEdit = () => {
   }, []);
 
   const handleSelectBeneficiary = async (beneId: string) => {
-    console.log("got here", beneId);
     if (!session?._id) return;
-
-    const updatedBeneficiaries = [
-      ...(session.associatedBeneficiaries || []),
+    const updatedExpectedAttendance = [
+      ...(session.expectedAttendance || []),
       beneId,
     ];
     const updatedSession = {
       ...session,
-      associatedBeneficiaries: updatedBeneficiaries,
+      expectedAttendance: updatedExpectedAttendance,
+    };
+
+    try {
+      const res = await fetch(`https://vac-net-backend.vercel.app/session`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedSession),
+      }).then((res: Response) => res.json() as unknown as Session);
+      setSession(res);
+      setNotifyChange(!notifyChange);
+    } catch (error) {
+      console.error("Error adding beneficiary to session:", error);
+    }
+  };
+
+  const handleSelectActualAttendance = async (beneId: string) => {
+    if (!session?._id) return;
+    const updatedActualAttendance = [
+      ...(session.actualAttendance || []),
+      beneId,
+    ];
+    const updatedSession = {
+      ...session,
+      actualAttendance: updatedActualAttendance,
     };
 
     try {
@@ -232,18 +289,14 @@ const SessionEdit = () => {
   const handleRemoveBeneficiary = async (beneId: string) => {
     if (!session?._id) return;
 
-    console.log("got here", beneId);
-
-    const updatedBeneficiaries = session.associatedBeneficiaries?.filter(
+    const updatedBeneficiaries = session.expectedAttendance?.filter(
       (bene) => bene !== beneId,
     );
 
     const updatedSession = {
       ...session,
-      associatedBeneficiaries: updatedBeneficiaries,
+      expectedAttendance: updatedBeneficiaries,
     };
-
-    console.log(updatedBeneficiaries);
 
     try {
       const res = await fetch(`https://vac-net-backend.vercel.app/session`, {
@@ -256,6 +309,33 @@ const SessionEdit = () => {
 
       setSession(res);
       setNotifyChange(!notifyChange);
+    } catch (error) {
+      console.error("Error removing beneficiary from session:", error);
+    }
+  };
+  const handleRemoveActualAttendance = async (beneId: string) => {
+    if (!session?._id) return;
+
+    const updatedActualAttendance = session.actualAttendance?.filter(
+      (bene) => bene !== beneId,
+    );
+
+    const updatedSession = {
+      ...session,
+      actualAttendance: updatedActualAttendance,
+    };
+
+    try {
+      const res = await fetch(`https://vac-net-backend.vercel.app/session`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedSession),
+      }).then((res: Response) => res.json() as unknown as Session);
+
+      setSession(res);
+      setNotifyChange(!notifyChange); // Using a toggle to force re-render might not be necessary if states are updated correctly
     } catch (error) {
       console.error("Error removing beneficiary from session:", error);
     }
@@ -374,33 +454,6 @@ const SessionEdit = () => {
               onChange={(e) => handleChange(e, "region")}
             />
           </div>
-          <div className="mb-4">
-            <Label htmlFor="staff">Staff</Label>
-            <Textarea
-              id="staff"
-              value={arrayToCsv(session.staff ?? [])}
-              onChange={(e) => handleArrayChange(e, "staff")}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <Label htmlFor="expectedAttendance">Expected Attendance</Label>
-            <Textarea
-              id="expectedAttendance"
-              value={arrayToCsv(session.expectedAttendance ?? [])}
-              onChange={(e) => handleArrayChange(e, "expectedAttendance")}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <Label htmlFor="actualAttendance">Actual Attendance</Label>
-            <Textarea
-              id="actualAttendance"
-              value={arrayToCsv(session.actualAttendance ?? [])}
-              onChange={(e) => handleArrayChange(e, "actualAttendance")}
-              className="w-full p-2 border rounded"
-            />
-          </div>
           <div className="mb-4 flex items-center">
             <input
               type="checkbox"
@@ -412,78 +465,45 @@ const SessionEdit = () => {
             <Label htmlFor="archived">Archived</Label>
           </div>
 
-          <div className="flex flex-row justify-between">
-            <Label htmlFor="loans" className="text-left">
-              Associated Beneficiaries
-            </Label>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="secondary" className="px-2 shadow-none">
-                  <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                alignOffset={-5}
-                className="w-[200px]"
-                forceMount
-              >
-                <DropdownMenuLabel>Choose a Beneficiary</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {beneficiaries.map((bene, index) => (
-                  <DropdownMenuItem
-                    key={bene._id ?? `loan-fallback-${index}`}
-                    onClick={() =>
-                      bene._id && handleSelectBeneficiary(bene._id)
-                    }
-                  >
-                    {`Name: ${
-                      bene.firstName
-                        ? bene.firstName + " " + bene.lastName
-                        : "Not specified"
-                    }`}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <Label htmlFor="sessions" className="text-left">
-              Associated Staff
-            </Label>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="secondary" className="px-2 shadow-none">
-                  <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                alignOffset={-5}
-                className="w-[200px]"
-                forceMount
-              >
-                <DropdownMenuLabel>Choose a Staff Member</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {staff.map((bene, index) => (
-                  <DropdownMenuItem
-                    key={bene._id ?? `loan-fallback-${index}`}
-                    onClick={() => bene._id && handleSelectStaff(bene._id)}
-                  >
-                    {`Name: ${
-                      bene.firstName
-                        ? bene.firstName + " " + bene.lastName
-                        : "Not specified"
-                    }`}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
           <div className="flex flex-wrap -mx-2">
-            <div className="w-full md:w-1/2 px-2">
+            <div className="w-full md:w-1/3 px-2">
+              <div className="mb-4">
+                <Label htmlFor="expectedAttendance" className="pr-3">
+                  Expected Attendance
+                </Label>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="secondary" className="px-2 shadow-none">
+                      <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    alignOffset={-5}
+                    className="w-[200px]"
+                    forceMount
+                  >
+                    <DropdownMenuLabel>Choose a Beneficiary</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {beneficiaries.map((bene, index) => (
+                      <DropdownMenuItem
+                        key={bene._id ?? `loan-fallback-${index}`}
+                        onClick={() =>
+                          bene._id && handleSelectBeneficiary(bene._id)
+                        }
+                      >
+                        {`Name: ${
+                          bene.firstName
+                            ? bene.firstName + " " + bene.lastName
+                            : "Not specified"
+                        }`}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
               <Table>
-                <TableCaption>Associated Beneficiaries</TableCaption>
+                <TableCaption>Expected Attendance</TableCaption>
                 <TableHeader>
                   <TableRow>
                     <TableHead>First Name</TableHead>
@@ -498,8 +518,75 @@ const SessionEdit = () => {
                       <TableCell>{bene.lastName ?? "Not specified"}</TableCell>
                       <TableCell>
                         <button
-                          // @ts-expect-error TODO
-                          onClick={() => handleRemoveBeneficiary(bene._id)}
+                          onClick={() =>
+                            handleRemoveBeneficiary(bene._id ?? "")
+                          }
+                          aria-label="Remove Beneficiary"
+                        >
+                          <Icons.close />
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            {/* Actual Attendance Section */}
+            <div className="w-full md:w-1/3 px-2">
+              <div className="mb-4">
+                <Label htmlFor="actualAttendance" className="pr-3">
+                  Actual Attendance
+                </Label>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="secondary" className="px-2 shadow-none">
+                      <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    alignOffset={-5}
+                    className="w-[200px]"
+                    forceMount
+                  >
+                    <DropdownMenuLabel>Choose a Beneficiary</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {detailedBeneficiaries.map((bene, index) => (
+                      <DropdownMenuItem
+                        key={bene._id ?? `attendance-fallback-${index}`}
+                        onClick={() =>
+                          bene._id && handleSelectActualAttendance(bene._id)
+                        }
+                      >
+                        {`Name: ${
+                          bene.firstName
+                            ? bene.firstName + " " + bene.lastName
+                            : "Not specified"
+                        }`}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              <Table>
+                <TableCaption>Actual Attendance</TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>First Name</TableHead>
+                    <TableHead>Last Name</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {detailedActualAttendance.map((bene) => (
+                    <TableRow key={bene._id}>
+                      <TableCell>{bene.firstName ?? "Not specified"}</TableCell>
+                      <TableCell>{bene.lastName ?? "Not specified"}</TableCell>
+                      <TableCell>
+                        <button
+                          onClick={() =>
+                            handleRemoveActualAttendance(bene._id ?? "")
+                          }
                           aria-label="Remove Beneficiary"
                         >
                           <Icons.close />
@@ -511,7 +598,43 @@ const SessionEdit = () => {
               </Table>
             </div>
 
-            <div className="w-full md:w-1/2 px-2">
+            {/* Associated Staff Section */}
+            <div className="w-full md:w-1/3 px-2">
+              <div className="mb-4">
+                <Label htmlFor="associatedStaff" className="pr-3">
+                  Associated Staff
+                </Label>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="secondary" className="px-2 shadow-none">
+                      <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    alignOffset={-5}
+                    className="w-[200px]"
+                    forceMount
+                  >
+                    <DropdownMenuLabel>Choose a Staff Member</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {staff.map((staffMember, index) => (
+                      <DropdownMenuItem
+                        key={staffMember._id ?? `staff-fallback-${index}`}
+                        onClick={() =>
+                          staffMember._id && handleSelectStaff(staffMember._id)
+                        }
+                      >
+                        {`Name: ${
+                          staffMember.firstName
+                            ? staffMember.firstName + " " + staffMember.lastName
+                            : "Not specified"
+                        }`}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
               <Table>
                 <TableCaption>Associated Staff</TableCaption>
                 <TableHeader>
@@ -522,15 +645,20 @@ const SessionEdit = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {detailedStaff.map((bene) => (
-                    <TableRow key={bene._id}>
-                      <TableCell>{bene.firstName ?? "Not specified"}</TableCell>
-                      <TableCell>{bene.lastName ?? "Not specified"}</TableCell>
+                  {detailedStaff.map((staffMember) => (
+                    <TableRow key={staffMember._id}>
+                      <TableCell>
+                        {staffMember.firstName ?? "Not specified"}
+                      </TableCell>
+                      <TableCell>
+                        {staffMember.lastName ?? "Not specified"}
+                      </TableCell>
                       <TableCell>
                         <button
-                          // @ts-expect-error TODO
-                          onClick={() => handleRemoveStaff(bene._id)}
-                          aria-label="Remove Beneficiary"
+                          onClick={() =>
+                            handleRemoveStaff(staffMember._id ?? "")
+                          }
+                          aria-label="Remove Staff Member"
                         >
                           <Icons.close />
                         </button>
