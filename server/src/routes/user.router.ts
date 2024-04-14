@@ -6,7 +6,6 @@ import {
   getStaffByFirebaseId,
   getStaffById,
   associateSessionWithStaff,
-  dissociateSessionFromStaff,
 } from "../controllers/users.controllers";
 
 import express from "express";
@@ -22,6 +21,5 @@ staffRouter.delete("/", deleteStaff);
 
 // New routes for associating sessions
 staffRouter.put("/:id/sessions/:sessionId", associateSessionWithStaff);
-staffRouter.delete("/:id/sessions/:sessionId", dissociateSessionFromStaff);
 
 export default staffRouter;

@@ -103,7 +103,6 @@ const Staff = () => {
       ...staff,
       sessions: updatedSessions,
     };
-    //problem somewhere within this api cal
     try {
       const response = await fetch(
         `http://localhost:3001/user/${staff._id}/sessions/${sessionId}`,
@@ -210,12 +209,12 @@ const Staff = () => {
         {editing && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="secondary" className="px-2 shadow-none">
+              <Button variant="secondary" className="px-2 w-10 shadow-none">
                 <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              align="end"
+              align="start"
               alignOffset={-5}
               className="w-[200px]"
               forceMount

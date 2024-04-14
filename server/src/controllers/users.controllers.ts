@@ -112,33 +112,10 @@ export const associateSessionWithStaff = async (
   res: Response,
 ) => {
   const { id, sessionId } = req.params;
-  console.log(req.params); //passes in correctly
-  try {
-    console.log("a");
-    //failing somewhere here
-    const updatedStaff = await StaffModel.findByIdAndUpdate(
-      id,
-      { $addToSet: { sessions: sessionId } },
-      { new: true },
-    ).populate("sessions");
-    console.log("b");
-
-    return res.status(200).json(updatedStaff);
-  } catch (error) {
-    // ... error handling
-  }
-};
-
-// Controller to dissociate a session from a beneficiary
-export const dissociateSessionFromStaff = async (
-  req: Request,
-  res: Response,
-) => {
-  const { id, sessionId } = req.params;
   try {
     const updatedStaff = await StaffModel.findByIdAndUpdate(
       id,
-      { $pull: { sessions: sessionId } }, // Use $pull to remove the sessionId from the array
+      { $set: { sessions: sessionId } },
       { new: true },
     ).populate("sessions");
 
