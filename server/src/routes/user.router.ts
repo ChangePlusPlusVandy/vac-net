@@ -1,10 +1,12 @@
 import {
+  associateSessionWithStaff,
   createStaff,
   deleteStaff,
+  dissociateSessionFromStaff,
   editStaff,
   getAllStaff,
   getStaffByFirebaseId,
-  getStaffById,
+  getStaffById
 } from "../controllers/users.controllers";
 
 import express from "express";
@@ -17,5 +19,7 @@ staffRouter.get("/getstaff", getStaffById);
 staffRouter.get("/", getStaffByFirebaseId);
 staffRouter.post("/edit", editStaff);
 staffRouter.delete("/", deleteStaff);
+staffRouter.put("/:id/sessions/:sessionId", associateSessionWithStaff);
+staffRouter.delete("/:id/sessions", dissociateSessionFromStaff);
 
 export default staffRouter;

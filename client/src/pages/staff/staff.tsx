@@ -1,3 +1,4 @@
+import { Button, buttonVariants } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -18,8 +19,19 @@ import { Input } from "@/components/ui/input";
 import { ItemCreateButton } from "@/components/create-item-button";
 import { Label } from "@/components/ui/label";
 import StaffToolbar from "@/components/toolbars/staff-toolbar";
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { type Session } from "../sessions/sessions";
+import { BellIcon, ChevronDownIcon } from "@radix-ui/react-icons";
+import { PlusIcon } from "@radix-ui/react-icons";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Staff = () => {
   const [query, setQuery] = useState("");
@@ -30,6 +42,7 @@ const Staff = () => {
   const [staff, setStaff] = useState<IStaff | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [allSessions, setAllSessions] = useState<Session[]>([]);
 
   const handleSaveStaff = async () => {
     if (params.get("f") === "1") {
@@ -52,6 +65,63 @@ const Staff = () => {
       }
     } else {
       setParams({ f: "1" });
+      setEditing(true)
+    }
+  };
+
+  useEffect(() => {
+    const getAllSessions = async () => {
+      setIsLoading(true);
+      try {
+        const data: Session[] = await fetch(
+          "https://vac-net-backend.vercel.app/session/sessions",
+        ).then((res: Response) => res.json() as unknown as Session[]);
+        setAllSessions(data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    void getAllSessions();
+  }, []);
+
+  const handleRemoveSession = async () => {
+    const response = await fetch(
+      `https://vac-net-backend.vercel.app/user/${staff?._id}/sessions`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+
+    setStaff({ ...staff, sessions: undefined });
+    if (response.ok) {
+      setStaff({ ...staff, sessions: undefined });
+    } else {
+      console.error("Failed to remove the session");
+    }
+  };
+
+  const handleAddSession = async (sessionId: string) => {
+    const response = await fetch(
+      `https://vac-net-backend.vercel.app/user/${staff?._id}/sessions/${sessionId}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+
+    if (response.ok) {
+      try {
+        const data: Session = await fetch(
+          "https://vac-net-backend.vercel.app/session/" + sessionId,
+        ).then((res: Response) => res.json() as unknown as Session);
+        setStaff({ ...staff, sessions: data });
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      console.error("Failed to add the session");
     }
   };
 
@@ -102,11 +172,25 @@ const Staff = () => {
           "'s data."
         }
       >
-        <SaveStaff
-          isLoading={isLoading}
-          editing={params.get("f") === "1"}
-          onClick={handleSaveStaff}
-        />
+        <div>
+          <SaveStaff
+            isLoading={isLoading}
+            editing={params.get("f") === "1"}
+            onClick={handleSaveStaff}
+          />
+          {params.get("f") === "1" && (
+            <button
+              className={buttonVariants({ variant: "outline" })}
+              onClick={() => {
+                setParams({ f: "0" });
+                setEditing(false);
+              }}
+            >
+              <Icons.close className="mr-2 h-4 w-4" />
+              Cancel
+            </button>
+          )}
+        </div>
       </DashboardHeader>
       <div className="grid gap-4 py-4">
         <div className="grid grid-cols-4 items-center gap-4">
@@ -131,9 +215,6 @@ const Staff = () => {
             disabled={params.get("f") !== "1"}
           />
         </div>
-
-        {/* TODO: Display the date */}
-
         <div className="grid grid-cols-4 items-center gap-4">
           <Label htmlFor="status" className="text-left">
             Status
@@ -156,8 +237,6 @@ const Staff = () => {
             disabled={params.get("f") !== "1"}
           />
         </div>
-
-        <Label>Associated Sessions</Label>
 
         {staff?.sessions != null ? (
           <Table>
@@ -213,13 +292,54 @@ const Staff = () => {
                     ) : (
                       <TableCell>Unknown</TableCell>
                     )}
+                    <TableCell>
+                      {editing && (
+                        <button
+                          onClick={() => handleRemoveSession()}
+                          aria-label="Remove session"
+                        >
+                          <Icons.close />
+                        </button>
+                      )}
+                    </TableCell>
                   </TableRow>
                 );
               })}
             </TableBody>
+            <TableCaption>Associated Sessions</TableCaption>
           </Table>
         ) : (
-          <div>No Available Sessions</div>
+          <TableCell>
+            {editing && (
+              <DropdownMenu>
+                <Label className="inline-flex mr-3">Add a Session</Label>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="secondary" className="px-2 shadow-none">
+                    <PlusIcon className="h-4 w-10 text-secondary-foreground" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  alignOffset={-5}
+                  className="w-[200px]"
+                  forceMount
+                >
+                  <DropdownMenuLabel>Choose a Session</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {allSessions?.map((session) => (
+                    <DropdownMenuItem
+                      key={session._id}
+                      onClick={() => handleAddSession(session._id)}
+                    >
+                      {`${new Date(
+                        session.sessionDate,
+                      ).toLocaleDateString()} - ${session.region}`}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </TableCell>
         )}
       </div>
     </DashboardShell>
