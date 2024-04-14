@@ -116,6 +116,7 @@ const Staff = () => {
         const data: Session = await fetch(
           "https://vac-net-backend.vercel.app/session/" + sessionId,
         ).then((res: Response) => res.json() as unknown as Session);
+        // @ts-expect-error TODO
         setStaff({ ...staff, sessions: data });
       } catch (e) {
         console.log(e);
