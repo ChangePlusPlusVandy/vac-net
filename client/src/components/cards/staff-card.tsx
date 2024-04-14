@@ -78,6 +78,7 @@ const StaffCard = ({ staff }: { staff: IStaff }) => {
             {Array.isArray(staff?.sessions) ? staff.sessions.length : 0}
           </div>
         </div>
+        <div className="truncate text-muted-foreground">{staff?.email}</div>
       </CardContent>
     </Card>
   );

@@ -63,7 +63,7 @@ export const getStaffByFirebaseId = async (req: Request, res: Response) => {
 };
 
 export const editStaff = async (req: Request, res: Response): Promise<void> => {
-  const staffId = req.query?.id;
+  const staffId = req.query?._id;
   const staffContent = req.body as IStaff;
 
   console.log("Got here", staffId, staffContent);
