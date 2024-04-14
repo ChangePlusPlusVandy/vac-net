@@ -35,8 +35,12 @@ const SessionEdit = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
   const [beneficiaries, setBeneficiaries] = useState<Beneficiary[]>([]);
-  const [detailedBeneficiaries, setDetailedBeneficiaries] = useState<Beneficiary[]>([]);
-  const [detailedActualAttendance, setDetailedActualAttendance] = useState<Beneficiary[]>([]);
+  const [detailedBeneficiaries, setDetailedBeneficiaries] = useState<
+    Beneficiary[]
+  >([]);
+  const [detailedActualAttendance, setDetailedActualAttendance] = useState<
+    Beneficiary[]
+  >([]);
   const [notifyChange, setNotifyChange] = useState(false);
   const [detailedStaff, setDetailedStaff] = useState<Staff[]>([]);
   const [staff, setStaff] = useState<Staff[]>([]);
@@ -153,7 +157,7 @@ const SessionEdit = () => {
   useEffect(() => {
     const fetchActualAttendanceDetails = async () => {
       if (!session?.actualAttendance) return;
-  
+
       try {
         // Fetch details for each beneficiary in actual attendance
         const attendanceInfo = await Promise.all(
@@ -167,19 +171,18 @@ const SessionEdit = () => {
             return await response.json();
           }),
         );
-  
+
         // Update the state with the fetched beneficiary details
-        setDetailedActualAttendance(attendanceInfo);  // You might need a different state variable here if expected and actual attendance are supposed to be independent
+        setDetailedActualAttendance(attendanceInfo); // You might need a different state variable here if expected and actual attendance are supposed to be independent
       } catch (error) {
         console.error("Error fetching actual attendance details:", error);
       }
     };
-  
+
     if (session?.actualAttendance) {
       fetchActualAttendanceDetails();
     }
-  }, [session, notifyChange]);  // Ensure dependency on the correct session property
-  
+  }, [session, notifyChange]); // Ensure dependency on the correct session property
 
   useEffect(() => {
     const fetchBeneficiariesAndStaff = async () => {
@@ -312,16 +315,16 @@ const SessionEdit = () => {
   };
   const handleRemoveActualAttendance = async (beneId: string) => {
     if (!session?._id) return;
-  
+
     const updatedActualAttendance = session.actualAttendance?.filter(
       (bene) => bene !== beneId,
     );
-  
+
     const updatedSession = {
       ...session,
       actualAttendance: updatedActualAttendance,
     };
-  
+
     try {
       const res = await fetch(`https://vac-net-backend.vercel.app/session`, {
         method: "PUT",
@@ -330,14 +333,13 @@ const SessionEdit = () => {
         },
         body: JSON.stringify(updatedSession),
       }).then((res: Response) => res.json() as unknown as Session);
-  
+
       setSession(res);
       setNotifyChange(!notifyChange); // Using a toggle to force re-render might not be necessary if states are updated correctly
     } catch (error) {
       console.error("Error removing beneficiary from session:", error);
     }
   };
-  
 
   const handleRemoveStaff = async (staffId: string) => {
     if (!session?._id) return;
@@ -439,6 +441,7 @@ const SessionEdit = () => {
             <Input
               type="date"
               id="sessionDate"
+              // @ts-expect-error TODO
               value={session.sessionDate}
               onChange={(e) => handleChange(e, "sessionDate")}
             />
@@ -483,9 +486,15 @@ const SessionEdit = () => {
                     {beneficiaries.map((bene, index) => (
                       <DropdownMenuItem
                         key={bene._id ?? `loan-fallback-${index}`}
-                        onClick={() => bene._id && handleSelectBeneficiary(bene._id)}
+                        onClick={() =>
+                          bene._id && handleSelectBeneficiary(bene._id)
+                        }
                       >
-                        {`Name: ${bene.firstName ? bene.firstName + " " + bene.lastName : "Not specified"}`}
+                        {`Name: ${
+                          bene.firstName
+                            ? bene.firstName + " " + bene.lastName
+                            : "Not specified"
+                        }`}
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
@@ -506,7 +515,12 @@ const SessionEdit = () => {
                       <TableCell>{bene.firstName ?? "Not specified"}</TableCell>
                       <TableCell>{bene.lastName ?? "Not specified"}</TableCell>
                       <TableCell>
-                        <button onClick={() => handleRemoveBeneficiary(bene._id)} aria-label="Remove Beneficiary">
+                        <button
+                          onClick={() =>
+                            handleRemoveBeneficiary(bene._id ?? "")
+                          }
+                          aria-label="Remove Beneficiary"
+                        >
                           <Icons.close />
                         </button>
                       </TableCell>
@@ -536,9 +550,15 @@ const SessionEdit = () => {
                     {detailedBeneficiaries.map((bene, index) => (
                       <DropdownMenuItem
                         key={bene._id ?? `attendance-fallback-${index}`}
-                        onClick={() => bene._id && handleSelectActualAttendance(bene._id)}
+                        onClick={() =>
+                          bene._id && handleSelectActualAttendance(bene._id)
+                        }
                       >
-                        {`Name: ${bene.firstName ? bene.firstName + " " + bene.lastName : "Not specified"}`}
+                        {`Name: ${
+                          bene.firstName
+                            ? bene.firstName + " " + bene.lastName
+                            : "Not specified"
+                        }`}
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
@@ -559,7 +579,12 @@ const SessionEdit = () => {
                       <TableCell>{bene.firstName ?? "Not specified"}</TableCell>
                       <TableCell>{bene.lastName ?? "Not specified"}</TableCell>
                       <TableCell>
-                        <button onClick={() => handleRemoveActualAttendance(bene._id)} aria-label="Remove Beneficiary">
+                        <button
+                          onClick={() =>
+                            handleRemoveActualAttendance(bene._id ?? "")
+                          }
+                          aria-label="Remove Beneficiary"
+                        >
                           <Icons.close />
                         </button>
                       </TableCell>
@@ -590,9 +615,15 @@ const SessionEdit = () => {
                     {staff.map((staffMember, index) => (
                       <DropdownMenuItem
                         key={staffMember._id ?? `staff-fallback-${index}`}
-                        onClick={() => staffMember._id && handleSelectStaff(staffMember._id)}
+                        onClick={() =>
+                          staffMember._id && handleSelectStaff(staffMember._id)
+                        }
                       >
-                        {`Name: ${staffMember.firstName ? staffMember.firstName + " " + staffMember.lastName : "Not specified"}`}
+                        {`Name: ${
+                          staffMember.firstName
+                            ? staffMember.firstName + " " + staffMember.lastName
+                            : "Not specified"
+                        }`}
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
@@ -610,10 +641,19 @@ const SessionEdit = () => {
                 <TableBody>
                   {detailedStaff.map((staffMember) => (
                     <TableRow key={staffMember._id}>
-                      <TableCell>{staffMember.firstName ?? "Not specified"}</TableCell>
-                      <TableCell>{staffMember.lastName ?? "Not specified"}</TableCell>
                       <TableCell>
-                        <button onClick={() => handleRemoveStaff(staffMember._id)} aria-label="Remove Staff Member">
+                        {staffMember.firstName ?? "Not specified"}
+                      </TableCell>
+                      <TableCell>
+                        {staffMember.lastName ?? "Not specified"}
+                      </TableCell>
+                      <TableCell>
+                        <button
+                          onClick={() =>
+                            handleRemoveStaff(staffMember._id ?? "")
+                          }
+                          aria-label="Remove Staff Member"
+                        >
                           <Icons.close />
                         </button>
                       </TableCell>
@@ -622,7 +662,6 @@ const SessionEdit = () => {
                 </TableBody>
               </Table>
             </div>
-
           </div>
         </div>
       )}
