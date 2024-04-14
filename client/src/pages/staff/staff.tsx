@@ -65,7 +65,7 @@ const Staff = () => {
       }
     } else {
       setParams({ f: "1" });
-      setEditing(true)
+      setEditing(true);
     }
   };
 
@@ -116,8 +116,7 @@ const Staff = () => {
         const data: Session = await fetch(
           "https://vac-net-backend.vercel.app/session/" + sessionId,
         ).then((res: Response) => res.json() as unknown as Session);
-        // @ts-expect-error TODO
-        setStaff({ ...staff, sessions: data });
+        setStaff({ ...staff, sessions: [data] });
       } catch (e) {
         console.log(e);
       }
@@ -134,7 +133,6 @@ const Staff = () => {
           "https://vac-net-backend.vercel.app/user/getstaff?staffId=" + id,
         ).then((res: Response) => res.json() as unknown as IStaff);
         setStaff(data);
-        console.log(data);
       } catch (e) {
         console.log(e);
       } finally {
@@ -253,9 +251,9 @@ const Staff = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {staff.sessions.map((session) => {
+              {staff?.sessions?.map((session, i) => {
                 return (
-                  <TableRow>
+                  <TableRow key={i}>
                     <TableCell className="font-medium">{session._id}</TableCell>
                     {session.sessionDate != null ? (
                       <TableCell>
