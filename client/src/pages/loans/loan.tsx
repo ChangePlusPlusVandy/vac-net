@@ -207,6 +207,15 @@ const LoanPage = () => {
           body: JSON.stringify(updatedLoan),
         },
       );
+      const response2 = await fetch(
+        `https://vac-net-backend.vercel.app/beneficiary/${beneId}/loans/${loan._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedLoan),
+        },
+      );
+      console.log(response,response2) 
       if (!response.ok)
         throw new Error("Failed to associate beneficiary with loan");
       setLoan(await response.json());

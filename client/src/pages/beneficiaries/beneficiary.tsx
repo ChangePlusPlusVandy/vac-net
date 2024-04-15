@@ -236,6 +236,14 @@ const Beneficiary = () => {
           body: JSON.stringify(updatedBeneficiary),
         },
       );
+      const response2 = await fetch(
+        `https://vac-net-backend.vercel.app/loan/${loanId}/beneficiaries/${beneficiary._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+      console.log(response, response2);
       if (!response.ok)
         throw new Error("Failed to associate loan with beneficiary");
       // Optionally, fetch updated beneficiary or set state directly
