@@ -153,7 +153,7 @@ const BeneficiaryCard = ({ beneficiary }: { beneficiary: Beneficiary }) => {
           <Badge
             className="flex items-center"
             variant={
-              getLoanStatus() === "Delinquient"
+              getLoanStatus() === "Delinquent"
                 ? "destructive"
                 : getLoanStatus() === "No Loan"
                 ? "secondary"
