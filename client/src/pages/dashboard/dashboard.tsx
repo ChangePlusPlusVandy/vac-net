@@ -36,12 +36,19 @@ const Dashboard = () => {
         console.error("Error fetching data:", error);
       });
 
-    void fetch(
-      "https://vac-net-backend.vercel.app/session/noshows?id=65a45fd23f430f539ae0e1c3",
-    )
+    void fetch("https://vac-net-backend.vercel.app/session/noshows")
       .then((res) => res.json())
       .then((data) => {
-        setAbsentBeneficiaries(data);
+        const absent = [];
+        for (const key of data) {
+          for (const beneficiary of key.expectedAttendance) {
+            if (beneficiary && !key.actualAttendance.includes(beneficiary)) {
+              absent.push(beneficiary);
+            }
+          }
+        }
+        console.log(absent);
+        setAbsentBeneficiaries(absent);
       });
 
     void fetch("https://vac-net-backend.vercel.app/loan/getDelinquent")
@@ -166,7 +173,7 @@ const Dashboard = () => {
                   Follow up with these beneficiaries and provide support.
                 </CardDescription>
                 {delinquentLoans.length > 0 && (
-                  <div>
+                  <div className="text-muted-foreground">
                     {delinquentLoans.map((loan, i) => {
                       if ((loan?.beneficiaries ?? []).length === 0) {
                         return null;
@@ -191,6 +198,19 @@ const Dashboard = () => {
                 <CardDescription>
                   These beneficiaries didn't make it to their recent session.
                 </CardDescription>
+                {absentBeneficiaries.length > 0 && (
+                  <div className="text-muted-foreground">
+                    {absentBeneficiaries.map((bene, i) => {
+                      return (
+                        <p key={i}>
+                          {/* @ts-expect-error TODO */}
+                          {bene.firstName} {/* @ts-expect-error TODO */}
+                          {bene.lastName}
+                        </p>
+                      );
+                    })}
+                  </div>
+                )}
               </CardHeader>
               <CardContent></CardContent>
             </Card>

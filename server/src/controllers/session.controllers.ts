@@ -60,12 +60,14 @@ const editSession = async (req: Request, res: Response) => {
     if (sessionID) {
       // Convert associatedStaff to ObjectId
       if (sessionContent.associatedStaff) {
-        sessionContent.associatedStaff = sessionContent.associatedStaff.map(staffId => new mongoose.Types.ObjectId(staffId));
+        sessionContent.associatedStaff = sessionContent.associatedStaff.map(
+          (staffId) => new mongoose.Types.ObjectId(staffId),
+        );
       }
       const updatedSession = await Session.findByIdAndUpdate(
         sessionID,
         sessionContent,
-        { new: true }  // return the updated document
+        { new: true }, // return the updated document
       );
       return res.status(200).json(updatedSession);
     } else {
@@ -101,27 +103,32 @@ const deleteSession = async (req: Request, res: Response) => {
 
 const getNoShows = async (req: Request, res: Response) => {
   try {
-    const sessionID = req.query.id;
-    if (sessionID) {
-      const session = await Session.findById(sessionID);
-      if (!session) {
-        return res.status(500).send("Invalid ID query");
-      }
+    const sessions = await Session.find({}).populate("expectedAttendance").populate("actualAttendance");
 
-      const noShows = session.expectedAttendance.filter(
-        (x) => !session.actualAttendance.includes(x),
-      );
-      return res.status(200).json(noShows);
-    } else {
-      return res.status(400).send({ message: "Missing Session ID" });
+    const ans = []
+
+    for (let session of sessions) {
+      const expected = session.expectedAttendance;
+      const actual = session.actualAttendance;
+
+      if (!expected || !actual) continue;
+
+      if (expected.length > actual.length) {
+        ans.push(session)
+      }
     }
-  } catch (err: unknown) {
+
+    return res.status(200).json(ans);
+
+
+  } catch (err) {
     if (err instanceof Error) {
       console.log(err, err.message);
       return res.status(500).send({ message: err.message });
     }
     console.log("Something unexpected went wrong");
   }
+
 };
 
 const getSessionCountWithinInterval = async (req: Request, res: Response) => {
