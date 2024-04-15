@@ -93,8 +93,8 @@ const LoanCard = ({ loan }: { loan: Loan }) => {
           <Badge
             className="flex items-center"
             variant={
-              getLoanStatus() === "Delinquient"
-                ? "destructive"
+              getLoanStatus() === "Delinquent"
+              ? "destructive"
                 : getLoanStatus() === "No Status"
                 ? "secondary"
                 : getLoanStatus() === "Fully Paid Off"

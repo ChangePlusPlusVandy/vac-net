@@ -87,7 +87,6 @@ const deleteLoan = async (req: Request, res: Response): Promise<any> => {
 
 const getDelinquentPayment = async (req: Request, res: Response) => {
   const date = new Date();
-  date.setDate(date.getDate() - 3);
 
   try {
     const loans = await OutstandingLoan.find({
