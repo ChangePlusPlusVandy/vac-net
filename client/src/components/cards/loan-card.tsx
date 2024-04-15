@@ -34,7 +34,7 @@ const LoanCard = ({ loan }: { loan: Loan }) => {
   };
 
   const getLoanStatus = () => {
-    if (!loan.loanStatus) return "No Loan";
+    if (!loan.loanStatus) return "No Status";
     return loan.loanStatus;
   };
 
@@ -95,7 +95,7 @@ const LoanCard = ({ loan }: { loan: Loan }) => {
             variant={
               getLoanStatus() === "Delinquient"
                 ? "destructive"
-                : getLoanStatus() === "No Loan"
+                : getLoanStatus() === "No Status"
                 ? "secondary"
                 : getLoanStatus() === "Fully Paid Off"
                 ? "default"
