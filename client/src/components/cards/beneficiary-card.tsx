@@ -30,6 +30,9 @@ const BeneficiaryCard = ({ beneficiary }: { beneficiary: Beneficiary }) => {
   const { mongoUser, refresh, setRefresh } = useAuth();
 
   const getLoanStatus = () => {
+
+    if (!beneficiary.associatedLoans) return "No Loan";
+
     if (!beneficiary.associatedLoans[0]) return "No Loan";
 
     if (beneficiary.associatedLoans[0]?.loanStatus === "Pending Approval") {
