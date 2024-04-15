@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect, useState, type ChangeEvent } from "react";
 import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
 import { useParams, useSearchParams } from "react-router-dom";
@@ -96,6 +95,16 @@ const LoanPage = () => {
     fetchBenesAndSessions();
   }, []);
 
+  // Helper function to format the date to YYYY-MM-DD
+  const formatDateForInput = (date: Date) => {
+    const d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    return [year, month.padStart(2, "0"), day.padStart(2, "0")].join("-");
+  };
+
   useEffect(() => {
     const getLoanById = async () => {
       setIsLoading(true);
@@ -103,6 +112,9 @@ const LoanPage = () => {
         const res: Loan = await fetch(
           `https://vac-net-backend.vercel.app/loan/?id=${id}`,
         ).then((res: Response) => res.json() as unknown as Loan);
+        res.nextPaymentDate = formatDateForInput(
+          new Date(res.nextPaymentDate ?? ""),
+        );
         setLoan(res);
         setLoanName(
           res.beneficiaries?.length
@@ -112,7 +124,6 @@ const LoanPage = () => {
                   .join(", ")
             : "Loan",
         );
-        console.log(res);
       } catch (error) {
         // TODO: add loan not found state
         console.error(error);
@@ -127,7 +138,6 @@ const LoanPage = () => {
     const fetchBeneficiaryDetails = async () => {
       // Check if there are associated loans to fetch
       if (loan?.beneficiaries?.length) {
-        console.log("TEST", loan.beneficiaries);
         try {
           // Fetch details for each associated loan
           const beneInfo = await Promise.all(
@@ -155,6 +165,13 @@ const LoanPage = () => {
       fetchBeneficiaryDetails();
     }
   }, [loan?.beneficiaries]);
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    field: keyof Loan,
+  ) => {
+    setLoan({ ...loan, [field]: e.target.value });
+  };
 
   useEffect(() => {
     const fetchSessionDetails = async () => {
@@ -215,7 +232,7 @@ const LoanPage = () => {
           body: JSON.stringify(updatedLoan),
         },
       );
-      console.log(response,response2) 
+      console.log(response, response2);
       if (!response.ok)
         throw new Error("Failed to associate beneficiary with loan");
       setLoan(await response.json());
@@ -374,6 +391,16 @@ const LoanPage = () => {
             value={loan?.loanStatus}
             onChange={(e) => setLoan({ ...loan, loanStatus: e.target.value })}
             disabled={params.get("f") !== "1"}
+          />
+        </div>
+        <div className="mb-4">
+          <Label htmlFor="sessionDate">Next Payment</Label>
+          <Input
+            type="date"
+            id="sessionDate"
+            // @ts-expect-error TODO
+            value={loan?.nextPaymentDate}
+            onChange={(e) => handleChange(e, "nextPaymentDate")}
           />
         </div>
 

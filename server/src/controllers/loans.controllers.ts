@@ -33,7 +33,9 @@ const getLoanById = async (req: Request, res: Response) => {
 
 const getLoans = async (req: Request, res: Response) => {
   try {
-    const loans = await OutstandingLoan.find().populate("beneficiaries").populate("associatedSessions");
+    const loans = await OutstandingLoan.find()
+      .populate("beneficiaries")
+      .populate("associatedSessions");
 
     return res.status(200).json(loans);
   } catch (err) {
@@ -51,7 +53,9 @@ const editLoan = async (req: Request, res: Response): Promise<any> => {
     const id = loan._id;
     if (id) {
       console.log(req.body);
-      const result = await OutstandingLoan.findByIdAndUpdate(id, loan);
+      const result = await OutstandingLoan.findByIdAndUpdate(id, loan, {
+        new: true,
+      });
       return res.status(200).send(result);
     } else {
       return res.status(404).send({ message: "Missing Loan ID" });
@@ -106,7 +110,7 @@ const getOutstandingLoansWithinInterval = async (
 ) => {
   try {
     // Extract the number of days from the request
-    const days = '14';
+    const days = "14";
 
     // Calculate the end date of the interva;
     const endDate = new Date();
@@ -144,9 +148,9 @@ const associateBeneficiaryWithLoan = async (req: Request, res: Response) => {
     const updatedLoan = await OutstandingLoan.findByIdAndUpdate(
       id,
       { $addToSet: { beneficiaries: beneId } }, // Use $addToSet to prevent duplicates
-      { new: true }
-    ).populate('beneficiaries');
-    
+      { new: true },
+    ).populate("beneficiaries");
+
     return res.status(200).json(updatedLoan);
   } catch (error) {
     // ... error handling
@@ -160,9 +164,9 @@ const dissociateBeneficiaryFromLoan = async (req: Request, res: Response) => {
     const updatedBeneficiary = await OutstandingLoan.findByIdAndUpdate(
       id,
       { $pull: { beneficiaries: beneId } }, // Use $pull to remove the loanId from the array
-      { new: true }
-    ).populate('beneficiaries');
-    
+      { new: true },
+    ).populate("beneficiaries");
+
     return res.status(200).json(updatedBeneficiary);
   } catch (error) {
     // ... error handling
@@ -176,9 +180,9 @@ const associateSessionWithLoan = async (req: Request, res: Response) => {
     const updatedBeneficiary = await OutstandingLoan.findByIdAndUpdate(
       id,
       { $addToSet: { associatedSessions: sessionId } }, // Use $addToSet to prevent duplicates
-      { new: true }
-    ).populate('associatedSessions');
-    
+      { new: true },
+    ).populate("associatedSessions");
+
     return res.status(200).json(updatedBeneficiary);
   } catch (error) {
     // ... error handling
@@ -192,9 +196,9 @@ const dissociateSessionFromLoan = async (req: Request, res: Response) => {
     const updatedBeneficiary = await OutstandingLoan.findByIdAndUpdate(
       id,
       { $pull: { associatedSessions: sessionId } }, // Use $pull to remove the sessionId from the array
-      { new: true }
-    ).populate('associatedSessions');
-    
+      { new: true },
+    ).populate("associatedSessions");
+
     return res.status(200).json(updatedBeneficiary);
   } catch (error) {
     // ... error handling
@@ -212,5 +216,5 @@ export {
   associateBeneficiaryWithLoan,
   dissociateBeneficiaryFromLoan,
   associateSessionWithLoan,
-  dissociateSessionFromLoan
+  dissociateSessionFromLoan,
 };
