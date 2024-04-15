@@ -45,7 +45,7 @@ const LoanCard = ({ loan }: { loan: Loan }) => {
     >
       <CardHeader className="grid grid-cols-[1fr_32px] items-start gap-4 space-y-0">
         <div className="mb-1">
-          <CardTitle className="text-xl">{getBeneficiaryName()}</CardTitle>
+          <CardTitle>{getBeneficiaryName()}</CardTitle>
           <CardDescription className="text-sm">({loan._id})</CardDescription>
         </div>
         <div className="flex items-center rounded-md bg-secondary text-secondary-foreground">
