@@ -394,7 +394,7 @@ const LoanPage = () => {
             disabled={params.get("f") !== "1"}
           />
         </div>
-        <div className="mb-4">
+        <div className="grid grid-cols-4 items-center gap-4">
           <Label htmlFor="sessionDate">Next Payment</Label>
           <Input
             type="date"
@@ -402,6 +402,18 @@ const LoanPage = () => {
             // @ts-expect-error TODO
             value={loan?.nextPaymentDate}
             onChange={(e) => handleChange(e, "nextPaymentDate")}
+          />
+          <Label htmlFor="name" className="text-left">
+            Next Payment Amount
+          </Label>
+          <Input
+            id="fname"
+            className="col-span-1"
+            value={loan?.nextPaymentAmount}
+            onChange={(e) =>
+              setLoan({ ...loan, nextPaymentAmount: parseInt(e.target.value) })
+            }
+            disabled={params.get("f") !== "1"}
           />
         </div>
 

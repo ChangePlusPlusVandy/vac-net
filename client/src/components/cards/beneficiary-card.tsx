@@ -169,7 +169,7 @@ const BeneficiaryCard = ({ beneficiary }: { beneficiary: Beneficiary }) => {
           </Badge>
           <div className="flex items-center">
             <Icons.dolla className="mr-1 h-3 w-3" />
-            20k
+            {beneficiary?.currentSavings}
           </div>
           {beneficiary?.phoneNumber?.length ?? 0 > 0 ? (
             <div className="truncate">#: {beneficiary?.phoneNumber} </div>
