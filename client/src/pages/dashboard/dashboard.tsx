@@ -48,6 +48,7 @@ const Dashboard = () => {
           }
         }
         console.log(absent);
+        // @ts-expect-error TODO
         setAbsentBeneficiaries(absent);
       });
 
