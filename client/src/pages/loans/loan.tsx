@@ -112,6 +112,7 @@ const LoanPage = () => {
         const res: Loan = await fetch(
           `https://vac-net-backend.vercel.app/loan/?id=${id}`,
         ).then((res: Response) => res.json() as unknown as Loan);
+        // @ts-expect-error TODO 
         res.nextPaymentDate = formatDateForInput(
           new Date(res.nextPaymentDate ?? ""),
         );
