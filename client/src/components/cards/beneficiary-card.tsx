@@ -30,13 +30,17 @@ const BeneficiaryCard = ({ beneficiary }: { beneficiary: Beneficiary }) => {
   const { mongoUser, refresh, setRefresh } = useAuth();
 
   const getLoanStatus = () => {
-    if (!beneficiary.loan) return "No Loan";
+    if (!beneficiary.associatedLoans || !beneficiary.associatedLoans[0]) return "No Loan";
 
-    if (beneficiary.loan?.loanStatus === "Pending Approval") {
+    if (beneficiary.associatedLoans[0]?.loanStatus === "Pending Approval") {
       return "Pending";
     }
 
-    return beneficiary.loan?.loanStatus;
+    if (!beneficiary.associatedLoans[0]?.loanStatus) {
+      return "Not Specified";
+    }
+
+    return beneficiary.associatedLoans[0]?.loanStatus;
   };
 
   const handleGoToBeneficiary = (e: React.MouseEvent) => {
@@ -152,6 +156,8 @@ const BeneficiaryCard = ({ beneficiary }: { beneficiary: Beneficiary }) => {
                 ? "secondary"
                 : getLoanStatus() === "Pending"
                 ? "warning"
+                : getLoanStatus() === "Not Specified"
+                ? "secondary"
                 : "default"
             }
           >

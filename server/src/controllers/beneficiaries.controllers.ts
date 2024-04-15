@@ -62,7 +62,7 @@ const editBeneficiary = async (req: Request, res: Response): Promise<void> => {
 const getBeneficiaries = async (req: Request, res: Response) => {
   console.log("got here");
   try {
-    const allUsers = await Beneficiary.find({}).populate("loan");
+    const allUsers = await Beneficiary.find({}).populate("associatedLoans");
     return res.status(200).json(allUsers);
   } catch (err) {
     if (err instanceof Error) {
