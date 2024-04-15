@@ -120,7 +120,7 @@ const Beneficiaries = () => {
     const getBeneficiaries = async () => {
       try {
         const data: Beneficiary[] = await fetch(
-          "https://vacnet-backend-deploy.vercel.app/beneficiary/all",
+          "https://vac-net-backend.vercel.app/beneficiary/all",
           {
             headers: {
               "Content-Type": "application/json",
